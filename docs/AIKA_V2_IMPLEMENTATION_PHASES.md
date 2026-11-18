@@ -70,6 +70,7 @@ AGENTIC WORKFLOWS
   5B Agent reliability, cancellation, verified execution control
   5C Controlled system-to-calculator numeric dataflow
   5D Bounded informational conditions and deterministic routing
+  5E Capability-aware intent routing and usability
               |
 PERCEPTION
   6A Optional system/foreground-app signals
@@ -99,7 +100,7 @@ ADVANCED CAPABILITIES
 | **R2 — Remembers** | 2A–2C | Exact facts, corrections, historical values, deletion |
 | **R3 — Acts safely** | 3A–3C | Deterministic tools and permitted real desktop actions |
 | **R4 — Researches** | 4A–4C | Current, attributable web answers; safe offline failure |
-| **R5 — Plans** | 5A–5D | Bounded multi-step work, approved numeric dataflow and verified informational conditions |
+| **R5 — Plans** | 5A–5E | Bounded multi-step work, approved numeric dataflow, verified conditions and capability-aware routing |
 | **R6 — Notices** | 6A–6B | Optional, consent-based context awareness |
 | **R7 — Behaves** | 7A–7B | Character state/behavior reflects actual activity |
 | **R8 — Appears** | 8A–8C | Animated desktop presence backed by the real AIKA core |
@@ -563,6 +564,16 @@ Phase 2C-A covers flexible memory phrasing and session-bound clarification or fi
 
 **Pass when:** Real verified numeric evidence determines the branch; unsupported actions and failed evidence cannot become a normal/warning response or ordinary-chat capability disclaimer.
 
+### Checkpoint 5E — Capability-aware intent routing and agent usability
+
+**Objective:** Improve deterministic language recognition and truthful capability discovery without expanding execution authority.
+
+**Implement:** Shared harmless normalization, common arithmetic/system/app/search/research aliases, immediate-condition aliases, deterministic capability questions and `/capabilities`, focused clarification and unsupported-action responses. Preserve command/memory priority, registry/configuration authority, executor evidence, network/billing gates, budgets, cancellation and history without replay. No new tools, model classifier, background monitoring, schema or orchestrator.
+
+**Manual acceptance:** Follow [Phase 5E report](phase-reports/PHASE_5E_REPORT.md) using isolated storage. Verify current measurements, arithmetic, synthetic memory revisions, disabled gates and capability status. Separate local readiness, mocked tests and actual live results.
+
+**Pass when:** Clear supported requests reach existing execution, status answers reflect configuration without executing, ambiguous/unsupported actions cannot trigger guessed work, and explanations retain conversation.
+
 **R5 Gate:** AIKA remains bounded to approved dataflow and immediate informational decisions, not general automation.
 
 ## Phase 6 — Consent-based perception
@@ -909,7 +920,8 @@ Do not mark anything PASSED based solely on this document or Codex's summary.
 | 5A Multi-tool agent | MANUAL TESTING COMPLETED (user report) | The Phase 5B brief reports completion of user manual testing and authorizes 5B. Historical [report](phase-reports/PHASE_5A_REPORT.md) retained. |
 | 5B Agent reliability / execution control | APPROVED BY USER (Phase 5C brief) | User reports successful manual acceptance and explicitly authorizes 5C. Historical [report](phase-reports/PHASE_5B_REPORT.md) retained. |
 | 5C Controlled tool dataflow | MANUAL TESTING CONFIRMED (user report) | The Phase 5D brief records confirmed manual measurements, rejection cases and restore behavior. Historical [report](phase-reports/PHASE_5C_REPORT.md) retained. |
-| 5D Bounded conditions / intent routing | READY FOR MANUAL REVIEW | Same two tools, exact threshold comparison and fixed informational branches; [report](phase-reports/PHASE_5D_REPORT.md). User acceptance pending. |
+| 5D Bounded conditions / intent routing | USER APPROVED (Phase 5E brief) | Approval recorded by the supplied Phase 5E request; historical [report](phase-reports/PHASE_5D_REPORT.md) retained. |
+| 5E Capability-aware routing / usability | READY FOR MANUAL REVIEW | Existing capability/configuration discovery and bounded recognition; [report](phase-reports/PHASE_5E_REPORT.md). User acceptance pending. |
 | 6A Desktop signals | NOT STARTED | — |
 | 6B Consent lifecycle | NOT STARTED | — |
 | 7A Character state events | NOT STARTED | — |
@@ -926,6 +938,6 @@ Do not mark anything PASSED based solely on this document or Codex's summary.
 
 ## 11. Immediate next step
 
-**Current checkpoint: Phase 5D, READY FOR MANUAL REVIEW.** The user confirmed Phase 5C manual testing and authorized bounded conditional decisions. Run the Phase 5D report walkthrough with isolated storage. Historical reports remain unchanged. General branching, conditional side effects, monitoring and later checkpoints were not implemented. Do not mark Phase 5D accepted or begin another checkpoint without user review and a new instruction.
+**Current checkpoint: Phase 5E, READY FOR MANUAL REVIEW.** The supplied brief approves Phase 5D and authorizes routing/usability only. Run the Phase 5E walkthrough with isolated storage. No later checkpoint, new executable tool, model change, schema or autonomous control was implemented. Wait for manual review and a new scoped instruction before further implementation.
 
 > AIKA V2 is not successful because every module exists. It is successful when each capability really works, remains working after the next phase, and eventually powers one coherent desktop character.

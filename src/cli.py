@@ -130,7 +130,7 @@ def main(argv: list[str] | None = None) -> int:
         for component in FUTURE_COMPONENTS:
             print(f"{component}: NOT IMPLEMENTED")
         print("Tools:          Calculator, app launcher, Windows information, opt-in DDGS/Tavily search (run doctor to check availability)")
-        print("Current Phase:   5D")
+        print("Current Phase:   5E")
 
     return 1 if failures else 0
 
@@ -297,6 +297,7 @@ def handle_chat_command(
             print("/status   Show the configured model and session status")
             print("/sessions List saved conversations")
             print("/tools    List registered tools and permissions")
+            print("/capabilities  Show current capabilities and local readiness without executing actions")
             print("/calc <expression>  Evaluate arithmetic through the tool executor")
             print("/apps     List approved applications, availability, and enabled state")
             print("/open <application>  Launch an explicitly selected approved application")
@@ -322,6 +323,8 @@ def handle_chat_command(
                 if tool.name == "web.read" and not (session.web_reader.enabled and session.web_reader.network_enabled):
                     status = 'UNAVAILABLE'
                 print(f"Status: {status}")
+        case "/capabilities":
+            print(session.reply("/capabilities"))
         case "/apps":
             print("Approved applications:")
             print("Availability checks the approved launch target; application readiness is not checked.")

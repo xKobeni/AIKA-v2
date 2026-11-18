@@ -1,5 +1,6 @@
 import re
 
+from src.capabilities.language import natural_text
 from src.capabilities.applications import APPROVED_APPS
 from src.capabilities.contracts import ToolRequest, ToolResult, ToolStatus
 
@@ -11,14 +12,33 @@ ALIASES = {
 }
 
 
+def application_question(prompt: str) -> str | None:
+    """Keep ability wording intact before polite action-prefix normalization."""
+    match = re.fullmatch(
+        r"(?:(?:hey )?aika[, :]\s*)?(?:please )?"
+        r"(?:(?:can|could|would) you (?:please )?(?:open|launch|start)|"
+        r"are you able to (?:open|launch|start)|do you support (?:opening|launching|starting)) (.+?)[.?!]*",
+        " ".join(prompt.split()), re.I,
+    )
+    if match is None:
+        return None
+    target = match[1].strip().casefold()
+    # A beneficiary explicitly requests action; bare ability/ambiguous wording never authorizes launch.
+    if re.search(r"\s+for me(?: now)?(?: please)?$", target):
+        return None
+    return target
+
+
 def application_request(prompt: str) -> ToolRequest | None:
     direct = re.fullmatch(r"/open(?:\s+(.*))?", prompt, re.IGNORECASE | re.DOTALL)
     if direct:
         target = direct[1] or ""
     else:
+        if application_question(prompt) is not None:
+            return None
         match = re.fullmatch(
             r"(?:(?:please|can you|could you|would you|i want you to)\s+)*(open|launch|start)\b\s*(.*)",
-            prompt, re.IGNORECASE | re.DOTALL,
+            natural_text(prompt), re.IGNORECASE | re.DOTALL,
         )
         if match is None:
             return None
@@ -27,7 +47,7 @@ def application_request(prompt: str) -> ToolRequest | None:
             r"(?:(?:a|the) )?(?:story|conversation|example|explanation)\b|(?:by|with)\b", target, re.IGNORECASE,
         ):
             return None
-        target = re.sub(r"\s+(?:for me(?: please)?|please)$", "", target, flags=re.IGNORECASE)
+        target = re.sub(r"\s+(?:for me(?: now)?(?: please)?|now|please)$", "", target, flags=re.IGNORECASE)
     target = re.sub(r"^the\s+", "", target.strip(), flags=re.IGNORECASE).casefold()
     if target in {"", "app", "an app", "application", "an application", "it", "that"} or re.search(r"\s+(?:or|and)\s+", target):
         target = ""

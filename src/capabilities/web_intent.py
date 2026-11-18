@@ -1,5 +1,6 @@
 import re
 
+from src.capabilities.language import natural_text
 from src.capabilities.contracts import ToolRequest, ToolResult, ToolStatus
 
 
@@ -13,8 +14,10 @@ def web_request(prompt: str) -> ToolRequest | None:
                 return ToolRequest("web.search", {"query": selected[2], "provider": selected[1].casefold()})
             return ToolRequest("web.search", {"query": "", "provider": "invalid"})
         return ToolRequest("web.search", {"query": query})
-    text = re.sub(r"^(?:(?:please|can you|could you|would you)\s+)+", "", prompt.strip(), flags=re.IGNORECASE)
-    explicit = re.fullmatch(r"(?:search(?: the (?:web|internet))? for|look online for|look up)(?:\s+(.*))?", text, re.IGNORECASE | re.DOTALL)
+    text = natural_text(prompt)
+    if re.search(r"\b(?:my|our|saved|remembered|memory|memories|conversation|history|project)\b", text, re.I):
+        return None
+    explicit = re.fullmatch(r"(?:search(?: online| the (?:web|internet))? for|look online for|look up)(?:\s+(.*))?", text, re.IGNORECASE | re.DOTALL)
     official = re.fullmatch(r"find (?:the )?(official .+ documentation)[.?!]?", text, re.IGNORECASE)
     fresh = re.fullmatch(r"(?:what is|what's) the latest (.+)|what are the (?:newest|latest) (.+)", text, re.IGNORECASE)
     query = None

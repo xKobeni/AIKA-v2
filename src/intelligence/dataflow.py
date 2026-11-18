@@ -78,7 +78,12 @@ class PercentageIntent:
 
 def _condition_text(text):
     text = " ".join(text.strip().replace("’", "'").split()).casefold()
-    return re.sub(r"^(?:hey )?aika[, :]\s*", "", text)
+    text = re.sub(r"^(?:hey )?aika[, :]\s*", "", text)
+    text = re.sub(r"^warn me when\b", "warn me if", text)
+    check = re.fullmatch(r"(?:check whether|tell me if) (.+?)[.?!]?", text)
+    if check:
+        text = "if " + check[1].rstrip(".?!") + ", warn me"
+    return text
 
 
 def conditional_candidate(text):
@@ -306,13 +311,13 @@ def format_condition(record, intent, data):
     with localcontext(Context(prec=50, rounding=ROUND_HALF_EVEN)):
         displayed = Decimal(record["calculated_percentage"]).quantize(Decimal("0.01"))
     label = "RAM used" if intent.group == "memory" else "Free storage" if intent.quantity == "free" else "Used storage"
-    scope = "RAM" if intent.group == "memory" else f"Drive: {data['measurements']['storage']['system_drive']}"
+    scope = "" if intent.group == "memory" else f"Drive: {data['measurements']['storage']['system_drive']}\n"
     comparison = {"lt": "below", "gt": "above", "le": "at most", "ge": "at least"}[record["operator"]]
     state = "TRUE" if record["condition_result"] else "FALSE"
     message = ("The measured percentage meets your warning condition." if record["condition_result"] else
                "The measured percentage does not meet your warning condition; this is not an overall system-health assessment.")
     return (f"AIKA {'RAM' if intent.group == 'memory' else 'Storage'} {'Warning' if record['condition_result'] else 'Status'}\n"
-            f"{scope}\n{label}: {displayed:.2f}%\nThreshold: {comparison} {record['threshold_percent']}%\n"
+            f"{scope}{label}: {displayed:.2f}%\nThreshold: {comparison} {record['threshold_percent']}%\n"
             f"Condition: {state}\nResponse: {record['selected_branch']}\n{message}\n"
             "Displayed percentage is rounded; the condition used exact measured byte counts.\n"
             f"Verified from system.snapshot step {record['source_step']} (collected {record['collected_at']}) "

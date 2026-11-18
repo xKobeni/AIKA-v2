@@ -208,7 +208,7 @@ def test_non_windows_is_unavailable(monkeypatch, mocked_process):
 
 
 @pytest.mark.parametrize(("prompt", "app_id"), [
-    ("Open Notepad.", "notepad"), ("Launch Calculator.", "calculator"), ("Can you open Spotify?", "spotify"),
+    ("Open Notepad.", "notepad"), ("Launch Calculator.", "calculator"), ("Can you open Spotify for me?", "spotify"),
     ("Start Notepad for me.", "notepad"), ("Launch the Windows Calculator.", "calculator"),
     ("Could you please open windows notepad for me?", "notepad"), ("/open notepad", "notepad"), ("/open calc", "calculator"),
 ])

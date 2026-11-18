@@ -1,5 +1,6 @@
 import re
 
+from src.capabilities.language import natural_text
 from src.capabilities.contracts import ToolRequest, ToolResult, ToolStatus
 
 
@@ -7,7 +8,8 @@ def calculator_request(prompt: str) -> ToolRequest | None:
     direct = re.fullmatch(r"/calc(?:\s+(.*))?", prompt, re.IGNORECASE | re.DOTALL)
     if direct:
         return ToolRequest("calculator.evaluate", {"expression": direct[1] or ""})
-    explicit = re.fullmatch(r"(?:please\s+)?(?:calculate|compute|evaluate)\b\s*(.*)", prompt, re.IGNORECASE | re.DOTALL)
+    prompt = natural_text(prompt)
+    explicit = re.fullmatch(r"(?:please\s+)?(?:calculate|compute|evaluate|work out)\b\s*(.*)", prompt, re.IGNORECASE | re.DOTALL)
     question = re.fullmatch(r"(?:what is|what's)\s+(.+)", prompt, re.IGNORECASE | re.DOTALL)
     text = explicit[1] if explicit else question[1] if question else prompt
     text = text.strip().removesuffix("?").removesuffix(".").strip()
@@ -18,6 +20,7 @@ def calculator_request(prompt: str) -> ToolRequest | None:
     ):
         text = re.sub(rf"\b{phrase}\b", symbol, text, flags=re.IGNORECASE)
     text = text.replace("×", "*").replace("÷", "/").replace("−", "-")
+    text = re.sub(r"\bpercent\s+of\b", "% of", text, flags=re.I)
     if not explicit and not re.fullmatch(r"[0-9.\s()+*/%\-]+(?:of\s+[+\-]?[0-9.]+)?", text, re.IGNORECASE):
         return None
     if not explicit and not question and not re.search(r"[+*/%\-]", text.lstrip("+-")):

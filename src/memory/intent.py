@@ -190,6 +190,11 @@ def parse_intent(prompt: str) -> Intent | None:
             if re.search(rf"\buses\b|\b{KEY_PATTERN}\s+is\b", assignment, re.IGNORECASE):
                 return _statement(assignment, "correct")
 
+        match = _match(rf"what was the previous ({KEY_PATTERN}) i recorded for (.+)", text)
+        if match:
+            return Intent("history", _subject(match[2]), KEYS[match[1].casefold()])
+        if _match(r"what about my project", text):
+            return Intent("list")
         match = _match(r"(?:what's|what is) (.+?) built with", text)
         if match:
             return Intent("list", _subject(match[1]))

@@ -6,7 +6,7 @@ Development starts with a headless backend and a CLI for verification. The plann
 
 ## Current checkpoint
 
-Phase 5D adds immediate informational conditions on verified storage/RAM percentages and fixes the conditional-request routing gap. Status: READY FOR MANUAL REVIEW; acceptance is pending. The same ConversationSession, six tools, executor, permissions, budgets and SQLite lifecycle remain in use. Memory, manual commands, research and ordinary conversation remain available. The Phase 5D brief records user-confirmed Phase 5C manual tests.
+Phase 5E improves capability-aware intent routing and terminal usability. Status: READY FOR MANUAL REVIEW; Phase 5E acceptance is pending. The supplied brief approves Phase 5D. The same ConversationSession, six tools, executor, permissions, budgets and SQLite lifecycle remain in use. No model configuration, executable capability or database schema changed.
 
 The conversation reliability update prefers `qwen3.5:4b` when no model override is set. Saved chats can be resumed with either model.
 
@@ -29,7 +29,7 @@ To activate the environment instead, run `.\.venv\Scripts\Activate.ps1` and repl
 
 | Command | Expected result |
 | --- | --- |
-| `python -m aika` | Core runtime `READY`, configuration `LOADED`, configured model, and current phase `5D`. This command works offline. |
+| `python -m aika` | Core runtime `READY`, configuration `LOADED`, configured model, and current phase `5E`. This command works offline. |
 | `python -m aika --version` | `AIKA AI V2 0.1.0` by default. |
 | `python -m aika doctor` | Runtime, SQLite, memory, Ollama, calculator, application, Windows measurement, and optional search configuration/contract checks. It never launches applications, samples system metrics, enumerates processes, or contacts Tavily. Missing optional web credentials produce `WARN` and do not prevent local use. |
 | `python -m aika chat` | Opens an interactive session with the configured local model. Use `exit`, `/exit`, Ctrl+C, or EOF to quit. |
@@ -315,6 +315,41 @@ Explicit search/current-information recognition remains bounded. Educational exp
 
 `/web-status` and doctor report provider mode, readiness, fallback policy, key presence, and contracts without searching or spending credits. A locally ready provider has not been connectivity/authentication-tested. Tool traces omit queries, keys, headers, and excerpts. SQLite saves displayed sources with their original provider and timestamp; `/resume` restores them without replaying searches. Search exchanges stay out of later ordinary Ollama context and do not automatically become memory facts. Search results are not globally cached.
 
+
+## Capability-aware routing (Phase 5E)
+
+Use `/capabilities` in chat, or ask “What can you do?” and “What tools do you have?”. The listing derives registration, enabled state, descriptions and permissions from the existing registry and checks local adapter readiness. It makes no model, provider, measurement or launch request. Readiness does not prove live inference, connectivity, Tavily credits, window readiness or successful database writes. `/help` includes the command.
+
+Common requests now use the existing handlers without an extra model classification pass:
+
+```text
+What's 245 multiplied by 18?
+What's 15 percent of 800?
+Can you work out 12 times 7?
+Can you check my disk space?
+Can you check my laptop's RAM usage?
+How much memory is available on my computer?
+Show me my PC system information.
+Can you open Notepad for me?
+Search online for Python release notes.
+Find sources and explain what they say about Python 3.15.
+Check whether my free storage is below 20%.
+Tell me if my RAM usage exceeds 90%.
+Warn me when my disk usage is above 85%.
+What was the previous frontend I recorded for Orion?
+```
+
+“Warn me when” checks immediately; it never schedules monitoring. C-drive questions measure the existing Windows system drive and report unavailable if it is not C. Explanations such as “Explain RAM” and “How do I open Notepad?” stay in chat. Existing latest-version/research phrasing retains bounded research; new “Search online for” wording uses the existing search executor. Natural personal/project searches cannot bypass the existing privacy guard; explicit `/web` remains authoritative.
+
+“Can you browse the web?”, “Can you access my system information?”, “Can you open applications?” and “Can you remember information?” receive deterministic configuration-aware answers. “Can you check my system?” describes capability; “Can you check my disk space?” requests an actual measurement. Use `/system` for an explicit full snapshot.
+
+App ability questions such as “Can you open Notepad?”, “Are you able to launch Notepad?” and “Do you support opening applications?” describe current support without launching. Imperatives (`Open Notepad`, `Please launch Notepad`, `Open Notepad now`) and `/open` remain actions. The conservative polite-action rule requires an explicit beneficiary: `Can you open Notepad for me?` or `Can you open Notepad for me now?` requests a launch. Bare ability wording with `now` asks for clarification. App targets, permissions and verification are unchanged.
+
+General laptop/computer/desktop/notebook storage questions use a snapshot labeled **Windows system drive only**, including its actual drive identity, capacity and collection timestamp. Explicit other-drive requests and aggregate storage across all drives remain unsupported; they never silently substitute system-drive values.
+
+“Open it”, “Check the latest version” and “Show me the information” ask for the missing target. Project references use existing memory context or ask which project. Unsupported file deletion, shell/install, private-file access, window-control and screen-recording requests cannot gain execution authority. Actual operations still require the existing executor or committed memory transaction. Commands retain precedence. Input is limited to 16,000 characters before normalization; unsupported control characters are rejected, and stricter tool/task limits remain.
+
+See [Phase 5E report](docs/phase-reports/PHASE_5E_REPORT.md) for tests, actual live checks, safe review commands and language limitations.
 
 ## Immediate verified conditions (Phase 5D)
 

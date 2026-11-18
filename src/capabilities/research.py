@@ -8,6 +8,7 @@ from email.utils import parsedate_to_datetime
 from urllib.parse import parse_qsl, urlencode, urlsplit
 from zoneinfo import ZoneInfo
 
+from src.capabilities.language import natural_text
 from src.capabilities.web_answer import _topics, _words
 from src.capabilities.web_reader import validate_url, MAX_SOURCES
 from src.memory.intent import parse_intent
@@ -33,15 +34,16 @@ def research_question(prompt: str) -> str | None:
         return None
     if parse_intent(prompt) is not None:
         return None
-    text = re.sub(r"^(?:AIKA[, :]\s*)?", "", prompt.strip(), flags=re.IGNORECASE)
-    text = re.sub(r"^(?:(?:please|can you|could you|would you)\s+)+", "", text, flags=re.IGNORECASE)
-    text = text.replace("’", "'")
+    text = natural_text(prompt)
     if parse_intent(text) is not None:
         return None
     if re.search(r"\b(?:my|our|saved|remembered|memory|memories|conversation|history|project)\b", text, re.IGNORECASE):
         return None
     if re.search(r"\b(?:cpu|processor)\s+(?:temperature|usage|utilization)\b|\b(?:ram|disk)\s+(?:usage|space)\b", text, re.IGNORECASE):
         return None
+    sources = re.fullmatch(r"find sources and explain what they say about (.+)", text, re.I)
+    if sources:
+        return sources[1]
     explicit = re.match(r"^(?:search(?: the (?:web|internet))? for|look online for|look up|research)\b", text, re.IGNORECASE)
     find = re.match(r"^find (?:the )?(?:latest|recent|current|official)\b", text, re.IGNORECASE)
     current = (re.match(r"^(?:what(?:'s| is| are)|compare|tell me)\b", text, re.IGNORECASE)

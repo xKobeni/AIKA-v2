@@ -8,6 +8,7 @@ from uuid import uuid4
 from time import monotonic
 from threading import Lock
 
+from src.capabilities.discovery import capability_answer, clarification, unsupported_request
 from src.capabilities import create_registry
 from src.capabilities.application_intent import application_request, format_application_result
 from src.capabilities.applications import ApplicationRegistry, create_applications
@@ -133,24 +134,31 @@ class ConversationSession:
         agent_cancelled: Callable[[], bool] | None = None,
         agent_progress: Callable[[dict], None] | None = None,
     ) -> str | None:
+        if len(prompt) > 16000 or any(not char.isprintable() and char not in "\r\n\t" for char in prompt):
+            return "Request exceeds the input limit or contains unsupported control characters. No action was executed."
         prompt = self.web_search.redact(prompt.strip())
         if not prompt:
             return None
-
-        agent = agent_task(prompt)
+        resolution = capability_answer(prompt, self) if not prompt.startswith("/") or prompt.casefold() == "/capabilities" else None
+        memory_intent = parse_intent(prompt) if not prompt.startswith("/") else None
+        if memory_intent is not None and memory_intent.action == "statement":
+            memory_intent = None
+        agent = agent_task(prompt) if resolution is None and memory_intent is None else None
+        if not prompt.startswith("/") and agent is None and memory_intent is None:
+            resolution = resolution or clarification(prompt) or unsupported_request(prompt)
         question = answer_question(prompt) if agent is None else None
-        request = None if question is not None or agent is not None else (reading_request(prompt) or calculator_request(prompt)
+        request = None if resolution is not None or memory_intent is not None or question is not None or agent is not None else (reading_request(prompt) or calculator_request(prompt)
                   or application_request(prompt) or system_request(prompt))
-        research = research_question(prompt) if question is None and request is None and agent is None else None
+        research = research_question(prompt) if resolution is None and memory_intent is None and question is None and request is None and agent is None else None
         if request is None and question is None and research is None:
-            request = web_request(prompt) if prompt.split(maxsplit=1)[0].casefold() == "/web" else None
+            request = web_request(prompt) if resolution is None and memory_intent is None and agent is None else None
         unsupported = unsupported_measurement(prompt)
         if unsupported is not None:
             research = None
-        if request is not None or unsupported is not None or question is not None or research is not None or agent is not None:
+        if resolution is not None or request is not None or unsupported is not None or question is not None or research is not None or agent is not None:
             self._pending_memory = None
         intent = None
-        if self._memory is not None and request is None and unsupported is None and question is None and research is None and agent is None:
+        if resolution is None and self._memory is not None and request is None and unsupported is None and question is None and research is None and agent is None:
             pending, self._pending_memory = self._pending_memory, None
             intent, confirmation = resolve_pending(pending, prompt)
             intent = intent or parse_intent(prompt)
@@ -180,7 +188,11 @@ class ConversationSession:
                     self._turns.append((prompt, result.answer))
                     return result.answer
 
-        if agent is not None:
+        if resolution is not None:
+            answer = resolution
+        elif memory_intent is not None and self._memory is None:
+            answer = "Structured memory is unavailable in this session; no memory operation was performed."
+        elif agent is not None:
             answer = self._agent_reply(agent, tool_trace, research_progress, agent_cancelled, agent_progress)
         elif request is not None:
             if request.tool == "web.search":
