@@ -7,6 +7,7 @@ from collections.abc import Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
 from urllib.parse import urlsplit
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from dotenv import dotenv_values
 
@@ -44,6 +45,10 @@ class Settings:
     web_search_fallback_enabled: bool = False
     web_search_fallback_provider: str = "tavily"
     web_reading_enabled: bool = False
+    web_debug: bool = False
+    research_timeout: float = 180.0
+    timezone: str = "local"
+    agent_timeout: float = 180.0
 
 
 def _environment() -> dict[str, str]:
@@ -131,7 +136,30 @@ def load_config() -> Settings:
     if web_enabled not in {"off", "on", "false", "true", "0", "1"}:
         raise ConfigError("AIKA_WEB_SEARCH_ENABLED must be off/on, false/true, or 0/1.")
     api_key = environment.get("AIKA_TAVILY_API_KEY", "")
+    try:
+        agent_timeout = float(environment.get("AIKA_AGENT_TIMEOUT", "180"))
+    except ValueError:
+        raise ConfigError("AIKA_AGENT_TIMEOUT must be 30 to 300 seconds.") from None
+    if not math.isfinite(agent_timeout) or not 30 <= agent_timeout <= 300:
+        raise ConfigError("AIKA_AGENT_TIMEOUT must be 30 to 300 seconds.")
+    try:
+        research_timeout = float(environment.get("AIKA_RESEARCH_TIMEOUT", "180"))
+    except ValueError:
+        raise ConfigError("AIKA_RESEARCH_TIMEOUT must be 30 to 300 seconds.") from None
+    if not math.isfinite(research_timeout) or not 30 <= research_timeout <= 300:
+        raise ConfigError("AIKA_RESEARCH_TIMEOUT must be 30 to 300 seconds.")
+    timezone = environment.get("AIKA_TIMEZONE", "local")
+    if timezone != "local":
+        if len(timezone) > 100 or not timezone.isprintable():
+            raise ConfigError("AIKA_TIMEZONE must be local or an available IANA timezone, such as Asia/Manila.")
+        try:
+            ZoneInfo(timezone)
+        except (ValueError, ZoneInfoNotFoundError):
+            raise ConfigError("AIKA_TIMEZONE must be local or an available IANA timezone, such as Asia/Manila.") from None
     reading = environment.get("AIKA_WEB_READING_ENABLED", "off").strip().casefold()
+    web_debug = environment.get("AIKA_WEB_DEBUG", "off").strip().casefold()
+    if web_debug not in {"off", "on", "false", "true", "0", "1"}:
+        raise ConfigError("AIKA_WEB_DEBUG must be off/on, false/true, or 0/1.")
     if reading not in {"off", "on", "false", "true", "0", "1"}:
         raise ConfigError("AIKA_WEB_READING_ENABLED must be off/on, false/true, or 0/1.")
     if not valid_tavily_key(api_key):
@@ -150,7 +178,8 @@ def load_config() -> Settings:
         name, load_version(environment), log_level, load_data_dir(environment), runtime_url,
         model, timeout, context_turns, ollama_think, context_debug, tuple(public_messages), tuple(disabled_apps),
         web_enabled in {"on", "true", "1"}, api_key,
-        provider, fallback in {"on", "true", "1"}, secondary, reading in {"on", "true", "1"},
+        provider, fallback in {"on", "true", "1"}, secondary, reading in {"on", "true", "1"}, web_debug in {"on", "true", "1"},
+        research_timeout, timezone, agent_timeout,
     )
 
 

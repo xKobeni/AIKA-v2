@@ -49,6 +49,9 @@ RUNTIME_FILES = (
     "src/capabilities/web_content.py",
     "src/capabilities/web_answer.py",
     "src/capabilities/web_read_intent.py",
+    "src/capabilities/web_diagnostics.py",
+    "src/capabilities/research.py",
+    "src/capabilities/web_budget.py",
 )
 
 
@@ -235,4 +238,8 @@ def inspect_web_search(settings: Settings) -> list[Check]:
                         f"Enabled={'yes' if settings.web_reading_enabled and settings.web_search_enabled else 'no'}; "
                         f"registered=web.read READ_ONLY; extraction={'available' if extraction_available else 'unavailable'}; "
                         "selected public HTTPS only; no source request made."))
+    checks.append(Check("PASS", "Research Configuration", f"Budget={settings.research_timeout:g}s; timezone={settings.timezone}; "
+                        "one search, at most five read attempts and three successful sources; no diagnostic network requests."))
+    checks.append(Check("PASS", "Agent Configuration", f"Budget={settings.agent_timeout:g}s; "
+                        "4 plan steps, 8 executor calls, 2 model generations; no diagnostic execution."))
     return checks

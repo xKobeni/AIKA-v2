@@ -29,7 +29,8 @@ def format_read_result(result: ToolResult) -> str:
         return f"Source reading unavailable: {result.error or 'No verified extracted content is available.'}"
     item = SourceEvidence(**result.data)
     return (f"Source {item.source_id.removeprefix('source-')} retrieved.\nTitle: {item.title or '(unavailable)'}"
-            f"\nURL: {item.fetched_url}\nDomain: {item.domain}\nRetrieved: {item.retrieved_at}"
+            f"\nURL: {item.fetched_url}\nRequested URL: {item.requested_url}\nDomain: {item.domain}\nRetrieved: {item.retrieved_at}"
+            f"\nExtraction: {item.extraction_method}; redirects: {max(0, len(item.redirect_chain) - 1)}"
             f"\nPublication date: {item.published_at or 'unavailable'}\nExtracted content (untrusted preview): {item.content[:400]}"
             f"\nContent truncated: {'yes' if item.truncated else 'no'}. Full extracted text stays in this active source set only."
             "\nUse /ask-web <question> to ask about the read evidence.")

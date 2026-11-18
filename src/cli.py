@@ -8,9 +8,11 @@ from uuid import uuid4
 from src.capabilities.contracts import ToolResult
 from src.capabilities.applications import create_applications
 from src.capabilities.web_search import MAX_RESULTS, SearchRouter
+from src.capabilities.web_answer import ANSWER_SCHEMA
 from src.config import ConfigError, Settings, load_version
 from src.diagnostics import inspect_applications, inspect_ollama, inspect_runtime, inspect_storage, inspect_system_tools, inspect_tools, inspect_web_search
 from src.intelligence.conversation import ConversationSession
+from src.intelligence.planning import PLAN_SCHEMA, MAX_STEPS, MAX_EXECUTIONS, MAX_MODEL_CALLS
 from src.intelligence.ollama_client import ChatMessage, OllamaClient, OllamaError
 from src.memory.chat import MemoryReply
 from src.memory.cli import add_memory_commands, run_memory
@@ -128,7 +130,7 @@ def main(argv: list[str] | None = None) -> int:
         for component in FUTURE_COMPONENTS:
             print(f"{component}: NOT IMPLEMENTED")
         print("Tools:          Calculator, app launcher, Windows information, opt-in DDGS/Tavily search (run doctor to check availability)")
-        print("Current Phase:   4B")
+        print("Current Phase:   5D")
 
     return 1 if failures else 0
 
@@ -142,6 +144,11 @@ def run_chat(settings: Settings, system_instruction: str = SYSTEM_INSTRUCTION) -
         web_search=SearchRouter(settings.web_search_enabled, settings.tavily_api_key, settings.web_search_provider,
                                 settings.web_search_fallback_enabled, settings.web_search_fallback_provider),
         web_reading_enabled=settings.web_reading_enabled,
+        web_debug=settings.web_debug,
+        grounded_generate=partial(client.generate, response_format=ANSWER_SCHEMA, num_predict=768),
+        research_timeout=settings.research_timeout, timezone=settings.timezone,
+        agent_generate=partial(client.generate, response_format=PLAN_SCHEMA, num_predict=512),
+        agent_timeout=settings.agent_timeout,
     )
     print(settings.app_name)
     show_session_status(settings, session)
@@ -173,6 +180,8 @@ def run_chat(settings: Settings, system_instruction: str = SYSTEM_INSTRUCTION) -
                 answer = session.reply(
                     message, trace=trace, memory_trace=memory_trace,
                     tool_trace=show_tool_trace if settings.context_debug != "off" else None,
+                    research_progress=show_research_progress,
+                    agent_progress=show_agent_progress,
                 )
             except OllamaError as exc:
                 print(f"Ollama error: {exc}\n", file=sys.stderr)
@@ -237,6 +246,9 @@ def show_session_status(settings: Settings, session: ConversationSession) -> Non
     print("Conversation: ACTIVE")
     print(f"Session ID: {session.session_id}")
     print(f"History: {session.turn_count}/{settings.context_turns} completed turns retained")
+    print(f"Agent limits: {MAX_STEPS} steps, {MAX_EXECUTIONS} tool executions, {MAX_MODEL_CALLS} model generations, {settings.agent_timeout:g}s")
+    if session.last_agent:
+        print(f"Last agent: {session.last_agent['outcome']}; operations attempted: {session.last_agent['executions']}")
 
 
 def show_tool_trace(result: ToolResult) -> None:
@@ -246,6 +258,31 @@ def show_tool_trace(result: ToolResult) -> None:
         f"verified={'yes' if result.verified else 'no'} elapsed_ms={result.elapsed_ms:.3f}",
         file=sys.stderr,
     )
+
+
+def show_research_progress(message: str) -> None:
+    label = "Agent" if message.startswith("Running operation ") else "Research"
+    print(f"{label} > {message}", flush=True)
+
+
+def show_agent_progress(event: dict) -> None:
+    if event["event"] == "planning":
+        print("AIKA Agent\nPlanning request...", flush=True)
+    elif event["event"] == "validated":
+        label = "step" if event["total"] == 1 else "steps"
+        print(f"Plan validated: {event['total']} {label}", flush=True)
+    elif event["event"] == "binding":
+        print(f"Agent > [{event['number']}/{event['total']}] Resolving verified numeric inputs...", flush=True)
+    elif event["event"] == "condition_evaluating":
+        print("Agent > Evaluating verified condition...", flush=True)
+    elif event["event"] == "condition_result":
+        state = "TRUE" if event["condition_result"] else "FALSE"
+        print(f"Agent > Condition {state}: {event['selected_branch']}", flush=True)
+    elif event["event"] in {"step", "tool"}:
+        detail = f" [{event['category']}]" if event["category"] else ""
+        print(f"Agent > [{event['number']}/{event['total']}] {event['state'].upper()} {event['tool']}{detail}", flush=True)
+    elif event["event"] == "summary":
+        print(f"Agent > Execution {event['outcome']}.", flush=True)
 
 
 def handle_chat_command(
@@ -270,6 +307,8 @@ def handle_chat_command(
             print("/web-status  Show web-search configuration without making a request")
             print("/read <result-number>  Read one selected HTTPS source (separate reading opt-in required)")
             print("/ask-web <question>  Answer only from sources read in this active source set")
+            print("/research <question>  Search, select, read and answer using bounded public web evidence")
+            print("/agent <task>  Run a bounded plan of explicitly requested supported operations")
             print("/resume <session_id>  Restore a saved conversation")
             print("/new      Start a fresh conversation")
             print("/exit     End the session (also: exit)")
@@ -300,6 +339,10 @@ def handle_chat_command(
             print(f"Tool registered: {'YES' if registered else 'NO'}\nAvailable: {'YES' if registered and reason is None else 'NO'}")
             print(f"Result limit: {MAX_RESULTS}")
             print(f"Web reading enabled: {'YES' if session.web_reader.enabled and session.web_reader.network_enabled else 'NO'}; maximum three selected pages per active search")
+            print(f"Web diagnostics: {'ON (fixed labels and timing only)' if settings.web_debug else 'OFF'}")
+            print(f"Research budget: {settings.research_timeout:g}s; timezone: {settings.timezone}; maximum 5 read attempts / 3 successful pages")
+            if session.last_research:
+                print(f"Last research: {session.last_research['outcome']}; reads: {session.last_research['successful_reads']}/{session.last_research['read_attempts']}")
             for name, adapter in (("DDGS", session.web_search.ddgs), ("Tavily", session.web_search.tavily)):
                 unavailable = adapter.unavailable_reason()
                 print(f"{name} readiness: {'UNAVAILABLE' if unavailable else 'AVAILABLE'}")
@@ -310,9 +353,11 @@ def handle_chat_command(
                 print(reason)
             print("DDGS is keyless. Tavily can use API credits only when selected or when paid fallback is explicitly enabled.")
             print("Explicit searches transmit only the query and bounded options to the selected provider.")
-        case "/calc" | "/open" | "/system" | "/processes" | "/web" | "/read" | "/ask-web":
+        case "/calc" | "/open" | "/system" | "/processes" | "/web" | "/read" | "/ask-web" | "/research" | "/agent":
             answer = session.reply(
                 command, tool_trace=show_tool_trace if settings.context_debug != "off" else None,
+                research_progress=show_research_progress,
+                agent_progress=show_agent_progress,
             )
             print(f"AIKA > {answer}\n")
         case "/clear":

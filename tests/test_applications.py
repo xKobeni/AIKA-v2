@@ -225,7 +225,7 @@ def test_ambiguous_requests_ask_without_launching(tmp_path, apps, mocked_process
 
 @pytest.mark.parametrize("prompt", [
     "Open UnknownApp123.", "Open Notepad & calc.exe", "/open ../notepad", "/open C:/Windows/System32/cmd.exe",
-    "Open Notepad; launch Calculator", "Open Notepad tomorrow", "Open Notepad --help", "Launch powershell",
+    "/open Notepad; launch Calculator", "Open Notepad tomorrow", "Open Notepad --help", "Launch powershell",
 ])
 def test_unsupported_or_injected_launch_request_never_falls_to_model(tmp_path, apps, mocked_process, prompt):
     generate = Mock(return_value="I opened it successfully")
@@ -245,6 +245,15 @@ def test_natural_language_and_command_use_same_executor_and_persist(tmp_path, ap
     restored = session_for(tmp_path, apps)
     restored.resume(session.session_id)
     assert restored.history() == session.history()
+
+
+def test_compound_explicit_app_requests_use_two_scoped_launches(tmp_path, apps, mocked_process):
+    session = session_for(tmp_path, apps)
+    trace = []
+    answer = session.reply("Open Notepad; launch Calculator", tool_trace=trace.append)
+    assert len(trace) == 2 and all(result.verified for result in trace)
+    assert mocked_process[0].call_count == 2
+    assert "Notepad launch verified" in answer and "Windows Calculator launch verified" in answer
     assert mocked_process[0].call_count == 2
     assert MemoryStore(tmp_path).list_facts("project", "Orion") == []
 

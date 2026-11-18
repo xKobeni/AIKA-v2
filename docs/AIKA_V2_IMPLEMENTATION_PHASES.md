@@ -67,7 +67,9 @@ WEB INTELLIGENCE
               |
 AGENTIC WORKFLOWS
   5A Bounded multi-tool execution
-  5B Approval, cancellation, partial failure, recovery
+  5B Agent reliability, cancellation, verified execution control
+  5C Controlled system-to-calculator numeric dataflow
+  5D Bounded informational conditions and deterministic routing
               |
 PERCEPTION
   6A Optional system/foreground-app signals
@@ -97,7 +99,7 @@ ADVANCED CAPABILITIES
 | **R2 — Remembers** | 2A–2C | Exact facts, corrections, historical values, deletion |
 | **R3 — Acts safely** | 3A–3C | Deterministic tools and permitted real desktop actions |
 | **R4 — Researches** | 4A–4C | Current, attributable web answers; safe offline failure |
-| **R5 — Plans** | 5A–5B | Bounded multi-step work with honest partial outcomes |
+| **R5 — Plans** | 5A–5D | Bounded multi-step work, approved numeric dataflow and verified informational conditions |
 | **R6 — Notices** | 6A–6B | Optional, consent-based context awareness |
 | **R7 — Behaves** | 7A–7B | Character state/behavior reflects actual activity |
 | **R8 — Appears** | 8A–8C | Animated desktop presence backed by the real AIKA core |
@@ -508,26 +510,60 @@ Phase 2C-A covers flexible memory phrasing and session-bound clarification or fi
 **Pass when:** Multi-tool tasks terminate, report steps accurately, and respect policy.  
 **Suggested tag:** `aika-v2/phase-5a`.
 
-### Checkpoint 5B — Approval, cancellation, and partial recovery
+### Checkpoint 5B — Agent reliability and execution control
 
-**Objective:** Handle interruptions and higher-risk requests without hidden side effects.
+**Objective:** Strengthen the existing bounded agent lifecycle without new tools or autonomy.
+
+**Scope clarification:** The user-authorized Phase 5B brief narrows the original approval/recovery proposal to reliable execution records, progress, cancellation, budgets and truthful outcomes. Existing exact app authorization remains; new interactive approvals, durable jobs and complex recovery are deferred rather than claimed implemented.
 
 **Implement:**
-- Approval request binds to exact tool + arguments + scope; recheck before execution.
-- Cancellation state and no false `completed` claim for interrupted work.
-- Defined behavior for unknown/inconclusive tool status; no blind non-idempotent retry.
-- Initial one-active-request-per-session queue/reject policy.
+- Preserve existing exact tool/argument permissions and executor enforcement.
+- Timed per-step records, actual tool provenance, verification and bounded outputs.
+- Planning/validated/running/terminal progress and record-derived final summaries.
+- Confirmed pre-start cancellation versus uncertain in-flight outcomes, without hard-preemption claims.
+- Bounded sequential execution, correct dependencies, no blind retries, one active request per session with immediate rejection of overlap.
 
 **Manual acceptance:**
-1. Attempt a controlled operation requiring approval → AIKA pauses until approved.
-2. Deny permission → no action performed.
-3. Approve modified or mismatched arguments → must be reapproved or denied.
-4. Cancel an in-flight test task → final state is cancelled/partial, never invented success.
+1. Run arithmetic plus system information → ordered progress and actual verified results.
+2. Cause a controlled calculation failure → dependent work skipped and independent policy preserved.
+3. Attempt an unauthorized target → rejected before launch; no permission elevation.
+4. Interrupt a controlled task → preserve completed work, cancel unstarted work and mark uncertain calls inconclusive.
+5. Resume saved results → no replay; see the Phase 5B report for live versus mocked verification.
 
-**Pass when:** Approval, cancellation, and partial failure semantics are observable and enforced.  
+**Pass when:** Execution, permission, cancellation and partial-failure semantics are accurate and enforced.
 **Suggested tag:** `aika-v2/phase-5b`.
 
-**R5 Gate:** AIKA is a limited, reliable agent, not a free-form system automation runner.
+### Checkpoint 5C — Controlled tool dataflow and contextual execution
+
+**Objective:** Use current verified system measurements in a later calculator step without model-estimated values or general piping.
+
+**Implement:**
+- Fixed typed byte-field references from `system.snapshot` to `calculator.evaluate` only.
+- Deterministic storage free/used and RAM-used percentage plans with required dependencies.
+- Preflight source/consumer/field/type/unit/operation checks and runtime verified numeric projection.
+- Exact-byte decimal calculation, real source timestamps, safe provenance and readable rounded displays.
+- Preserve 5B execution controls, budgets, permissions, isolation and non-replaying history.
+
+**Manual acceptance:** Use the Phase 5C report scenarios for real free/used storage and RAM calculations, existing independent operations, dependency/cancellation failures, unsupported dynamic chaining and resume without replay. Check real tools and collection timestamps rather than fixed example values.
+
+**Pass when:** Only the approved typed path produces a verified derived answer, and unavailable or unsafe references never run the calculator.
+
+### Checkpoint 5D — Bounded conditional decisions and reliable intent routing
+
+**Objective:** Evaluate one user-requested percentage threshold from verified storage/RAM data and display exactly one informational branch.
+
+**Implement:**
+- Deterministic routing of supported and clearly unsupported local conditional requests before ordinary chat, while preserving explicit commands and memory.
+- One fixed metric/operator/threshold, using the same snapshot → calculator plan and exact byte-based comparison.
+- Warning/normal text only; no branch-triggered actions or monitoring.
+- Verified decision/provenance, safe progress and saved final answer with no replay.
+- Preserve existing limits, permissions, cancellation, lock and failure semantics; no condition when evidence fails.
+
+**Manual acceptance:** Run the original reported request and explicit agent form, exercise the opposite branch from current measurements, test RAM, reject conditional deletion before any tool, verify ordinary arithmetic/dataflow, and restore history without replay. Use the Phase 5D report for actual versus mocked verification.
+
+**Pass when:** Real verified numeric evidence determines the branch; unsupported actions and failed evidence cannot become a normal/warning response or ordinary-chat capability disclaimer.
+
+**R5 Gate:** AIKA remains bounded to approved dataflow and immediate informational decisions, not general automation.
 
 ## Phase 6 — Consent-based perception
 
@@ -866,11 +902,14 @@ Do not mark anything PASSED based solely on this document or Codex's summary.
 | 3A Tool registry + calculator | NOT STARTED | — |
 | 3B Application launcher | NOT STARTED | — |
 | 3C Scoped system and file reads | NOT STARTED | — |
-| 4A Web search adapter | NOT STARTED | — |
-| 4B Safe page retrieval | NOT STARTED | — |
-| 4C Research answer + citations | NOT STARTED | — |
-| 5A Multi-tool agent | NOT STARTED | — |
-| 5B Approval / cancel / recovery | NOT STARTED | — |
+| 4A Web search adapter | READY FOR MANUAL REVIEW | Implemented hybrid DDGS/Tavily; [report](phase-reports/PHASE_4A_REPORT.md). |
+| 4B Safe page retrieval | READY FOR MANUAL REVIEW | User-selected reading and bounded manual answers; [report](phase-reports/PHASE_4B_REPORT.md). |
+| 4B-R Web reliability and stabilization | READY FOR MANUAL REVIEW | Bounded same-host redirects, extraction fallback and safe diagnostics; [report](phase-reports/PHASE_4B_R_REPORT.md). User acceptance pending; complete live grounded-answer acceptance remains unverified. |
+| 4C Research answer + citations | READY FOR MANUAL REVIEW | Bounded automatic research, source ranking, guarded reads and validated local synthesis; [report](phase-reports/PHASE_4C_REPORT.md). User acceptance pending. |
+| 5A Multi-tool agent | MANUAL TESTING COMPLETED (user report) | The Phase 5B brief reports completion of user manual testing and authorizes 5B. Historical [report](phase-reports/PHASE_5A_REPORT.md) retained. |
+| 5B Agent reliability / execution control | APPROVED BY USER (Phase 5C brief) | User reports successful manual acceptance and explicitly authorizes 5C. Historical [report](phase-reports/PHASE_5B_REPORT.md) retained. |
+| 5C Controlled tool dataflow | MANUAL TESTING CONFIRMED (user report) | The Phase 5D brief records confirmed manual measurements, rejection cases and restore behavior. Historical [report](phase-reports/PHASE_5C_REPORT.md) retained. |
+| 5D Bounded conditions / intent routing | READY FOR MANUAL REVIEW | Same two tools, exact threshold comparison and fixed informational branches; [report](phase-reports/PHASE_5D_REPORT.md). User acceptance pending. |
 | 6A Desktop signals | NOT STARTED | — |
 | 6B Consent lifecycle | NOT STARTED | — |
 | 7A Character state events | NOT STARTED | — |
@@ -887,6 +926,6 @@ Do not mark anything PASSED based solely on this document or Codex's summary.
 
 ## 11. Immediate next step
 
-**Start at Checkpoint 0A, then 0B.** Make sure the foundation documents and V1 backup strategy are clear, then let Codex create a **small runnable Python application** with a truthful `doctor` command. Run it yourself, inspect the results, and accept the checkpoint. The **first local AI conversation happens in 1A**, not earlier.
+**Current checkpoint: Phase 5D, READY FOR MANUAL REVIEW.** The user confirmed Phase 5C manual testing and authorized bounded conditional decisions. Run the Phase 5D report walkthrough with isolated storage. Historical reports remain unchanged. General branching, conditional side effects, monitoring and later checkpoints were not implemented. Do not mark Phase 5D accepted or begin another checkpoint without user review and a new instruction.
 
 > AIKA V2 is not successful because every module exists. It is successful when each capability really works, remains working after the next phase, and eventually powers one coherent desktop character.

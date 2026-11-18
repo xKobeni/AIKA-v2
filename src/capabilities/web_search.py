@@ -14,6 +14,8 @@ from urllib.parse import unquote, urlsplit, urlunsplit
 
 from src.capabilities.contracts import Permission, ToolDefinition, ToolExecutionError, ToolInputError, ToolStatus
 from src.config import valid_tavily_key
+from src.capabilities.web_diagnostics import WebFailure
+from src.capabilities.web_budget import bounded_timeout
 
 
 ENDPOINT = "https://api.tavily.com/search"
@@ -29,6 +31,7 @@ class SearchProviderError(ToolExecutionError):
 
     def __init__(self, message: str, kind: str, *, status=ToolStatus.EXECUTION_FAILED):
         super().__init__(message, status=status)
+        self.stage = "provider"
         self.kind = kind
 
 
@@ -44,12 +47,12 @@ def _httpx():
 
 
 def _open_client(httpx):
-    return httpx.Client(timeout=httpx.Timeout(5.0, connect=3.0, write=3.0, pool=3.0),
+    return httpx.Client(timeout=httpx.Timeout(bounded_timeout(5.0), connect=bounded_timeout(3.0), write=bounded_timeout(3.0), pool=bounded_timeout(3.0)),
                         trust_env=False, follow_redirects=False)
 
 
 def _clean(value: str, limit: int) -> str:
-    return " ".join("".join(char if char.isprintable() else " " for char in value).split())[:limit]
+    return " ".join("".join(char if char.isprintable() else " " for char in value).split())[:limit].rstrip()
 
 
 def _source_url(value: object, api_key: str = "") -> tuple[str, str] | None:
@@ -147,7 +150,7 @@ class TavilySearchProvider:
         httpx = _httpx()
         payload = {**arguments, "search_depth": "basic", "topic": "general", "auto_parameters": False,
                    "include_answer": False, "include_raw_content": False, "include_images": False}
-        deadline = monotonic() + READ_BUDGET
+        deadline = monotonic() + bounded_timeout(READ_BUDGET)
         try:
             with _open_client(httpx) as client:
                 with client.stream("POST", ENDPOINT, json=payload,
@@ -175,18 +178,18 @@ class TavilySearchProvider:
                         raise SearchProviderError(message, kind)
                     length = response.headers.get("Content-Length")
                     if length is not None and (not length.isdecimal() or int(length) > MAX_RESPONSE_BYTES):
-                        raise ToolExecutionError("Tavily response exceeds the size limit or has an invalid size header.")
+                        raise WebFailure("Tavily response exceeds the size limit or has an invalid size header.", "provider", "response_size")
                     if response.headers.get("Content-Encoding", "identity").lower() != "identity":
-                        raise ToolExecutionError("Tavily returned an unsupported encoded response.")
+                        raise WebFailure("Tavily returned an unsupported encoded response.", "provider", "response_encoding")
                     body = bytearray()
                     for chunk in response.iter_bytes(chunk_size=8192):
                         if monotonic() > deadline:
-                            raise ToolExecutionError("Tavily response exceeded the total read budget.")
+                            raise WebFailure("Tavily response exceeded the total read budget.", "provider", "response_budget")
                         if len(body) + len(chunk) > MAX_RESPONSE_BYTES:
-                            raise ToolExecutionError("Tavily response exceeds the size limit.")
+                            raise WebFailure("Tavily response exceeds the size limit.", "provider", "response_size")
                         body.extend(chunk)
                     if monotonic() > deadline:
-                        raise ToolExecutionError("Tavily response exceeded the total read budget.")
+                        raise WebFailure("Tavily response exceeded the total read budget.", "provider", "response_budget")
         except httpx.TimeoutException:
             raise SearchProviderError("Tavily search timed out. No automatic retry was made.", "timeout") from None
         except httpx.RequestError:
@@ -194,17 +197,23 @@ class TavilySearchProvider:
         try:
             data = json.loads(body)
         except (ValueError, UnicodeError, RecursionError):
-            raise ToolExecutionError("Tavily returned malformed JSON.") from None
+            raise WebFailure("Tavily returned malformed JSON.", "provider", "response_json") from None
         if not isinstance(data, dict) or "error" in data or "detail" in data or not isinstance(data.get("results"), list) or len(data["results"]) > 50:
-            raise ToolExecutionError("Tavily returned an invalid search response.")
+            raise WebFailure("Tavily returned an invalid search response.", "provider", "response_shape")
         return normalize_results(data["results"], arguments["query"], max_results, self.name, self.api_key)
 
 
 def normalize_results(rows: list, query: str, limit: int, provider: str, key: str = "") -> dict:
-    if (not isinstance(rows, list) or len(rows) > 50
-            or sum(len(value) for row in rows if isinstance(row, dict) for value in row.values() if isinstance(value, str)) > MAX_RESPONSE_BYTES
+    if not isinstance(rows, list) or len(rows) > 50:
+        raise WebFailure("Search normalization failed: invalid or oversized result list.", "normalization", "invalid_result_list")
+    # Ignore malformed optional metadata before serialization; native provider values need not be JSON types.
+    rows = [{**{name: row.get(name) if isinstance(row.get(name), str) else None
+                for name in ("url", "title", "content", "published_date")},
+             "score": row.get("score") if type(row.get("score")) in (int, float) and 0 <= row["score"] <= 1 else None}
+            if isinstance(row, dict) else None for row in rows]
+    if (sum(len(value) for row in rows if isinstance(row, dict) for value in row.values() if isinstance(value, str)) > MAX_RESPONSE_BYTES
             or len(json.dumps(rows, ensure_ascii=True).encode("utf-8")) > MAX_RESPONSE_BYTES):
-        raise ToolExecutionError("Search provider returned an invalid or oversized result list.")
+        raise WebFailure("Search normalization failed: oversized result content.", "normalization", "oversized_result_content")
     retrieved = datetime.now(UTC).isoformat()
     results, seen, discarded = [], set(), 0
     for rank, raw in enumerate(rows, 1):
@@ -216,7 +225,7 @@ def normalize_results(rows: list, query: str, limit: int, provider: str, key: st
         title = _clean(redact(raw["title"], key), 200) if isinstance(raw.get("title"), str) else None
         snippet = _clean(redact(raw["content"], key), 1000) if isinstance(raw.get("content"), str) else None
         score = raw.get("score")
-        if type(score) not in (int, float) or not math.isfinite(score) or not 0 <= score <= 1:
+        if type(score) not in (int, float) or not 0 <= score <= 1 or not math.isfinite(score):
             score = None
         results.append({"title": title or None, "url": source[0], "domain": source[1], "snippet": snippet or None,
                         "published_at": _published(redact(raw["published_date"], key)) if isinstance(raw.get("published_date"), str) else None,
@@ -224,7 +233,7 @@ def normalize_results(rows: list, query: str, limit: int, provider: str, key: st
         if len(results) == limit:
             break
     if rows and not results:
-        raise ToolExecutionError("Search provider returned no usable source entries; this is not a verified empty search.")
+        raise WebFailure("Search normalization failed: no usable source entries; this is not a verified empty search.", "normalization", "no_usable_sources")
     return {"query": query, "provider": provider, "retrieved_at": retrieved, "results": results, "discarded_count": discarded}
 
 
@@ -249,7 +258,7 @@ def _ddgs_dependencies():
 
 def _open_ddgs():
     module, _ = _ddgs_dependencies()
-    return module.DDGS(timeout=5, verify=True)
+    return module.DDGS(timeout=bounded_timeout(5), verify=True)
 
 
 @dataclass(frozen=True)
@@ -304,7 +313,7 @@ class DDGSSearchProvider:
             else:
                 raise ToolExecutionError("DDGS search failed internally; no provider fallback was initiated.") from None
         if not isinstance(rows, list) or len(rows) > 50:
-            raise ToolExecutionError("DDGS returned an invalid result list.")
+            raise WebFailure("DDGS normalization failed: invalid result list.", "normalization", "invalid_result_list")
         normalized = [{"title": row.get("title"), "url": row.get("href"), "content": row.get("body"),
                        "published_date": row.get("date"), "score": row.get("score")} if isinstance(row, dict) else None for row in rows]
         return normalize_results(normalized, checked["query"], max_results, self.name, self.redaction_key)
@@ -353,6 +362,7 @@ class SearchRouter:
         selected = provider or ("ddgs" if self.mode == "auto" else self.mode)
         providers = {"ddgs": self.ddgs, "tavily": self.tavily}
         attempts = [selected]
+        bounded_timeout(1)
         try:
             data = providers[selected].search(checked["query"], max_results)
         except SearchProviderError as primary_error:
@@ -360,11 +370,13 @@ class SearchRouter:
                     or primary_error.kind not in {"unavailable", "timeout", "rate_limited"}):
                 raise
             attempts.append(self.secondary)
+            bounded_timeout(1)
             try:
                 data = providers[self.secondary].search(checked["query"], max_results)
             except ToolExecutionError:
                 raise ToolExecutionError("Primary search failed and the explicitly enabled fallback was unavailable or failed. No further requests were made.",
                                          data={"attempted_providers": attempts}) from None
+        bounded_timeout(1)
         return {**data, "attempted_providers": attempts, "fallback_used": len(attempts) == 2}
 
 

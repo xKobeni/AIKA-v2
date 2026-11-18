@@ -128,6 +128,7 @@ def test_connection_uses_validated_numeric_address_and_original_tls_host(monkeyp
     lookup = Mock(side_effect=[[address()], [address("127.0.0.1")]])
     monkeypatch.setattr(socket, "getaddrinfo", lookup)
     raw = MagicMock()
+    raw.getpeername.return_value = ("93.184.216.34", 443)
     monkeypatch.setattr(socket, "socket", Mock(return_value=raw))
     tls = Mock()
     connection = reader._PinnedHTTPSConnection("example.com", context=tls)
@@ -262,6 +263,7 @@ def test_extraction_limits_controls_and_redaction(monkeypatch):
 def test_empty_extraction_never_uses_search_snippet(monkeypatch, text):
     import trafilatura
     monkeypatch.setattr(trafilatura, "extract", Mock(return_value=text))
+    monkeypatch.setattr("src.capabilities.web_content._fallback_text", lambda _: None)
     with pytest.raises(ToolExecutionError):
         extract_evidence(HTML, search_data()["results"][0], 1)
 
@@ -288,7 +290,7 @@ def test_search_read_answer_workflow_no_extra_calls(tmp_path, fetched):
     assert "[1] https://example.com/source-1" in answer
     assert "Retrieved:" in answer and "Evidence:" in answer
     assert len(instance.web_reader.evidence) == 1
-    fetched.assert_called_once_with("https://example.com/source-1")
+    fetched.assert_called_once_with("https://example.com/source-1", redirects=["https://example.com/source-1"], redaction_key=KEY)
     search.search.assert_called_once()
     generate.assert_called_once()
 
@@ -374,7 +376,8 @@ def test_malicious_page_cannot_act_or_leak_secrets(tmp_path, fetched):
     draft(text="See https://invented.example/"), draft(text="This is true [9]."), "not JSON", '{"claims":[]}',
     draft(text="secret " + KEY), 'x' * 9000])
 def test_invalid_citations_or_obviously_unsupported_draft_is_not_displayed(value):
-    assert grounded_answer("Which version?", {1: evidence()}, Mock(return_value=value), KEY) == INSUFFICIENT
+    answer = grounded_answer("Which version?", {1: evidence()}, Mock(return_value=value), KEY)
+    assert ("[malformed_json]" in answer) if value == "not JSON" else answer == INSUFFICIENT
 
 
 def test_multi_source_conflicts_keep_identity_and_timestamps():
@@ -400,9 +403,9 @@ def test_model_prompt_is_bounded_and_contains_only_evidence():
 
 
 def test_model_timeout_does_not_retry_or_guess():
-    generate = Mock(side_effect=OllamaError(KEY))
+    generate = Mock(side_effect=OllamaError(KEY, kind="timeout"))
     answer = grounded_answer("Which version?", {1: evidence()}, generate)
-    assert "unavailable or timed out" in answer and KEY not in answer
+    assert "timed out at the configured model budget" in answer and KEY not in answer
     generate.assert_called_once()
 
 
@@ -523,6 +526,7 @@ def test_deadline_interrupts_socket_even_when_response_detaches_it(connection, m
 def test_extraction_failure_is_private(monkeypatch):
     import trafilatura
     monkeypatch.setattr(trafilatura, "extract", Mock(side_effect=RuntimeError(KEY)))
+    monkeypatch.setattr("src.capabilities.web_content._fallback_text", lambda _: None)
     with pytest.raises(ToolExecutionError) as failure:
         extract_evidence(HTML, search_data()["results"][0], 1)
     assert KEY not in str(failure.value)

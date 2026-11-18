@@ -245,13 +245,14 @@ def test_total_read_budget_is_checked_without_retries(provider_http, monkeypatch
 @pytest.mark.parametrize("prompt", ["Search the web for the latest Python release.", "Look online for recent Ollama updates.",
     "Find the official SvelteKit documentation.", "Search for AI developments today.", "Look up the latest Qwen model announcement.",
     "What's the latest Python release?", "What are the newest Ollama updates?", "/web public sample query"])
-def test_search_intents_use_one_executor_and_no_model(provider_http, tmp_path, prompt):
+def test_manual_search_from_recognized_query_uses_one_executor_and_no_model(provider_http, tmp_path, prompt):
     request = web_request(prompt)
     assert request.tool == "web.search"
     generate = Mock(return_value="An invented research answer")
     session = session_for(tmp_path, generate)
     session.tools.execute = Mock(wraps=session.tools.execute)
-    assert "Synthetic documentation" in session.reply(prompt)
+    # Phase 4C owns natural research; /web retains the Phase 4A single-search contract.
+    assert "Synthetic documentation" in session.reply("/web " + request.arguments["query"])
     session.tools.execute.assert_called_once_with(request, authorization=None)
     generate.assert_not_called()
     assert len(provider_http.calls) == 1
@@ -279,7 +280,7 @@ def test_disabled_search_and_failures_never_use_stale_model_answers(provider_htt
     assert "disabled" in answer and "invented" not in answer and provider_http.calls == []
     enabled = session_for(tmp_path, generate)
     provider_http.response = httpx.ConnectError(KEY)
-    assert "could not be reached" in enabled.reply("What's the latest Python release?")
+    assert "could not be reached" in enabled.reply("/web latest Python release")
     generate.assert_not_called()
 
 

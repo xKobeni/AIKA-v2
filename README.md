@@ -6,7 +6,7 @@ Development starts with a headless backend and a CLI for verification. The plann
 
 ## Current checkpoint
 
-Phase 4B adds user-selected source reading and evidence-grounded answers through the existing conversation lifecycle. DDGS/Tavily search, calculator, approved Windows apps, system information, memory, and persistence remain. Search and source reading are independently disabled by default. No autonomous browsing or planning is enabled.
+Phase 5D adds immediate informational conditions on verified storage/RAM percentages and fixes the conditional-request routing gap. Status: READY FOR MANUAL REVIEW; acceptance is pending. The same ConversationSession, six tools, executor, permissions, budgets and SQLite lifecycle remain in use. Memory, manual commands, research and ordinary conversation remain available. The Phase 5D brief records user-confirmed Phase 5C manual tests.
 
 The conversation reliability update prefers `qwen3.5:4b` when no model override is set. Saved chats can be resumed with either model.
 
@@ -29,7 +29,7 @@ To activate the environment instead, run `.\.venv\Scripts\Activate.ps1` and repl
 
 | Command | Expected result |
 | --- | --- |
-| `python -m aika` | Core runtime `READY`, configuration `LOADED`, configured model, and current phase `4B`. This command works offline. |
+| `python -m aika` | Core runtime `READY`, configuration `LOADED`, configured model, and current phase `5D`. This command works offline. |
 | `python -m aika --version` | `AIKA AI V2 0.1.0` by default. |
 | `python -m aika doctor` | Runtime, SQLite, memory, Ollama, calculator, application, Windows measurement, and optional search configuration/contract checks. It never launches applications, samples system metrics, enumerates processes, or contacts Tavily. Missing optional web credentials produce `WARN` and do not prevent local use. |
 | `python -m aika chat` | Opens an interactive session with the configured local model. Use `exit`, `/exit`, Ctrl+C, or EOF to quit. |
@@ -316,9 +316,137 @@ Explicit search/current-information recognition remains bounded. Educational exp
 `/web-status` and doctor report provider mode, readiness, fallback policy, key presence, and contracts without searching or spending credits. A locally ready provider has not been connectivity/authentication-tested. Tool traces omit queries, keys, headers, and excerpts. SQLite saves displayed sources with their original provider and timestamp; `/resume` restores them without replaying searches. Search exchanges stay out of later ordinary Ollama context and do not automatically become memory facts. Search results are not globally cached.
 
 
+## Immediate verified conditions (Phase 5D)
+
+Use a single CLI line, for example:
+
+```text
+AIKA, check my storage. If my free space is below 20%, warn me. Otherwise, tell me everything is fine.
+/agent check my storage and warn me if free space is below 20%
+/agent if my C drive free space is under 15%, warn me; otherwise tell me it's okay
+/agent check my RAM usage; if it's above 90%, warn me, otherwise say normal
+If my disk usage exceeds 85%, warn me. Otherwise tell me everything is fine.
+```
+
+Supported metrics are free system-drive percentage, used system-drive percentage and used RAM percentage. Comparisons: below/under/less than, above/over/greater than/exceeds, at least/greater than or equal to, and at most/less than or equal to. Thresholds must be percentages from 0 to 100, with at most three decimal places. Equality, negative/nonfinite/scientific/malformed thresholds, other drives/metrics, combined/nested conditions and arbitrary branch text are unsupported. A named C drive must be the actual system drive.
+
+`warn me` means immediate text in this CLI. True selects the fixed `warning` response; false selects fixed `normal`. If `otherwise` is omitted, a successfully evaluated false condition still reports its normal status. Neither branch is selected when evidence, calculation, permission, cancellation or budget checks fail. A normal response establishes only that this requested warning condition was not met, not overall system health.
+
+The same two actual tools run: `system.snapshot`, then `calculator.evaluate`. There is no third comparison tool. Qwen never supplies measurements or chooses the branch. Code compares exact integer cross-products of the original verified byte counts and the threshold's exact ratio, independently of the calculator's rounded display. Thus 19.999% may display as 20.00% while correctly satisfying “below 20%.” Common supported conditions use exactly two executor attempts and zero generations, with no web activity.
+
+Routing recognizes actionable local conditional requests before ordinary-chat fallback, including the original reported sentence. Unsupported conditional actions such as deletion, launching, shell use, memory changes, emails or notifications are rejected as a whole request before any tool runs; AIKA does not silently replace them with a warning. Explicit memory routes and manual `/calc`, `/system`, `/web`, `/research`, `/read`, `/ask-web` stay separate. Explanations such as “What is a conditional statement?” remain ordinary conversation. Recognition is deliberately narrow; unsupported conditions get a controlled explanation, not model repair calls.
+
+Progress shows two verified tool completions, then `Evaluating verified condition...` and the true/false informational category. Callback arguments contain no measurement, threshold, snapshot, query, source time or private payload; only the final answer/short transient decision record carries the relevant percentage, threshold and provenance. The final answer retains the actual collection time, selected branch, tool/step status and counts. History/resume preserve that answer without rerunning measurements or decisions. A newly submitted request measures again. All existing execution budgets, permission checks, locking, output bounds, atomic history and cooperative cancellation remain.
+
+No monitoring, autonomous cleanup, OS alerts, arbitrary workflows, model/configuration changes or new dependencies were added. The full suite passed **1,295 tests with no warnings**. See [Phase 5D report](docs/phase-reports/PHASE_5D_REPORT.md) for actual live checks, exact comparison rules, failure handling and manual acceptance.
+
+## Verified system calculations (Phase 5C)
+
+These requests use one live system snapshot and one real calculator invocation, with zero model or web calls:
+
+```text
+/agent check my system storage and calculate the percentage of free disk space
+/agent calculate what percentage of my C drive is used
+/agent get my RAM information and calculate the percentage currently used
+Calculate what percentage of my C drive is free.
+Check my available storage, calculate what percent is free, and explain it.
+```
+
+Only `system.snapshot` → `calculator.evaluate` is supported. The fixed numeric field allowlist is `storage.free_bytes`, `storage.used_bytes`, `storage.total_bytes`, `memory.used_bytes`, `memory.total_bytes`. Values must come from a matching, successful, verified ToolResult in this request, pass the existing snapshot contract, and be available, nonboolean integers within the producer's unsigned 64-bit byte bounds. No strings, floats, NaN/infinity, missing values, arbitrary attributes/paths, old history/memory, process names, launch output, snippets or webpage text can supply operands.
+
+The operation is fixed: numerator / total × 100. Both operands use bytes from the same earlier snapshot and declared dependency; total must be positive and capacities consistent. Code constructs the bounded numeric expression and calls the existing calculator through its executor, preserving its decimal arithmetic and validation. There is no expression-template evaluator or model-supplied measurement. Binding into app/web/memory/configuration arguments remains unavailable.
+
+Free and used storage percentages cover the system drive only. An explicit C-drive request must match the actual measured system drive; other drive/cloud requests are unsupported. RAM used means total minus available, preserving existing snapshot semantics. Final replies include actual byte counts, rounded GiB quantities, the calculator's percentage rounded to two decimal places, actual collection time and tool/step provenance. They explicitly state that rounded display quantities are not the exact operands.
+
+Progress adds `Resolving verified numeric inputs...` after producer success and before the calculator starts. Invalid/unavailable bindings skip the consumer with no calculator call and no fabricated derived answer. Cancelled, failed, inconclusive or unverified producers never unlock it. Existing budgets, output limits, one-active-request guard, permissions and atomic history guarantees remain. Successful binding metadata stores approved field IDs, step/tool/type/unit references, actual collection time and verification flags, without numeric values or full snapshots. Those measured values never enter an Ollama prompt or progress log.
+
+Supported dataflow wording is deliberately narrow and deterministic. Unsupported/ambiguous dataflow is rejected without a model repair call; the existing small model schema has no new arbitrary binding/value keys. Literal calculations followed by independent system requests still work. General dataflow, arbitrary transformations, multiple derived quantities in one new natural-language macro and reuse across requests are unavailable. All existing manual `/system`, `/calc`, web and memory commands retain their own routes.
+
+The three presentation fixes also apply: `1 step`, an explicit research parent-step/call-count label, and an inconclusive final status for an unverified launch. No new configuration, dependencies or registered capabilities were added. Phase 5C verification passed **1,183 tests with no warnings**. See [Phase 5C report](docs/phase-reports/PHASE_5C_REPORT.md) for its actual tests, live acceptance and limitations.
+
+## Agent execution control (Phase 5B)
+
+`/agent` now separates planning from execution progress. It shows the validated step count, actual tool names, verified completions, failures, dependency skips and cancellation. Research also identifies its actual `web.search`/`web.read` calls. Progress uses fixed status labels and safe categories, without arguments, calculation results, system/process details, provider responses, source text, URLs or credentials. Results appear in the bounded final answer, together with step/tool provenance, execution status and counts.
+
+States retain Phase 5A names: `pending`, `running`, `succeeded`, `failed`, `skipped`, `inconclusive`, plus `cancelled` for work cancelled before it starts. An interrupted in-flight operation is **inconclusive** unless a verified result was already observed; it is not falsely called cancelled or terminated. Previously completed results remain visible. `then` dependencies cannot run after a non-successful predecessor. Independent steps may continue after ordinary controlled failures; internal/contract errors, output-budget exhaustion, global budget failures and interruption stop further scheduling.
+
+The existing step records now include dependency IDs, actual UTC start/finish timestamps, monotonic durations, verification flags, safe fixed summaries, and bounded records of actual executor attempts. `last_agent` is transient metadata without raw payloads. Timestamps describe local observation; finishing an inconclusive record does not prove an external process/request ended. Final summaries are derived by code, with no extra model call. Only the final exchange is saved; progress never becomes extra history turns. Resume does not repeat operations.
+
+`AIKA_AGENT_TIMEOUT` remains 180 seconds by default (finite 30–300). Fixed caps remain four steps, eight executor attempts, two model generations and one research workflow, with no automatic tool/planning retries. The existing executor additionally limits each JSON-compatible tool output to **128 KiB of UTF-8 JSON**, before output validation and again before retention. Controlled failure payloads are bounded too. Per-step final display is capped at **16,000 characters**, with an explicit truncation notice. These are fixed limits, not new environment settings. They do not preempt allocations or a native call inside a handler.
+
+Ctrl+C during agent execution returns a controlled stopped/partial answer to the chat loop where Python can observe the interrupt. The existing synchronous CLI cannot read a new command mid-call, so there is no fake `/agent cancel` command, job queue or background worker. No external process is killed. Native DDGS waves, DNS/platform calls, extraction and network inactivity timeouts retain their cooperative interruption limits. A late local result that was actually verified is preserved, but no additional step starts after cancellation or exhaustion is known.
+
+One request at a time is accepted per ConversationSession. An overlapping/reentrant `reply()` is rejected immediately without a second plan, tool call or history write; the guard releases even after interruption/storage failure. This is a rejection policy, not parallel execution or an asynchronous queue. Direct lifecycle changes (`new`/`resume`) still belong to the idle synchronous caller.
+
+If SQLite saving fails after operations, AIKA displays the bounded known results and explicitly reports the save failure. The in-memory conversation is not appended and operations are not automatically repeated or rolled back. Check actual app state before resubmitting. Existing permissions, allowlisted targets, network gates, DDGS/Tavily selection and paid-fallback opt-ins remain unchanged; source/tool content cannot authorize later actions or change budgets.
+
+Phase 5B verification passed **1,072 tests with no warnings**. See [Phase 5B report](docs/phase-reports/PHASE_5B_REPORT.md) for its actual tests, live checks, exclusions and manual acceptance. Its implementation-time live DDGS-agent attempt returned a controlled failure; the user subsequently reported successful web-agent and app-state acceptance in the Phase 5C brief. No fresh GUI/web acceptance is claimed by Phase 5C. No Tavily credits were used during implementation verification.
+
+## Controlled multi-tool plans (Phase 5A)
+
+Use an explicit task or combine independently supported requests:
+
+```text
+/agent calculate 12*7 then show my system information
+calculate 2+2 and calculate 3+3
+/agent calculate 1/0 then calculate 3+3; calculate 4+4
+/agent First calculate 12*7. Afterwards calculate 20/4.
+/agent open Notepad then research latest Python release
+```
+
+Every app launch must be explicitly requested by the user and use the existing fixed allowlist. No new approval workflow is added. `then` makes the next step require verified success of the previous step. `and`/`;` make independent operations that can still run after an ordinary tool failure. Invalid plans are rejected before any execution. A required dependency failure skips its descendants; interruption, budget exhaustion and internal failures stop the run. Progress describes operations being attempted; final replies distinguish verified results, inconclusive actions, failures and skipped work.
+
+Limits: **4 steps, 8 ToolExecutor attempts, 2 model generations, 1 research workflow**, and **180 seconds** overall. `AIKA_AGENT_TIMEOUT` accepts finite values from 30 to 300 seconds. These caps include nested research's search/read attempts and grounding generation. Plans conservatively reserve six executor slots for research, so research plus at most two other operations fits. The existing model/research timeouts still apply, clipped to the remaining outer budget. Deadlines and Ctrl+C are cooperative checkpoints, not hard preemption of an in-flight native operation; already-issued app launches cannot be rolled back.
+
+Clear compound requests need no planning model call. Other `/agent` wording can use one structured call to the configured local Ollama model. Its proposals must match original user-text spans (ignoring only case/whitespace), cover every operation and preserve explicit sequencing. Tool names and arguments are derived and validated by code; the model cannot grant permissions, introduce actions or use earlier private history to fill missing arguments. Unsupported wording fails closed without retries. Source content and tool results never re-enter the planner. Final summaries use tool results and existing verified research output, without an extra synthesis model call.
+
+Phase 4C research is reused unchanged as a bounded workflow, not registered as a seventh tool or duplicated. Optional web use obeys the current network gates and DDGS/Tavily mode/fallback settings; no new paid opt-in is introduced. Phase 5C permits only the typed system-byte-to-calculator binding described above; other result substitution and following webpage instructions remain unavailable. General shell, files, memory operations, desktop automation and persistent/resumable plans are unavailable. Phase 5D permits only the fixed immediate informational conditions described above, not general conditional business logic or actions. Continue using existing memory commands separately. Simple chat, arithmetic, single-tool requests and manual `/web`, `/read`, `/ask-web`, `/research` retain their routes.
+
+`/status` shows limits and the last agent outcome. Safe transient metadata records request ID, step number/tool/state/category/attempt count, executor/model counts and elapsed time; Phase 5B adds the observation timestamps and safe records described above. It contains no arguments, raw results, queries, URLs, keys or private prompts. The final exchange uses the existing atomic SQLite history save; `/resume` restores the answer without rerunning anything. Full plans/results are not a new persistent job queue. If history saving fails after an operation, no retry occurs; check actual app state before resubmitting.
+
+Phase 5A verification passed **1,034 tests with no warnings**. See [Phase 5A report](docs/phase-reports/PHASE_5A_REPORT.md) for its actual tests, live local-model acceptance, changed files and manual scenarios. Current execution-control verification is recorded in the Phase 5B report. No Tavily credits were consumed during implementation verification.
+
+## Automatic grounded research (Phase 4C)
+
+With both web gates enabled, current-information questions and explicit research requests use one fixed workflow: search once, rank returned candidates, read up to three pages securely, then make one local grounded-answer call. For example:
+
+```text
+What's happening in the Philippines today?
+What's the latest stable Python version?
+Search for recent AI developments.
+Find the latest information about Ollama.
+Compare the newest releases of Python and Node.js.
+/research latest Python release
+```
+
+Install the updated dependencies with `python -m pip install -e '.[dev]'`. In the ignored local `.env`, deliberately enable:
+
+```dotenv
+AIKA_WEB_SEARCH_ENABLED=on
+AIKA_WEB_READING_ENABLED=on
+AIKA_WEB_SEARCH_PROVIDER=auto
+AIKA_WEB_SEARCH_FALLBACK_ENABLED=off
+AIKA_RESEARCH_TIMEOUT=180
+AIKA_TIMEZONE=Asia/Manila
+```
+
+Restart chat. `AIKA_TIMEZONE=local` is the default and uses the OS timezone; explicit IANA zones are supported using the standard library and the Windows `tzdata` dependency. `AIKA_RESEARCH_TIMEOUT` accepts 30 through 300 seconds. These settings do not enable network access or paid fallback by themselves. Provider mode `auto` keeps DDGS primary; Tavily-only mode and paid fallback retain their existing explicit configuration rules. A Tavily key alone is insufficient to activate paid fallback. There are no application-level search retries, query-expansion loops, or automatic changes of provider after ambiguous DDGS errors.
+
+The single ConversationSession executes the existing `web.search` and `web.read` tools. At most five eligible candidate reads are attempted and at most three pages are successfully read; dates later found unusable still count toward the three-page resource cap. The model cannot choose new tool calls. Ranking considers topic overlap, supported HTTPS URLs, duplicate tracking links, available dates and recency, direct release/download information, publisher diversity for comparisons/news, and small documented publisher hints. Python/Node/Ollama owner domains and AP/PNA news domains are ranking hints, not proof of trust or factual correctness. All selected URLs still pass the same DNS pinning, peer/TLS, redirect, byte, MIME and extraction controls.
+
+`today` and `yesterday` are resolved at request time using the configured/local timezone. A bounded date is added to the search query where it fits. Same-day news claims require actual read-page publication metadata with a timezone, within the requested local date and no later than the request time. Missing/date-only/unqualified dates cannot establish a local publication day. Publication time is never treated as the event time. This conservative policy can decline news sites that omit suitable metadata. Software-release questions can use undated official pages but must qualify what those pages establish rather than infer global freshness or stable status.
+
+Progress messages correspond to actual searching, ranking, read attempts and answer generation. Successful replies contain validated source-backed statements and actual final URLs/retrieval timestamps, without dumping search cards. Failed or unsupported pages are skipped within the limits. If no suitable evidence remains, AIKA explains the verification limit and does not guess. Incomplete comparisons are qualified. Normal conversation, arithmetic, saved-memory/history questions, local system measurements and desktop commands keep their existing routes. Ambiguous references require a specific query; private prior turns or memory facts are not added to searches.
+
+`/web`, `/read`, `/ask-web` and `/web-status` remain manual controls. `/research <question>` is the deterministic full workflow; unknown natural phrasing can use it explicitly. `/web` still only searches, even when reading is enabled. Both disabled gates and provider failures fail closed. `/history` and `/resume` never replay research or fetch pages. Research replies are saved through the existing SQLite exchange transaction; full extracted text remains active-session state only and is excluded from later ordinary model context. A failed save clears uncommitted evidence and never retries a potentially billable request.
+
+The overall deadline is shared with existing search/read/model adapters. Remaining time clips network/model timeouts and is checked between operations; no new operation starts after expiry. The reader retains its socket shutdown timer. Native DDGS engine waves/thread shutdown and HTTPX read-inactivity semantics are not hard process-level preemption: a native operation may return after the nominal deadline, and its result is then discarded. Extraction remains bounded by HTML/text sizes rather than a CPU cancellation worker. No background retries, unrestricted URL feature, crawling, browser, new database or general agent runtime was added.
+
+With `AIKA_WEB_DEBUG=on`, a bounded run summary records a generated research ID, provider attempts/actual provider, candidates evaluated, read counts, fixed failure categories, evidence outcome and elapsed time. It contains no query text, source content, URLs, keys or private state. The active summary is available through the current session/status and optional logs; it is not a new persistent research database. The citation-bearing answer and timestamps persist normally. Phase 4C verification passed **945 tests with no warnings**. See [the Phase 4C report](docs/phase-reports/PHASE_4C_REPORT.md) for actual tests and manual acceptance outcomes.
+
 ## Selected source reading and grounded answers (Phase 4B)
 
-Install updated dependencies with `python -m pip install -e '.[dev]'`. This adds Trafilatura for extraction from already retrieved HTML. Edit the project `.env` (process variables still take precedence):
+Install updated dependencies with `python -m pip install -e '.[dev]'`. This adds Trafilatura for extraction from already retrieved HTML. If its primary extraction fails or yields no text, a deterministic paragraph/heading fallback may read the same sanitized HTML. The fallback removes page chrome and rejects empty/challenge pages; it does not download anything or bypass access restrictions. Previews identify the extraction method. Edit the project `.env` (process variables still take precedence):
 
 ```dotenv
 AIKA_WEB_SEARCH_ENABLED=on
@@ -338,15 +466,15 @@ Restart chat, then use:
 
 `Read source 1.`, `Read the first result.`, and `Open and summarize source 2.` also select one page. Reading shows a short untrusted preview, actual URL, title, retrieval timestamp, and any explicit publication date. It does not synthesize an answer automatically. Select up to three pages from the current search; selecting a read source again reuses its active evidence. A new search clears the previous source set, including after a failed search. No result page is fetched until selected. Arbitrary URLs and source numbers outside the current result set are rejected. `/web-status` reports the separate reading gate.
 
-The reader supports HTTPS on port 443 and HTML only. It rejects IP literals, credentials, local hostnames, and DNS answers containing any nonpublic address. The TCP connection uses the validated numeric address directly, with TLS verification/SNI for the original hostname, so it does not resolve the host again at connection time. It blocks redirects, environment proxies, cookies, authentication headers, file attachments, compressed responses, and non-HTML content. No JavaScript, secondary assets, crawling, retry, or paywall/CAPTCHA bypass is performed. Redirecting result URLs must be replaced by another directly readable search result; HTTP results are not upgraded.
+The reader supports HTTPS on port 443 and HTML only. It rejects IP literals, credentials, local hostnames, and DNS answers containing any nonpublic address. The TCP connection uses the validated numeric address directly, with TLS verification/SNI for the original hostname, so it does not resolve the host again at connection time. It follows at most two same-host HTTPS redirects, with URL/DNS/numeric-peer/TLS validation on every new connection and one shared time/byte budget. Cross-host, HTTP, credential-bearing and looping redirects are rejected. It blocks environment proxies, cookies, authentication headers, file attachments, compressed responses, and non-HTML content. No JavaScript, secondary assets, crawling, retry, or paywall/CAPTCHA bypass is performed. Cross-host redirecting result URLs require another directly readable search result; HTTP results are not upgraded. Both requested and final URLs and the validated redirect chain are retained.
 
 Limits: three sources; 1 MiB downloaded HTML; 12,000 extracted characters per source; 3-second DNS/connect and 5-second read inactivity timeouts; a 15-second network budget with socket shutdown; no automatic retry. A bounded daemon resolver can outlive a timed-out lookup, with at most one pending lookup per process. These are application controls, not a sandbox for a compromised operating system or hostile network routing. See the [OWASP SSRF guidance](https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html) and the phase report for the exact mechanism and limits.
 
-`/ask-web` sends only the question and selected extracted passages to the configured local Ollama model; it never searches or fetches more pages. At most 2,400 characters per source and 15,000 prompt characters are allowed. The model must return a short structured answer with existing source IDs and exact supporting quotes. Invalid IDs, invented URLs, missing/invented quotes, obviously unsupported numbers, and malformed drafts produce an insufficient-evidence response without correction loops. The app attaches the real URLs and original retrieval timestamps. Quote/ID checks establish traceability and catch some errors; they cannot prove semantic entailment, freshness, truth, or that the model noticed every disagreement. Visible supporting quotes let you inspect each claim.
+`/ask-web` sends only the question and selected extracted passages to the configured local Ollama model; it never searches or fetches more pages. At most 2,400 characters per source and 15,000 prompt characters are allowed. The CLI uses Ollama's JSON schema output for grounded answers only, capped at 768 predicted tokens, while preserving the configured model timeout and ordinary chat behavior. The model must return a short structured answer with existing source IDs and exact supporting quotes; it chooses a quote first and copies numeric details unchanged. Timeout and model-unavailability errors are distinguished; there is no hidden retry. Each claim must independently pass ID, quote, numeric/version and content checks. Invalid claims are omitted; supported claims remain visible, with a partial-evidence notice when appropriate. If none pass, the reply reports insufficient evidence. Malformed JSON has an explicit controlled error; there are no correction loops. Topic filtering prevents an unrelated question from using the wrong source set. Freshness answers state what the pages establish without claiming global currency. The app attaches the real URLs and original retrieval timestamps. Quote/ID checks establish traceability and catch some errors; they cannot prove semantic entailment, freshness, truth, or that the model noticed every disagreement. Visible supporting quotes let you inspect each claim.
 
 Full extracted text is active-session state only and is not saved as long-term memory. SQLite stores the bounded reading preview and completed answer/citations. These exchanges stay out of future ordinary model context. `/history` and `/resume` never refetch. Resume, restart, `/new`, `/clear`, or a new search discard full evidence; after resume, explicitly search and read sources again before asking a new grounded question. Saved answers keep their original source URLs and retrieval times. Reading sends the selected URL/path to that source site and performs DNS resolution, but sends no Tavily key, saved memory, conversation history, or system measurements.
 
-Manual walkthrough: enable both gates; search; select a directly accessible HTTPS source; inspect `/read` preview; ask `/ask-web`; optionally select a second page and compare; inspect `/history`; resume and confirm a new grounded answer requires new reading. If a source redirects, is blocked, requires JavaScript, has no extractable text, or exceeds limits, expect a controlled failure. Ollama failures remain errors rather than guesses. Automated tests mock source HTTP and model responses and consume no provider credits.
+Manual walkthrough: enable both gates; search; select a directly accessible HTTPS source; inspect `/read` preview; ask `/ask-web`; optionally select a second page and compare; inspect `/history`; resume and confirm a new grounded answer requires new reading. If a source redirects across hosts or exceeds two redirects, is blocked, requires JavaScript, has no extractable text, or exceeds limits, expect a controlled failure. Ollama failures remain errors rather than guesses. Automated tests mock source HTTP and model responses and consume no provider credits.
 
 
 ## Configuration
@@ -383,6 +511,10 @@ All optional variables below may be set in `.env` or PowerShell. Existing proces
 | `AIKA_WEB_SEARCH_PROVIDER` | `auto` | `auto` (DDGS first), `ddgs` only, or `tavily` only. |
 | `AIKA_WEB_SEARCH_FALLBACK_ENABLED` | `off` | Explicit fallback opt-in, same boolean syntax. A Tavily secondary can consume credits. |
 | `AIKA_WEB_SEARCH_FALLBACK_PROVIDER` | `tavily` | `ddgs` or `tavily`; never retries the primary or overrides explicit selection. |
+| `AIKA_RESEARCH_TIMEOUT` | `180` | Overall research budget in seconds, bounded to 30-300; underlying native preemption limitations are documented above. |
+| `AIKA_AGENT_TIMEOUT` | `180` | Overall controlled-plan budget, finite 30-300 seconds; includes nested research and model work. Fixed caps: 4 steps / 8 executor attempts / 2 model generations. |
+| `AIKA_TIMEZONE` | `local` | OS local timezone or an available IANA name, used for relative-date research. |
+| `AIKA_WEB_DEBUG` | `off` | Opt-in fixed stage/outcome/rejection labels and elapsed timing only. No queries, URLs, raw responses, exception messages, credentials, or page content. Restart after changes. |
 | `AIKA_WEB_READING_ENABLED` | `off` | Separate source-reading opt-in; requires the existing web network gate too. |
 | `AIKA_TAVILY_API_KEY` | empty | Optional secret ASCII token, at most 512 characters, without whitespace/control characters. Required only for Tavily; never displayed or sent to DDGS. |
 
@@ -486,4 +618,16 @@ AIKA AI/
 - [Phase 3B-B report](docs/phase-reports/PHASE_3B_B_REPORT.md) explains read-only Windows measurements, process privacy, verification, and manual review steps.
 - [Phase 4A report](docs/phase-reports/PHASE_4A_REPORT.md) records hybrid DDGS/Tavily setup, routing, fallback, costs and retrieval repairs.
 
-- [Phase 4B report](docs/phase-reports/PHASE_4B_REPORT.md) records guarded source reading, citation checks, actual acceptance outcomes, and 791 passing regression tests. Next planned milestone: Phase 5 - Controlled Agent Planning (not implemented).
+- [Phase 4B report](docs/phase-reports/PHASE_4B_REPORT.md) records guarded source reading, citation checks, actual acceptance outcomes, and 791 passing regression tests. Phase 5A now adds the controlled planning described above.
+
+
+### Phase 4B-R diagnostics and review
+
+Set `AIKA_WEB_DEBUG=on` in `.env` and restart to diagnose a failing `/web`, `/read`, or `/ask-web` request. Logs contain fixed stage/outcome/rejection labels and elapsed milliseconds only. Provider failures, result-normalization failures, unexpected execution errors and output-contract failures are distinguished. Diagnostics remain off by default and never print traceback text, source bodies, queries, credentials or model drafts. Malformed optional provider metadata is ignored before normalization serialization; malformed lists and unusable sources remain controlled failures, never invented empty success. Ambiguous DDGS errors do not authorize paid fallback.
+
+The configured local-model budget has not been increased. The grounding follow-up reproduced an all-or-nothing validation error: one unsupported numeric claim discarded other claims before they were checked. Claims are now validated independently, and selected paragraph/sentence spans preserve original text and word boundaries. Exact versions, dates and topic matches receive priority; whitespace-only quote copying is resolved back to the original source substring. The final real qwen3.5:4b `/ask-web` acceptance identified the Python release from the supplied Python.org page in 40.47 seconds, with its actual quote, URL and retrieval time and an explicit freshness limitation. An unrelated Philippines-news question was rejected before a model call. DDGS failed during this follow-up, so no fresh successful search/read/answer chain is claimed. No live Tavily credits were used. The final regression suite passed **872 tests with no warnings**; exact results are recorded in the report. See the [Phase 4B-R report](docs/phase-reports/PHASE_4B_R_REPORT.md) for precise results, modified files and acceptance commands. Phase 4C now adds the bounded automatic research described above; Phase 5B now strengthens execution control as described above.
+
+
+Grounding diagnostics use fixed categories such as `malformed_json`, `missing_quote`, `quote_not_selected`, `unsupported_number`, `source_mismatch`, `insufficient_evidence`, and `model_timeout`. Logs never contain private prompts, source passages, raw model drafts or credentials. The known optional urllib3/PySocks warning is narrowly suppressed only during Trafilatura import; unrelated warnings still surface and no proxy dependency/support was added. Citation/quote/status checks improve traceability but do not prove complete semantic support. See the grounded-answer follow-up in the Phase 4B-R report for the exact live test scope and limitations.
+
+- [Phase 4C report](docs/phase-reports/PHASE_4C_REPORT.md) documents the automatic research workflow, fixed limits, privacy/billing safeguards, actual verification and remaining limits. See the Phase 5A section above for controlled multi-tool planning.

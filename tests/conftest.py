@@ -22,6 +22,10 @@ def isolated_config(monkeypatch, tmp_path, ollama_model):
     # Child CLI processes must also stay offline when a developer enables local search.
     monkeypatch.setenv("AIKA_WEB_SEARCH_ENABLED", "off")
     monkeypatch.setenv("AIKA_WEB_READING_ENABLED", "off")
+    monkeypatch.setenv("AIKA_WEB_DEBUG", "off")
+    monkeypatch.setenv("AIKA_RESEARCH_TIMEOUT", "180")
+    monkeypatch.setenv("AIKA_AGENT_TIMEOUT", "180")
+    monkeypatch.setenv("AIKA_TIMEZONE", "local")
     monkeypatch.setenv("AIKA_TAVILY_API_KEY", "")
     monkeypatch.setenv("AIKA_WEB_SEARCH_PROVIDER", "auto")
     monkeypatch.setenv("AIKA_WEB_SEARCH_FALLBACK_ENABLED", "off")

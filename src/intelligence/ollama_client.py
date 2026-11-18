@@ -1,6 +1,7 @@
 from typing import TypedDict
 
 from src.config import Settings
+from src.capabilities.web_budget import bounded_timeout
 
 
 class ChatMessage(TypedDict):
@@ -10,6 +11,10 @@ class ChatMessage(TypedDict):
 
 class OllamaError(Exception):
     """An Ollama failure safe to display to the user."""
+
+    def __init__(self, message: str, *, kind: str = "unavailable"):
+        super().__init__(message)
+        self.kind = kind
 
 
 class ModelUnavailable(OllamaError):
@@ -39,10 +44,14 @@ class OllamaClient:
                 return entry
         raise self._missing_model()
 
-    def generate(self, messages: list[ChatMessage]) -> str:
+    def generate(self, messages: list[ChatMessage], *, response_format: dict | None = None, num_predict: int | None = None) -> str:
         """Return one assistant answer from the supplied messages."""
         think = self._thinking_value(self.check_model())
         body = {"model": self.settings.model, "messages": messages, "stream": False, "options": {"temperature": 0.2}}
+        if response_format is not None:
+            body["format"] = response_format
+        if num_predict is not None:
+            body["options"]["num_predict"] = num_predict
         if think is not None:
             body["think"] = think
         payload = self._request("POST", "/api/chat", self.settings.model_timeout, body)
@@ -99,6 +108,7 @@ class OllamaClient:
         return ModelUnavailable(f"Model {model} is unavailable. Run `ollama pull {model}` or select an installed model.")
 
     def _request(self, method: str, path: str, timeout: float, body: dict | None = None) -> dict:
+        timeout = bounded_timeout(timeout)
         try:
             import httpx
         except ImportError:
@@ -109,17 +119,17 @@ class OllamaClient:
                 method,
                 self.settings.runtime_url.rstrip("/") + path,
                 json=body,
-                timeout=httpx.Timeout(timeout, connect=self.probe_timeout),
+                timeout=httpx.Timeout(timeout, connect=min(self.probe_timeout, timeout)),
                 trust_env=False,
                 follow_redirects=False,
             )
             response.raise_for_status()
         except httpx.ConnectError:
-            raise OllamaError("Cannot connect to Ollama. Open Ollama or run `ollama serve`, then try again.") from None
+            raise OllamaError("Cannot connect to Ollama. Open Ollama or run `ollama serve`, then try again.", kind="connection") from None
         except httpx.TimeoutException:
             if path == "/api/chat":
-                raise OllamaError("Ollama took too long to generate. Retry or increase AIKA_MODEL_TIMEOUT.") from None
-            raise OllamaError("Ollama did not respond to the model check. Check the local service and try again.") from None
+                raise OllamaError("Ollama took too long to generate. Retry or increase AIKA_MODEL_TIMEOUT.", kind="timeout") from None
+            raise OllamaError("Ollama did not respond to the model check. Check the local service and try again.", kind="timeout") from None
         except httpx.HTTPStatusError as exc:
             status = exc.response.status_code
             if path in {"/api/chat", "/api/show"} and status == 404:
@@ -128,6 +138,7 @@ class OllamaClient:
         except httpx.RequestError:
             raise OllamaError("Communication with Ollama failed. Check the local service and try again.") from None
 
+        bounded_timeout(1)
         try:
             payload = response.json()
         except ValueError:

@@ -72,3 +72,4 @@ class ToolResult:
     permission: Permission | None = None
     validation: str = "NOT_RUN"
     elapsed_ms: float = 0.0
+    failure_category: str | None = None
