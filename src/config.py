@@ -2,7 +2,6 @@ import json
 import math
 import os
 import re
-import sys
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -19,6 +18,12 @@ DOTENV_PATH = Path(__file__).resolve().parents[1] / ".env"
 DEFAULT_MODEL = "qwen3.5:4b"
 DEFAULT_MODEL_TIMEOUT = 180.0
 DEFAULT_CONTEXT_TURNS = 10
+MAX_CONTEXT_TURNS = 50
+DEFAULT_CONTEXT_CHARS = 24000
+MIN_CONTEXT_CHARS = 4096
+MAX_CONTEXT_CHARS = 64000
+DEFAULT_RESPONSE_TOKENS = 1024
+MAX_RESPONSE_TOKENS = 4096
 
 
 class ConfigError(ValueError):
@@ -49,6 +54,8 @@ class Settings:
     research_timeout: float = 180.0
     timezone: str = "local"
     agent_timeout: float = 180.0
+    context_chars: int = DEFAULT_CONTEXT_CHARS
+    response_tokens: int = DEFAULT_RESPONSE_TOKENS
 
 
 def _environment() -> dict[str, str]:
@@ -68,6 +75,17 @@ def load_version(environment: Mapping[str, str] | None = None) -> str:
     if not re.fullmatch(r"(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)", version):
         raise ConfigError("AIKA_VERSION must use a numeric X.Y.Z version, such as 0.1.0.")
     return version
+
+
+def _bounded_integer(environment, key, default, minimum, maximum):
+    error = f"{key} must be a whole number from {minimum} to {maximum}."
+    try:
+        value = int(environment.get(key, default))
+    except ValueError:
+        raise ConfigError(error) from None
+    if not minimum <= value <= maximum:
+        raise ConfigError(error)
+    return value
 
 
 def load_config() -> Settings:
@@ -98,13 +116,9 @@ def load_config() -> Settings:
     if not math.isfinite(timeout) or timeout <= 0:
         raise ConfigError(timeout_error)
 
-    context_error = "AIKA_CONTEXT_TURNS must be a nonnegative whole number within the supported range."
-    try:
-        context_turns = int(environment.get("AIKA_CONTEXT_TURNS", DEFAULT_CONTEXT_TURNS))
-    except ValueError:
-        raise ConfigError(context_error) from None
-    if not 0 <= context_turns <= sys.maxsize:
-        raise ConfigError(context_error)
+    context_turns = _bounded_integer(environment, "AIKA_CONTEXT_TURNS", DEFAULT_CONTEXT_TURNS, 0, MAX_CONTEXT_TURNS)
+    context_chars = _bounded_integer(environment, "AIKA_CONTEXT_CHARS", DEFAULT_CONTEXT_CHARS, MIN_CONTEXT_CHARS, MAX_CONTEXT_CHARS)
+    response_tokens = _bounded_integer(environment, "AIKA_RESPONSE_TOKENS", DEFAULT_RESPONSE_TOKENS, 64, MAX_RESPONSE_TOKENS)
 
     ollama_think = environment.get("AIKA_OLLAMA_THINK", "off").strip().lower()
     if ollama_think not in {"off", "on", "default"}:
@@ -180,6 +194,7 @@ def load_config() -> Settings:
         web_enabled in {"on", "true", "1"}, api_key,
         provider, fallback in {"on", "true", "1"}, secondary, reading in {"on", "true", "1"}, web_debug in {"on", "true", "1"},
         research_timeout, timezone, agent_timeout,
+        context_chars, response_tokens,
     )
 
 

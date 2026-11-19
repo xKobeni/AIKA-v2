@@ -10,6 +10,12 @@ Phase 5E improves capability-aware intent routing and terminal usability. Status
 
 The conversation reliability update prefers `qwen3.5:4b` when no model override is set. Saved chats can be resumed with either model.
 
+The November 19 backend baseline checkpoint adds developer benchmarks and Windows CI for Python 3.12/3.13 without changing runtime behavior. See the [baseline and portability report](docs/phase-reports/BACKEND_BASELINE_PORTABILITY_CI_REPORT.md) for actual clean-environment results, remaining gaps and reproducible commands.
+
+The subsequent [Ollama transport checkpoint](docs/phase-reports/OLLAMA_TRANSPORT_METADATA_CACHE_REPORT.md) reuses one HTTP client per chat and caches successful model/thinking metadata for 30 seconds. Warm generations still call `/api/chat` every time; replies and conversation content are never cached. `check_model()` forces a fresh check. Errors or endpoint/model/thinking-mode changes invalidate metadata, and failed generations are never automatically replayed. CLI, doctor and developer benchmarks close their owned clients. Use `with OllamaClient(settings) as client:` or call `close()` when using the backend adapter directly. The configured model remains unchanged.
+
+The [context/output budget checkpoint](docs/phase-reports/CONTEXT_OUTPUT_BUDGET_REPORT.md) limits model input to 24,000 content characters by default and ordinary output to 1,024 tokens. Chat keeps the newest complete exchange suffix that fits, preserves the full system instruction and latest user message, and leaves saved history and structured memory intact. Retained turns default to 10 with a maximum of 50. A mandatory input that cannot fit receives a controlled error without generation; source/planner prompts are validated without silently trimming evidence. `/status` shows budgets and context debug reports the actual sent turns. Character counts are not exact tokenizer counts, and no model context-window setting is changed.
+
 ## Run on Windows
 
 Open PowerShell in this project's root. Create a Python 3.12 virtual environment and use its Python directly.
@@ -538,8 +544,10 @@ All optional variables below may be set in `.env` or PowerShell. Existing proces
 | `AIKA_OLLAMA_MODEL` | `qwen3.5:4b` | An installed local chat model. Cloud models are unavailable. |
 | `AIKA_MODEL_TIMEOUT` | `180` | Finite positive number of seconds to wait for generation I/O. Connection and model-list probes wait at most three seconds per I/O operation. |
 | `AIKA_OLLAMA_THINK` | `off` | `off` requests no thinking where supported. `on` uses a supported thinking mode. `default` leaves the decision to the model. Only final assistant text is displayed and saved. |
-| `AIKA_CONTEXT_TURNS` | `10` | Nonnegative whole number of completed turns to load into context. `0` keeps saving exchanges and sends only the system instruction and latest prompt. |
-| `AIKA_CONTEXT_DEBUG` | `off` | `roles` shows the outgoing message order, model, session ID, retained turn count, and whether earlier saved turns were omitted. `content` also reveals explicitly approved public message text. |
+| `AIKA_CONTEXT_TURNS` | `10` | Whole number 0–50 of completed turns retained/loaded. `0` keeps saving exchanges and sends only the system instruction and latest prompt. Older complete exchanges may also be omitted by the content budget. |
+| `AIKA_CONTEXT_CHARS` | `24000` | Whole number 4096–64000: total model message-content characters. Chat trims only older complete pairs; newest user/system text is never shortened. Oversized mandatory or structured input is rejected before model HTTP work. |
+| `AIKA_RESPONSE_TOKENS` | `1024` | Whole number 64–4096 for ordinary generation. Research/planning retain their explicit 768/512-token caps; explicit adapter overrides must be 1–4096, with unlimited values rejected. |
+| `AIKA_CONTEXT_DEBUG` | `off` | `roles` shows the actual outgoing message order, model, session ID, included history count, and whether earlier turns were omitted by retention, privacy or content limits. `content` also reveals explicitly approved public message text. |
 | `AIKA_CONTEXT_DEBUG_PUBLIC` | `[]` | JSON array of exact public message strings to reveal in `content` mode. Unlisted and recognizable credential-like text stays hidden. |
 | `AIKA_DISABLED_APPS` | `[]` | JSON array of unique approved application IDs to disable: `notepad`, `calculator`, `spotify`. No commands or paths are accepted. |
 | `AIKA_WEB_SEARCH_ENABLED` | `off` | Explicit outbound-search gate: `off/on`, `false/true`, or `0/1`, case-insensitive. |

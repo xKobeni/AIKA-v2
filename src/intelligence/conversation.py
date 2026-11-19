@@ -30,6 +30,8 @@ from src.capabilities.research import (research_question, temporal_context, prep
                                        safe_failure, log_summary, MAX_ATTEMPTS, MAX_SOURCES)
 from src.intelligence.ollama_client import ChatMessage
 from src.intelligence.ollama_client import OllamaError
+from src.intelligence.prompt_budget import bounded_context
+from src.config import DEFAULT_CONTEXT_CHARS, MAX_CONTEXT_TURNS, MIN_CONTEXT_CHARS, MAX_CONTEXT_CHARS
 from src.intelligence.planning import (agent_task, build_plan, call_identity, execution_outcome, execution_counts,
                                       record_summary, PlanError, MAX_EXECUTIONS, MAX_MODEL_CALLS, MAX_STEP_TEXT)
 from src.intelligence.dataflow import (BindingError, validate_calculation, resolve_calculation, provenance,
@@ -59,13 +61,19 @@ class ConversationSession:
         timezone: str = "local",
         agent_generate: Callable | None = None,
         agent_timeout: float = 180.0,
+        context_chars: int = DEFAULT_CONTEXT_CHARS,
     ):
+        if type(context_turns) is not int or not 0 <= context_turns <= MAX_CONTEXT_TURNS:
+            raise ValueError(f"context_turns must be from 0 to {MAX_CONTEXT_TURNS}.")
+        if type(context_chars) is not int or not MIN_CONTEXT_CHARS <= context_chars <= MAX_CONTEXT_CHARS:
+            raise ValueError("context_chars is outside the supported range.")
         self._system_instruction = system_instruction
         self._generate = generate
         self._grounded_generate = grounded_generate if grounded_generate is not None else generate
         self._store = store
         self._memory = memory
         self._context_turns = context_turns
+        self._context_chars = context_chars
         self.applications = applications if applications is not None else create_applications()
         self.web_search = web_search if web_search is not None else SearchRouter()
         key = getattr(self.web_search, "api_key", getattr(self.web_search, "redaction_key", ""))
@@ -647,13 +655,14 @@ class ConversationSession:
             summary["elapsed_ms"] = round((monotonic() - started) * 1000, 1)
 
     def _ordinary_reply(self, prompt: str, trace) -> str:
-        messages: list[ChatMessage] = [
-            {"role": "system", "content": self.web_search.redact(self._system_instruction)},
-            *self.history(for_model=True),
-            {"role": "user", "content": prompt},
-        ]
+        try:
+            messages, trimmed = bounded_context(self.web_search.redact(self._system_instruction),
+                                                self.history(for_model=True), prompt, self._context_chars)
+        except ValueError as exc:
+            raise OllamaError(str(exc)) from None
         if trace is not None:
-            trace(self.session_id, messages, self.turn_count, self._sequence // 2 > self.turn_count)
+            included = (len(messages) - 2) // 2
+            trace(self.session_id, messages, included, trimmed or self._sequence // 2 > included)
         answer = self._generate(messages)
         if self._memory is not None:
             answer = ordinary_statement_reply(answer)

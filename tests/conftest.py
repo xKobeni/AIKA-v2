@@ -32,6 +32,8 @@ def isolated_config(monkeypatch, tmp_path, ollama_model):
     monkeypatch.setenv("AIKA_WEB_SEARCH_FALLBACK_PROVIDER", "tavily")
     monkeypatch.setenv("AIKA_DATA_DIR", str(tmp_path))
     monkeypatch.setenv("AIKA_OLLAMA_MODEL", ollama_model)
+    monkeypatch.setenv("AIKA_CONTEXT_CHARS", "24000")
+    monkeypatch.setenv("AIKA_RESPONSE_TOKENS", "1024")
 
 
 @pytest.fixture(autouse=True)
@@ -60,18 +62,29 @@ def prevent_live_search_requests(monkeypatch):
 
 @pytest.fixture
 def mock_ollama(monkeypatch, ollama_model):
+    client_type = httpx.Client
+    clients = []
     def installed_models(request):
         assert request.method == "GET"
         assert request.url.path == "/api/tags"
         return httpx.Response(200, json={"models": [{"name": ollama_model}]})
 
     def use_transport(handler=installed_models):
-        def request(method, url, *, trust_env, follow_redirects, **kwargs):
+        def create_client(*args, **kwargs):
+            # Other tool mocks already supply their own isolated HTTP transport.
+            if "transport" in kwargs:
+                return client_type(*args, **kwargs)
+            trust_env, follow_redirects = kwargs["trust_env"], kwargs["follow_redirects"]
             assert trust_env is False
             assert follow_redirects is False
-            with httpx.Client(transport=httpx.MockTransport(handler), trust_env=False) as client:
-                return client.request(method, url, **kwargs)
+            client = client_type(transport=httpx.MockTransport(handler), trust_env=trust_env,
+                                 follow_redirects=follow_redirects)
+            clients.append(client)
+            return client
 
-        monkeypatch.setattr(httpx, "request", request)
+        monkeypatch.setattr(httpx, "Client", create_client)
+        return clients
 
-    return use_transport
+    yield use_transport
+    for client in clients:
+        client.close()

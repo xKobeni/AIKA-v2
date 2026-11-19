@@ -1,7 +1,14 @@
 from typing import TypedDict
+from copy import deepcopy
+from time import monotonic
 
-from src.config import Settings
+from src.config import Settings, validate_runtime_url, MIN_CONTEXT_CHARS, MAX_CONTEXT_CHARS, MAX_RESPONSE_TOKENS
+from src.intelligence.prompt_budget import validate_messages
 from src.capabilities.web_budget import bounded_timeout
+
+
+METADATA_TTL = 30.0
+_UNSET = object()
 
 
 class ChatMessage(TypedDict):
@@ -25,8 +32,48 @@ class OllamaClient:
     def __init__(self, settings: Settings):
         self.settings = settings
         self.probe_timeout = min(3.0, settings.model_timeout)
+        self._http = None
+        self._closed = False
+        self._identity = None
+        self._clear_metadata()
+
+    def _clear_metadata(self):
+        self._model = None
+        self._checked_at = 0.0
+        self._thinking = _UNSET
+
+    def _drop_transport(self):
+        client, self._http = self._http, None
+        if client is not None:
+            client.close()
+
+    def _prepare(self):
+        if self._closed:
+            raise OllamaError("The Ollama client is closed.")
+        validate_runtime_url(self.settings.runtime_url, "AIKA_OLLAMA_URL")
+        identity = (self.settings.runtime_url.rstrip("/"), self.settings.model, self.settings.ollama_think)
+        if identity != self._identity:
+            self._clear_metadata()
+            self._drop_transport()
+            self._identity = identity
+        self.probe_timeout = min(3.0, self.settings.model_timeout)
+
+    def close(self):
+        self._closed = True
+        self._clear_metadata()
+        self._drop_transport()
+
+    def __enter__(self):
+        self._prepare()
+        return self
+
+    def __exit__(self, *_):
+        self.close()
 
     def check_model(self) -> dict:
+        """Always refresh availability; generation alone may reuse a recent successful check."""
+        self._prepare()
+        self._clear_metadata()
         payload = self._request("GET", "/api/tags", self.probe_timeout)
         models = payload.get("models")
         if not isinstance(models, list):
@@ -41,12 +88,38 @@ class OllamaClient:
             if entry["name"].casefold() == model:
                 if entry.get("remote_host") or entry.get("remote_model"):
                     raise ModelUnavailable(f"{self.settings.model} uses a remote model. Select an installed local model.")
-                return entry
+                self._model = deepcopy(entry)
+                self._checked_at = monotonic()
+                return deepcopy(entry)
         raise self._missing_model()
 
     def generate(self, messages: list[ChatMessage], *, response_format: dict | None = None, num_predict: int | None = None) -> str:
         """Return one assistant answer from the supplied messages."""
-        think = self._thinking_value(self.check_model())
+        if type(self.settings.context_chars) is not int or not MIN_CONTEXT_CHARS <= self.settings.context_chars <= MAX_CONTEXT_CHARS:
+            raise OllamaError("AIKA_CONTEXT_CHARS is outside the supported range.")
+        try:
+            validate_messages(messages, self.settings.context_chars)
+        except ValueError as exc:
+            raise OllamaError(str(exc)) from None
+        if num_predict is None:
+            num_predict = self.settings.response_tokens
+            if type(num_predict) is not int or not 64 <= num_predict <= MAX_RESPONSE_TOKENS:
+                raise OllamaError("AIKA_RESPONSE_TOKENS is outside the supported range.")
+        if type(num_predict) is not int or not 1 <= num_predict <= MAX_RESPONSE_TOKENS:
+            raise OllamaError("Use a positive, bounded generation token limit.")
+        self._prepare()
+        try:
+            return self._generate(messages, response_format=response_format, num_predict=num_predict)
+        except (OllamaError, KeyboardInterrupt):
+            self._clear_metadata()
+            raise
+
+    def _generate(self, messages, *, response_format, num_predict):
+        model = (self._model if self._model is not None and monotonic() - self._checked_at < METADATA_TTL
+                 else self.check_model())
+        if self._thinking is _UNSET:
+            self._thinking = self._thinking_value(model)
+        think = self._thinking
         body = {"model": self.settings.model, "messages": messages, "stream": False, "options": {"temperature": 0.2}}
         if response_format is not None:
             body["format"] = response_format
@@ -108,6 +181,15 @@ class OllamaClient:
         return ModelUnavailable(f"Model {model} is unavailable. Run `ollama pull {model}` or select an installed model.")
 
     def _request(self, method: str, path: str, timeout: float, body: dict | None = None) -> dict:
+        self._prepare()
+        try:
+            return self._send_request(method, path, timeout, body)
+        except (OllamaError, KeyboardInterrupt):
+            self._clear_metadata()
+            self._drop_transport()
+            raise
+
+    def _send_request(self, method, path, timeout, body):
         timeout = bounded_timeout(timeout)
         try:
             import httpx
@@ -115,14 +197,16 @@ class OllamaClient:
             raise OllamaError("HTTPX could not load. Install the project dependencies with `python -m pip install -e .`.") from None
 
         try:
-            response = httpx.request(
+            if self._http is None:
+                self._http = httpx.Client(trust_env=False, follow_redirects=False)
+            response = self._http.request(
                 method,
                 self.settings.runtime_url.rstrip("/") + path,
                 json=body,
                 timeout=httpx.Timeout(timeout, connect=min(self.probe_timeout, timeout)),
-                trust_env=False,
-                follow_redirects=False,
             )
+            # Pool sockets without introducing cross-request cookie persistence.
+            self._http.cookies.clear()
             response.raise_for_status()
         except httpx.ConnectError:
             raise OllamaError("Cannot connect to Ollama. Open Ollama or run `ollama serve`, then try again.", kind="connection") from None

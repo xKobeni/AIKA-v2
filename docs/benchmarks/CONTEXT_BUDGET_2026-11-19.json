@@ -1,0 +1,99 @@
+{
+  "review_date": "2026-11-19",
+  "before": {
+    "turn_limit": 10,
+    "user_characters": 12028,
+    "assistant_characters": 10000,
+    "first_content_characters": 12057,
+    "full_history_content_characters": 232337,
+    "restored_content_characters": 232337,
+    "generations": 13,
+    "model_mocked": true,
+    "note": "Character counts only; no tokenizer or model context-window assumption."
+  },
+  "after": {
+    "turn_limit": 10,
+    "user_characters": 12028,
+    "assistant_characters": 10000,
+    "first_content_characters": 12057,
+    "full_history_content_characters": 12057,
+    "restored_content_characters": 12057,
+    "generations": 13,
+    "model_mocked": true,
+    "context_budget_characters": 24000,
+    "last_model_history_turns": 0,
+    "retained_turns": 10,
+    "persisted_exchanges": 13,
+    "note": "Character counts only; no tokenizer or model context-window assumption."
+  },
+  "live": {
+    "model": "qwen3.5:4b",
+    "live_requests": [
+      {
+        "characters": 1937,
+        "output_cap": 1024,
+        "history_turns": 0
+      },
+      {
+        "characters": 1993,
+        "output_cap": 1024,
+        "history_turns": 1
+      }
+    ],
+    "short_followup": "passed",
+    "resume_without_replay": "passed",
+    "mandatory_overflow_without_model_call": "passed",
+    "cli_exits": {
+      "startup": 0,
+      "doctor": 0,
+      "--version": 0,
+      "--help": 0,
+      "chat_status_calc": 0
+    }
+  },
+  "limits": {
+    "context_turns": {
+      "default": 10,
+      "minimum": 0,
+      "maximum": 50
+    },
+    "context_characters": {
+      "default": 24000,
+      "minimum": 4096,
+      "maximum": 64000
+    },
+    "ordinary_output_tokens": {
+      "default": 1024,
+      "minimum": 64,
+      "maximum": 4096
+    }
+  },
+  "limitations": "Content character counts, not tokenizer measurements or peak RAM. Synthetic size comparison used mocked generation and temporary databases.",
+  "wheel_smoke_python313": {
+    "python": "3.13.15",
+    "module_inside_fresh_venv": true,
+    "commands": {
+      "startup": "passed",
+      "--help": "passed",
+      "--version": "passed",
+      "doctor": "passed"
+    },
+    "default_data_path": "isolated OS default",
+    "synthetic_database_restart": "passed",
+    "explicit_data_override": "passed",
+    "dotenv_beside_installed_package": true,
+    "working_directory_dotenv_loaded": false,
+    "environment_override": "passed",
+    "gui_or_provider_operations": 0
+  },
+  "regression": {
+    "python312": {
+      "passed": 1526,
+      "seconds": 48.33
+    },
+    "python313": {
+      "passed": 1526,
+      "seconds": 36.88
+    }
+  }
+}

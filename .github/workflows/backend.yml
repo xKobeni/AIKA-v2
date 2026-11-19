@@ -1,0 +1,87 @@
+name: Backend verification
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.12', '3.13']
+    defaults:
+      run:
+        shell: pwsh
+    env:
+      AIKA_WEB_SEARCH_ENABLED: 'off'
+      AIKA_WEB_READING_ENABLED: 'off'
+      AIKA_WEB_SEARCH_PROVIDER: ddgs
+      AIKA_WEB_SEARCH_FALLBACK_ENABLED: 'off'
+      AIKA_TAVILY_API_KEY: ''
+      AIKA_OLLAMA_URL: http://127.0.0.1:1
+      PIP_DISABLE_PIP_VERSION_CHECK: '1'
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - name: Set temporary runtime storage
+        run: '"AIKA_DATA_DIR=$env:RUNNER_TEMP/aika-ci-data" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append'
+      - name: Install in fresh checkout environment
+        run: |
+          python -m venv .venv-ci
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          .venv-ci/Scripts/python -m pip install --upgrade pip
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          .venv-ci/Scripts/python -m pip install -e '.[dev]'
+      - name: Check dependencies and compile
+        run: |
+          .venv-ci/Scripts/python -m pip check
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          .venv-ci/Scripts/python -m compileall -q aika.py src scripts
+      - name: Offline CLI diagnostics (Ollama optional)
+        run: |
+          foreach ($arguments in @(@(), @('--help'), @('--version'), @('doctor'))) {
+            & .venv-ci/Scripts/python -m aika @arguments
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+      - name: Mocked regression suite
+        run: .venv-ci/Scripts/python -m pytest -q --durations=20
+      - name: Synthetic performance baseline (no inference or providers)
+        run: .venv-ci/Scripts/python -m scripts.benchmark_backend --output artifacts/baseline.json
+      - name: Build wheel and install without editable/source imports
+        run: |
+          .venv-ci/Scripts/python -m pip wheel --no-deps --wheel-dir artifacts/wheels .
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python -m venv .venv-wheel
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $wheels = @(Get-ChildItem -LiteralPath artifacts/wheels -Filter '*.whl')
+          if ($wheels.Count -ne 1) { throw 'Expected exactly one application wheel.' }
+          $wheel = $wheels[0].FullName
+          .venv-wheel/Scripts/python -m pip install $wheel
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          .venv-wheel/Scripts/python -m pip check
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          .venv-wheel/Scripts/python -I scripts/check_installed.py
+      - name: Record resolved dependency versions
+        if: always()
+        run: |
+          New-Item -ItemType Directory -Force artifacts | Out-Null
+          .venv-ci/Scripts/python -m pip list --format=json | Set-Content -Encoding utf8 artifacts/dependencies.json
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: backend-windows-python-${{ matrix.python }}
+          path: artifacts/*.json
+          retention-days: 14

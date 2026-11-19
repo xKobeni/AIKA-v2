@@ -353,7 +353,7 @@ def test_model_request_respects_remaining_workflow_timeout(monkeypatch):
     def request(*a, **kwargs):
         seen.append(kwargs["timeout"])
         return httpx.Response(200, json={"done": True}, request=httpx.Request("POST", "http://localhost/api/chat"))
-    monkeypatch.setattr(httpx, "request", request)
+    monkeypatch.setattr(httpx.Client, "request", request)
     with budget.request_budget(30):
         clock[0] = 29
         assert OllamaClient(load_config())._request("POST", "/api/chat", 180, {})["done"]

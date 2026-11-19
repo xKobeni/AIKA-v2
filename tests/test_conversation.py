@@ -114,7 +114,7 @@ def test_chat_context_limit_history_clear_and_local_commands(mock_ollama, monkey
     assert "You: Third prompt\nAIKA: Reply 3\nYou: Fourth prompt\nAIKA: Reply 4\n" in output.out
     assert "Conversation context cleared. Saved history is retained" in output.out
     assert "No completed turns in this session." in output.out
-    assert requests == ["/api/tags", *["/api/tags", "/api/chat"] * 5]
+    assert requests == ["/api/tags", *["/api/chat"] * 5]
 
     system = payloads[0][0]
     assert system["role"] == "system"

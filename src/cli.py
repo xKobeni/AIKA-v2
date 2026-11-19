@@ -137,65 +137,66 @@ def main(argv: list[str] | None = None) -> int:
 
 def run_chat(settings: Settings, system_instruction: str = SYSTEM_INSTRUCTION) -> None:
     store = ConversationStore(settings.data_dir)
-    client = OllamaClient(settings)
-    session = ConversationSession(
-        system_instruction, settings.context_turns, client.generate, store, MemoryStore(settings.data_dir, create=False),
-        applications=create_applications(settings.disabled_apps),
-        web_search=SearchRouter(settings.web_search_enabled, settings.tavily_api_key, settings.web_search_provider,
-                                settings.web_search_fallback_enabled, settings.web_search_fallback_provider),
-        web_reading_enabled=settings.web_reading_enabled,
-        web_debug=settings.web_debug,
-        grounded_generate=partial(client.generate, response_format=ANSWER_SCHEMA, num_predict=768),
-        research_timeout=settings.research_timeout, timezone=settings.timezone,
-        agent_generate=partial(client.generate, response_format=PLAN_SCHEMA, num_predict=512),
-        agent_timeout=settings.agent_timeout,
-    )
-    print(settings.app_name)
-    show_session_status(settings, session)
-    trace = None
-    memory_trace = None
-    if settings.context_debug != "off":
-        trace = partial(show_context_trace, settings)
-        memory_trace = partial(show_memory_trace, settings)
-    if settings.context_debug == "content":
-        print("Privacy warning: approved public message text can appear in terminal output. Use synthetic test text.", file=sys.stderr)
+    with OllamaClient(settings) as client:
+        session = ConversationSession(
+            system_instruction, settings.context_turns, client.generate, store, MemoryStore(settings.data_dir, create=False),
+            applications=create_applications(settings.disabled_apps),
+            web_search=SearchRouter(settings.web_search_enabled, settings.tavily_api_key, settings.web_search_provider,
+                                    settings.web_search_fallback_enabled, settings.web_search_fallback_provider),
+            web_reading_enabled=settings.web_reading_enabled,
+            web_debug=settings.web_debug,
+            grounded_generate=partial(client.generate, response_format=ANSWER_SCHEMA, num_predict=768),
+            research_timeout=settings.research_timeout, timezone=settings.timezone,
+            agent_generate=partial(client.generate, response_format=PLAN_SCHEMA, num_predict=512),
+            agent_timeout=settings.agent_timeout,
+            context_chars=settings.context_chars,
+        )
+        print(settings.app_name)
+        show_session_status(settings, session)
+        trace = None
+        memory_trace = None
+        if settings.context_debug != "off":
+            trace = partial(show_context_trace, settings)
+            memory_trace = partial(show_memory_trace, settings)
+        if settings.context_debug == "content":
+            print("Privacy warning: approved public message text can appear in terminal output. Use synthetic test text.", file=sys.stderr)
 
-    try:
         try:
-            client.check_model()
-        except OllamaError as exc:
-            print(f"Status: UNAVAILABLE. {exc}")
-        else:
-            print("Status: CONNECTED")
-        print("\nType /help for commands or exit to quit.\n")
-
-        while True:
-            message = input("You > ").strip()
-            if message.casefold() in {"exit", "/exit"}:
-                break
             try:
-                if message.startswith("/"):
-                    handle_chat_command(message, settings, session, store)
-                    continue
-                answer = session.reply(
-                    message, trace=trace, memory_trace=memory_trace,
-                    tool_trace=show_tool_trace if settings.context_debug != "off" else None,
-                    research_progress=show_research_progress,
-                    agent_progress=show_agent_progress,
-                )
+                client.check_model()
             except OllamaError as exc:
-                print(f"Ollama error: {exc}\n", file=sys.stderr)
-            except StorageError as exc:
-                print(f"Storage error: {exc}\n", file=sys.stderr)
-            except MemoryInputError as exc:
-                print(f"Memory error: {exc}\n", file=sys.stderr)
+                print(f"Status: UNAVAILABLE. {exc}")
             else:
-                if answer is not None:
-                    print(f"AIKA > {answer}\n")
-    except (EOFError, KeyboardInterrupt):
-        print()
+                print("Status: CONNECTED")
+            print("\nType /help for commands or exit to quit.\n")
 
-    print("Session ended.")
+            while True:
+                message = input("You > ").strip()
+                if message.casefold() in {"exit", "/exit"}:
+                    break
+                try:
+                    if message.startswith("/"):
+                        handle_chat_command(message, settings, session, store)
+                        continue
+                    answer = session.reply(
+                        message, trace=trace, memory_trace=memory_trace,
+                        tool_trace=show_tool_trace if settings.context_debug != "off" else None,
+                        research_progress=show_research_progress,
+                        agent_progress=show_agent_progress,
+                    )
+                except OllamaError as exc:
+                    print(f"Ollama error: {exc}\n", file=sys.stderr)
+                except StorageError as exc:
+                    print(f"Storage error: {exc}\n", file=sys.stderr)
+                except MemoryInputError as exc:
+                    print(f"Memory error: {exc}\n", file=sys.stderr)
+                else:
+                    if answer is not None:
+                        print(f"AIKA > {answer}\n")
+        except (EOFError, KeyboardInterrupt):
+            print()
+
+        print("Session ended.")
 
 
 def show_context_trace(
@@ -246,6 +247,7 @@ def show_session_status(settings: Settings, session: ConversationSession) -> Non
     print("Conversation: ACTIVE")
     print(f"Session ID: {session.session_id}")
     print(f"History: {session.turn_count}/{settings.context_turns} completed turns retained")
+    print(f"Model budgets: {settings.context_chars} input content characters; {settings.response_tokens} ordinary output tokens")
     print(f"Agent limits: {MAX_STEPS} steps, {MAX_EXECUTIONS} tool executions, {MAX_MODEL_CALLS} model generations, {settings.agent_timeout:g}s")
     if session.last_agent:
         print(f"Last agent: {session.last_agent['outcome']}; operations attempted: {session.last_agent['executions']}")

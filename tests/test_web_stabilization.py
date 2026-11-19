@@ -314,7 +314,7 @@ def test_grounded_format_and_token_cap_do_not_change_timeout_or_ordinary_chat(mo
     request.assert_called_once()
     client.generate(messages)
     assert "format" not in request.call_args.args[3]
-    assert "num_predict" not in request.call_args.args[3]["options"]
+    assert request.call_args.args[3]["options"]["num_predict"] == settings.response_tokens
 
 
 def test_same_session_uses_grounded_callback_without_tools_or_ordinary_context(tmp_path):
@@ -340,7 +340,7 @@ def test_same_session_uses_grounded_callback_without_tools_or_ordinary_context(t
 def test_typed_ollama_timeout_keeps_safe_category(monkeypatch):
     import httpx
     client = OllamaClient(load_config())
-    monkeypatch.setattr(httpx, "request", Mock(side_effect=httpx.ReadTimeout(KEY)))
+    monkeypatch.setattr(httpx.Client, "request", Mock(side_effect=httpx.ReadTimeout(KEY)))
     with pytest.raises(OllamaError) as error:
         client._request("POST", "/api/chat", client.settings.model_timeout, {})
     assert error.value.kind == "timeout" and KEY not in str(error.value)

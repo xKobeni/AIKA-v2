@@ -1,0 +1,135 @@
+{
+  "review_date": "2026-11-19",
+  "metadata_ttl_seconds": 30,
+  "model_unchanged": true,
+  "before": {
+    "model": "qwen3.5:4b",
+    "requests": [
+      {
+        "stage": "startup_probe",
+        "method": "GET",
+        "path": "/api/tags",
+        "status": "success",
+        "elapsed_ms": 890.516
+      },
+      {
+        "stage": "first_generation",
+        "method": "GET",
+        "path": "/api/tags",
+        "status": "success",
+        "elapsed_ms": 259.709
+      },
+      {
+        "stage": "first_generation",
+        "method": "POST",
+        "path": "/api/show",
+        "status": "success",
+        "elapsed_ms": 397.937
+      },
+      {
+        "stage": "first_generation",
+        "method": "POST",
+        "path": "/api/chat",
+        "status": "success",
+        "total_duration": 15405008300,
+        "load_duration": 14361336000,
+        "prompt_eval_count": 17,
+        "eval_count": 2,
+        "elapsed_ms": 15633.912
+      },
+      {
+        "stage": "consecutive_generation",
+        "method": "GET",
+        "path": "/api/tags",
+        "status": "success",
+        "elapsed_ms": 279.731
+      },
+      {
+        "stage": "consecutive_generation",
+        "method": "POST",
+        "path": "/api/show",
+        "status": "success",
+        "elapsed_ms": 241.335
+      },
+      {
+        "stage": "consecutive_generation",
+        "method": "POST",
+        "path": "/api/chat",
+        "status": "success",
+        "total_duration": 576095400,
+        "load_duration": 7148200,
+        "prompt_eval_count": 17,
+        "eval_count": 2,
+        "elapsed_ms": 832.191
+      }
+    ],
+    "outcomes": [
+      {
+        "stage": "first_generation",
+        "status": "success",
+        "elapsed_ms": 16291.651
+      },
+      {
+        "stage": "consecutive_generation",
+        "status": "success",
+        "elapsed_ms": 1353.355
+      }
+    ],
+    "note": "No forced unload/restart; first call is not proof of a cold model. No reply content recorded."
+  },
+  "after": {
+    "model": "qwen3.5:4b",
+    "requests": [
+      {
+        "stage": "startup_probe",
+        "method": "GET",
+        "path": "/api/tags",
+        "status": "success",
+        "elapsed_ms": 710.438
+      },
+      {
+        "stage": "first_generation",
+        "method": "POST",
+        "path": "/api/show",
+        "status": "success",
+        "elapsed_ms": 13.335
+      },
+      {
+        "stage": "first_generation",
+        "method": "POST",
+        "path": "/api/chat",
+        "status": "success",
+        "total_duration": 876260000,
+        "load_duration": 9220300,
+        "prompt_eval_count": 17,
+        "eval_count": 2,
+        "elapsed_ms": 876.41
+      },
+      {
+        "stage": "consecutive_generation",
+        "method": "POST",
+        "path": "/api/chat",
+        "status": "success",
+        "total_duration": 331034100,
+        "load_duration": 5774700,
+        "prompt_eval_count": 17,
+        "eval_count": 2,
+        "elapsed_ms": 332.828
+      }
+    ],
+    "outcomes": [
+      {
+        "stage": "first_generation",
+        "status": "success",
+        "elapsed_ms": 889.821
+      },
+      {
+        "stage": "consecutive_generation",
+        "status": "success",
+        "elapsed_ms": 332.881
+      }
+    ],
+    "note": "No forced unload/restart; first call is not proof of a cold model. No reply content recorded."
+  },
+  "comparison_limit": "Same synthetic prompt and model, sequential runs; model loading/inference varied. First calls are not controlled cold starts. Request counts are the primary evidence."
+}

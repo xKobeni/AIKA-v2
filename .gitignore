@@ -1,5 +1,10 @@
 # Local environment and credentials
 .venv/
+.venv-ci/
+.venv-wheel/
+/build/
+/dist/
+/artifacts/
 .env
 .env.*
 !.env.example

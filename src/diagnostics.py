@@ -149,7 +149,8 @@ def inspect_storage(data_dir: Path) -> list[Check]:
 
 def inspect_ollama(settings: Settings) -> list[Check]:
     try:
-        OllamaClient(settings).check_model()
+        with OllamaClient(settings) as client:
+            client.check_model()
     except ModelUnavailable as exc:
         model = Check("WARN", "Model", str(exc))
     except OllamaError as exc:

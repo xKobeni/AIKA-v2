@@ -83,7 +83,7 @@ def test_generation_uses_selected_model_and_returns_only_text(mock_ollama, monke
         assert request.extensions["timeout"]["read"] == 42.5
         assert json.loads(request.content) == {
             "messages": messages, "model": ollama_model, "stream": False, "think": False,
-            "options": {"temperature": 0.2},
+            "options": {"temperature": 0.2, "num_predict": 1024},
         }
         return answer("  Generated answer.  ")
 
@@ -113,7 +113,7 @@ def test_thinking_uses_model_supported_controls(mode, metadata, expected, monkey
             return httpx.Response(200, json={"thinking": metadata})
         assert request.url.path == "/api/chat"
         assert json.loads(request.content) == {
-            "model": model, "messages": [], "stream": False, "options": {"temperature": 0.2}, **expected,
+            "model": model, "messages": [], "stream": False, "options": {"temperature": 0.2, "num_predict": 1024}, **expected,
         }
         return answer("Final answer")
 
