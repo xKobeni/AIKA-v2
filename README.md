@@ -520,9 +520,17 @@ Manual walkthrough: enable both gates; search; select a directly accessible HTTP
 
 ## Configuration
 
-AIKA automatically reads `.env` in the project root, regardless of the working directory. A local file with safe defaults is included; for a new checkout, copy `.env.example` to `.env`. Install updated dependencies with `python -m pip install -e '.[dev]'` (includes `python-dotenv`).
+Configuration precedence, highest first: **process environment > optional per-user configuration > verified source-checkout `.env` > validated defaults**. Blank environment values also override files. Restart AIKA after editing configuration.
 
-To use Tavily, edit `.env`:
+For a wheel installation, create your own UTF-8 configuration at `%LOCALAPPDATA%\AIKA AI V2\config\.env`. For example, deliberately create the directory with `New-Item -ItemType Directory -Force "$env:LOCALAPPDATA\AIKA AI V2\config"`, then create/edit `.env` there in your editor. Use `.env.example` as a reference; keep credentials private. AIKA never creates, copies, migrates or overwrites configuration files. Do not put configuration in `site-packages`. If Windows local application data is unavailable, the location is `~/.aika-v2/config/.env`.
+
+Source and editable installations retain root `.env` compatibility when the executing module belongs to the matching source tree (`src/config.py`, `aika.py`, and the matching `pyproject.toml` project name). Wheel RECORD ownership disables this fallback. This is a source-tree compatibility policy, not a guess based on the current directory or a claim that every source execution is pip-editable. An unrelated working-directory `.env` or project marker is never consulted. Install development dependencies with `python -m pip install -e '.[dev]'`; a new checkout may deliberately copy `.env.example` to its root `.env`.
+
+Configuration discovery is independent of `AIKA_DATA_DIR`: the existing default `%LOCALAPPDATA%\AIKA AI V2\data`, database name/schema and explicit data-directory override are preserved. Creating a user config alone does not move conversation history or memory. Doctor shows safe source labels without private paths or values. Missing optional files are allowed; existing unreadable, malformed or oversized files fail safely rather than silently falling back. Files must be UTF-8 (optional BOM), at most 64 KiB, and cannot use symlink/junction/reparse indirections in the file or parent directories. If your profile uses such indirections, use process environment settings instead.
+
+Checkpoint 4 verification and limitations are recorded in the [portable configuration report](docs/phase-reports/BACKEND_PORTABLE_CONFIGURATION_REPORT.md). Windows CI redirects both profile configuration and runtime data to runner-temporary roots; its fresh-wheel smoke covers Unicode/spaced profiles, precedence, safe failures and synthetic memory persistence. Local workflow checks do not establish a hosted CI run. The current top-level `src` package remains a potential import-name collision with other distributions; use a dedicated virtual environment. Renaming it is deferred.
+
+To use Tavily, edit your selected `.env`:
 
 ```dotenv
 AIKA_TAVILY_API_KEY=your-key-here
@@ -532,7 +540,7 @@ AIKA_WEB_SEARCH_PROVIDER=tavily
 
 Restart AIKA, then run `/web-status` and `/web <query>`. Tavily searches can consume credits. Keep fallback off unless deliberately authorizing it. The local `.env` is ignored by Git; `.env.example` contains only blank credentials and safe defaults. Never paste keys into chat or tracked code.
 
-All optional variables below may be set in `.env` or PowerShell. Existing process environment variables override `.env`, including blank values. Quoted values and comments are supported; variable interpolation is disabled. Configuration reads do not modify the process environment.
+All optional variables below may be set in the selected configuration file or PowerShell. Quoted values and comments are supported; variable interpolation is disabled. Configuration reads do not modify the process environment. No explicit configuration-file override or directory search is added.
 
 | Variable | Default | Valid values |
 | --- | --- | --- |

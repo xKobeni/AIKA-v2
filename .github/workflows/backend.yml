@@ -37,7 +37,9 @@ jobs:
           cache: pip
           cache-dependency-path: pyproject.toml
       - name: Set temporary runtime storage
-        run: '"AIKA_DATA_DIR=$env:RUNNER_TEMP/aika-ci-data" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append'
+        run: |
+          "AIKA_DATA_DIR=$env:RUNNER_TEMP/aika-ci-data" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "LOCALAPPDATA=$env:RUNNER_TEMP/aika-ci-profile" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
       - name: Install in fresh checkout environment
         run: |
           python -m venv .venv-ci

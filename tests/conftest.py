@@ -19,6 +19,9 @@ def isolated_config(monkeypatch, tmp_path, ollama_model):
     ):
         monkeypatch.delenv(key, raising=False)
     monkeypatch.setattr("src.config.DOTENV_PATH", tmp_path / ".env")
+    monkeypatch.setenv("LOCALAPPDATA", str(tmp_path / "profile"))
+    monkeypatch.setenv("USERPROFILE", str(tmp_path / "home"))
+    monkeypatch.setenv("HOME", str(tmp_path / "home"))
     # Child CLI processes must also stay offline when a developer enables local search.
     monkeypatch.setenv("AIKA_WEB_SEARCH_ENABLED", "off")
     monkeypatch.setenv("AIKA_WEB_READING_ENABLED", "off")

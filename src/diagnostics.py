@@ -26,6 +26,9 @@ RUNTIME_FILES = (
     "src/diagnostics.py",
     "src/intelligence/conversation.py",
     "src/intelligence/ollama_client.py",
+    "src/intelligence/planning.py",
+    "src/intelligence/dataflow.py",
+    "src/intelligence/prompt_budget.py",
     "src/storage/conversation_store.py",
     "src/storage/database.py",
     "src/memory/store.py",
@@ -39,6 +42,8 @@ RUNTIME_FILES = (
     "src/capabilities/executor.py",
     "src/capabilities/calculator.py",
     "src/capabilities/intent.py",
+    "src/capabilities/discovery.py",
+    "src/capabilities/language.py",
     "src/capabilities/applications.py",
     "src/capabilities/application_intent.py",
     "src/capabilities/system_info.py",
@@ -97,8 +102,10 @@ def inspect_runtime() -> tuple[Settings | None, list[Check]]:
 
     if has_metadata:
         checks.append(Check("PASS", "Project directory", "Found the project root beside the runtime module."))
-    else:
+    elif missing:
         checks.append(Check("WARN", "Project directory", "No source project metadata beside the runtime module."))
+    else:
+        checks.append(Check("PASS", "Project directory", "Installed runtime; source project metadata is not required."))
 
     if missing:
         checks.append(Check("FAIL", "Runtime files", f"Missing {', '.join(missing)}."))
@@ -117,6 +124,10 @@ def inspect_runtime() -> tuple[Settings | None, list[Check]]:
         return None, checks
 
     checks.append(Check("PASS", "Configuration", "Environment settings passed validation."))
+    checks.append(Check("PASS", "Configuration mode", settings.configuration_mode))
+    checks.append(Check("PASS", "Configuration sources", " < ".join(("defaults", *settings.configuration_sources)) + " (highest priority last; values hidden)."))
+    checks.append(Check("PASS", "User configuration", "Present and readable." if "user" in settings.configuration_sources else "Absent; optional."))
+    checks.append(Check("PASS", "Development .env", "Loaded from verified source checkout." if "development .env" in settings.configuration_sources else "Not used."))
     checks.append(check_data_dir(settings.data_dir))
     return settings, checks
 

@@ -2,18 +2,23 @@ import json
 import math
 import os
 import re
+import io
+import stat
+import tomllib
+from importlib.metadata import distribution, PackageNotFoundError
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
 from urllib.parse import urlsplit
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
-from dotenv import dotenv_values
+from dotenv.parser import parse_stream
 
 from src import __version__
 
 
 DOTENV_PATH = Path(__file__).resolve().parents[1] / ".env"
+MAX_CONFIG_BYTES = 65536
 
 DEFAULT_MODEL = "qwen3.5:4b"
 DEFAULT_MODEL_TIMEOUT = 180.0
@@ -56,21 +61,98 @@ class Settings:
     agent_timeout: float = 180.0
     context_chars: int = DEFAULT_CONTEXT_CHARS
     response_tokens: int = DEFAULT_RESPONSE_TOKENS
+    configuration_mode: str = field(default="Not inspected", compare=False, repr=False)
+    configuration_sources: tuple[str, ...] = field(default=(), compare=False, repr=False)
 
 
-def _environment() -> dict[str, str]:
+def resolve_development_config_path() -> Path | None:
+    """Trust the executing source tree, never the working directory or a wheel's neighbors."""
+    module = Path(__file__).resolve()
+    root = module.parents[1]
     try:
-        with DOTENV_PATH.open(encoding="utf-8-sig") as stream:
-            values = dotenv_values(stream=stream, interpolate=False)
+        package = distribution("aika-ai-v2")
+        if package.read_text("RECORD") is not None and any(
+            str(item).replace("\\", "/") == "src/config.py" and package.locate_file(item).resolve() == module
+            for item in (package.files or ())
+        ):
+            return None
+    except PackageNotFoundError:
+        pass
+    except (OSError, UnicodeError, ValueError):
+        raise ConfigError("Cannot verify the installed configuration source.") from None
+    try:
+        with (root / "pyproject.toml").open("rb") as stream:
+            metadata = tomllib.load(stream)
+        if (metadata.get("project", {}).get("name") == "aika-ai-v2"
+                and (root / "aika.py").is_file() and module == root / "src" / "config.py"):
+            return DOTENV_PATH
     except FileNotFoundError:
+        pass
+    except (OSError, ValueError):
+        raise ConfigError("Cannot verify the development configuration source.") from None
+    return None
+
+
+def resolve_user_config_path() -> Path:
+    # Configuration discovery must never inherit AIKA_DATA_DIR from any source.
+    try:
+        profile = {key: value for key, value in os.environ.items() if key == "LOCALAPPDATA"}
+        return load_data_dir(profile).parent / "config" / ".env"
+    except ConfigError:
+        raise ConfigError("The user configuration location is invalid.") from None
+
+
+def _read_configuration_file(path: Path, label: str) -> dict[str, str] | None:
+    try:
+        if not path.is_absolute() or ".." in path.parts:
+            raise ConfigError(f"The {label} configuration path is invalid.")
+        try:
+            original = path.lstat()
+        except FileNotFoundError:
+            return None
+        for candidate in (path, *path.parents):
+            info = candidate.lstat()
+            if stat.S_ISLNK(info.st_mode) or getattr(info, "st_file_attributes", 0) & stat.FILE_ATTRIBUTE_REPARSE_POINT:
+                raise ConfigError(f"The {label} configuration cannot use file or directory indirections.")
+        if not stat.S_ISREG(original.st_mode) or original.st_size > MAX_CONFIG_BYTES:
+            raise ConfigError(f"The {label} configuration must be a regular file of at most 64 KiB.")
+        with path.open("rb") as stream:
+            opened = os.fstat(stream.fileno())
+            if (opened.st_dev, opened.st_ino) != (original.st_dev, original.st_ino):
+                raise ConfigError(f"The {label} configuration changed while opening; retry explicitly.")
+            raw = stream.read(MAX_CONFIG_BYTES + 1)
+        if len(raw) > MAX_CONFIG_BYTES:
+            raise ConfigError(f"The {label} configuration exceeds 64 KiB.")
         values = {}
-    except (OSError, UnicodeError):
-        raise ConfigError("The project .env file could not be read as UTF-8.") from None
-    return {**{key: value for key, value in values.items() if value is not None}, **os.environ}
+        for binding in parse_stream(io.StringIO(raw.decode("utf-8-sig"))):
+            if binding.error:
+                raise ConfigError(f"The {label} configuration contains malformed .env syntax.")
+            if binding.key is not None and binding.value is not None:
+                values[binding.key] = binding.value
+        return values
+    except (OSError, UnicodeError, ValueError) as exc:
+        if isinstance(exc, ConfigError):
+            raise
+        raise ConfigError(f"The {label} configuration could not be read as UTF-8.") from None
+
+
+def _configuration_values():
+    development = resolve_development_config_path()
+    values = {}
+    sources = []
+    for path, label in ((development, "development .env"), (resolve_user_config_path(), "user")):
+        if path is not None:
+            selected = _read_configuration_file(path, label)
+            if selected is not None:
+                values.update(selected)
+                sources.append(label)
+    if any(key.startswith("AIKA_") for key in os.environ):
+        sources.append("process environment")
+    return {**values, **os.environ}, tuple(sources), "Source checkout" if development is not None else "Installed / non-checkout runtime"
 
 
 def load_version(environment: Mapping[str, str] | None = None) -> str:
-    environment = _environment() if environment is None else environment
+    environment = _configuration_values()[0] if environment is None else environment
     version = environment.get("AIKA_VERSION", __version__)
     if not re.fullmatch(r"(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)", version):
         raise ConfigError("AIKA_VERSION must use a numeric X.Y.Z version, such as 0.1.0.")
@@ -89,7 +171,7 @@ def _bounded_integer(environment, key, default, minimum, maximum):
 
 
 def load_config() -> Settings:
-    environment = _environment()
+    environment, sources, mode = _configuration_values()
     name = environment.get("AIKA_APP_NAME", "AIKA AI V2").strip()
     if not name or len(name) > 80 or not name.isprintable():
         raise ConfigError("AIKA_APP_NAME must contain 1 to 80 printable characters.")
@@ -195,6 +277,7 @@ def load_config() -> Settings:
         provider, fallback in {"on", "true", "1"}, secondary, reading in {"on", "true", "1"}, web_debug in {"on", "true", "1"},
         research_timeout, timezone, agent_timeout,
         context_chars, response_tokens,
+        configuration_mode=mode, configuration_sources=sources,
     )
 
 
@@ -205,7 +288,7 @@ def valid_tavily_key(value: str) -> bool:
 
 
 def load_data_dir(environment: Mapping[str, str] | None = None) -> Path:
-    environment = _environment() if environment is None else environment
+    environment = _configuration_values()[0] if environment is None else environment
     path = environment.get("AIKA_DATA_DIR")
     try:
         if path is None:
