@@ -7,6 +7,7 @@ import pytest
 
 import aika
 from src.cli import SYSTEM_INSTRUCTION
+from src.intelligence.persona import HISTORY_OMITTED
 from src.config import load_config
 from src.intelligence.conversation import ConversationSession
 from src.intelligence.ollama_client import OllamaError
@@ -76,7 +77,7 @@ def test_zero_turn_limit_disables_context_but_still_saves_exchanges(monkeypatch,
     session.reply("First prompt")
     assert session.history() == []
     session.reply("Second prompt")
-    generate.assert_called_with([message("system", "Identity"), message("user", "Second prompt")])
+    generate.assert_called_with([message("system", "Identity" + HISTORY_OMITTED), message("user", "Second prompt")])
     assert store.load_session(session.session_id, 10) == (4, [("First prompt", "A reply"), ("Second prompt", "A reply")])
     assert store.load_session(session.session_id, 0) == (4, [])
 
@@ -124,7 +125,7 @@ def test_chat_context_limit_history_clear_and_local_commands(mock_ollama, monkey
         [system, message("user", "First prompt"), message("assistant", "Reply 1"), message("user", "Second prompt")],
         [system, message("user", "First prompt"), message("assistant", "Reply 1"),
          message("user", "Second prompt"), message("assistant", "Reply 2"), message("user", "Third prompt")],
-        [system, message("user", "Second prompt"), message("assistant", "Reply 2"),
+        [message("system", system["content"] + HISTORY_OMITTED), message("user", "Second prompt"), message("assistant", "Reply 2"),
          message("user", "Third prompt"), message("assistant", "Reply 3"), message("user", "Fourth prompt")],
         [system, message("user", "After clear")],
     ]
@@ -167,7 +168,8 @@ def test_resume_and_new_keep_saved_sessions_isolated(store, mock_ollama, monkeyp
     assert len(payloads) == 4
     assert requested_models == [ollama_model, ollama_model, "qwen3.5:4b", "qwen3.5:4b"]
     system = payloads[0][0]
-    assert payloads[2] == [system, message("user", "Recent context"), message("assistant", "Reply 2"), message("user", "Follow-up")]
+    assert payloads[2] == [message("system", system["content"] + HISTORY_OMITTED), message("user", "Recent context"),
+                           message("assistant", "Reply 2"), message("user", "Follow-up")]
     assert payloads[3] == [system, message("user", "Ask from a fresh session")]
     assert store.load_session(original_id, 10) == (6, [
         ("Old context", "Reply 1"), ("Recent context", "Reply 2"), ("Follow-up", "Reply 3"),

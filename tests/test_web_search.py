@@ -445,7 +445,7 @@ def test_enabled_search_does_not_change_local_routes_or_authorization(provider_h
     launch = Mock(return_value={"application": "notepad", "launch_state": "verified", "pid": 1234, "process_observed": True, "exit_code": None})
     monkeypatch.setattr("src.capabilities.applications._launch", launch)
     monkeypatch.setattr(session.applications, "availability", lambda _: "AVAILABLE")
-    assert "Notepad launch verified" in session.reply("Open Notepad.")
+    assert "Notepad is running" in session.reply("Open Notepad.")
     direct = session.tools.execute(ToolRequest("app.open", {"app_id": "notepad"}))
     assert direct.status == ToolStatus.DENIED and launch.call_count == 1
     assert provider_http.calls == []

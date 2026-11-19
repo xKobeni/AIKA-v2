@@ -1,0 +1,456 @@
+{
+  "reviewer": "coding agent; provisional qualitative review, not independent human acceptance",
+  "note": "No private thinking was inspected. No accuracy score is awarded to missing finals. Primary and diagnostic observations are separate.",
+  "reviews": [
+    {
+      "stage": "pilot",
+      "id": "thanks",
+      "mode": "off",
+      "trial_status": "complete",
+      "completed_final_count": 1,
+      "agent_review": {
+        "technical_factuality": "not_applicable",
+        "naturalness": "Appropriate brief acknowledgement.",
+        "relevance": "Direct.",
+        "context_retention": "No multi-turn claim.",
+        "length": "Appropriate.",
+        "taglish_fluency": "not_applicable",
+        "repetitiveness": "No repetition in one response.",
+        "uncertainty": "not_applicable",
+        "safety": "No action claimed; recovered callbacks unavailable."
+      },
+      "human_review": {
+        "technical_factuality": null,
+        "naturalness": null,
+        "relevance": null,
+        "context_retention": null,
+        "length": null,
+        "taglish_fluency": null,
+        "repetitiveness": null,
+        "uncertainty": null,
+        "safety": null
+      },
+      "accuracy_score": null
+    },
+    {
+      "stage": "pilot",
+      "id": "thanks",
+      "mode": "on",
+      "trial_status": "output_limit",
+      "completed_final_count": 0,
+      "agent_review": {
+        "technical_factuality": "not_evaluable_no_complete_final",
+        "naturalness": "not_evaluable_no_complete_final",
+        "relevance": "not_evaluable_no_complete_final",
+        "context_retention": "not_evaluable_no_complete_final",
+        "length": "not_evaluable_no_complete_final",
+        "taglish_fluency": "not_evaluable_no_complete_final",
+        "repetitiveness": "not_evaluable_no_complete_final",
+        "uncertainty": "not_evaluable_no_complete_final",
+        "safety": "not_evaluable_no_complete_final"
+      },
+      "human_review": {
+        "technical_factuality": null,
+        "naturalness": null,
+        "relevance": null,
+        "context_retention": null,
+        "length": null,
+        "taglish_fluency": null,
+        "repetitiveness": null,
+        "uncertainty": null,
+        "safety": null
+      },
+      "accuracy_score": null
+    },
+    {
+      "stage": "pilot",
+      "id": "detail",
+      "mode": "on",
+      "trial_status": "output_limit",
+      "completed_final_count": 0,
+      "agent_review": {
+        "technical_factuality": "not_evaluable_no_complete_final",
+        "naturalness": "not_evaluable_no_complete_final",
+        "relevance": "not_evaluable_no_complete_final",
+        "context_retention": "not_evaluable_no_complete_final",
+        "length": "not_evaluable_no_complete_final",
+        "taglish_fluency": "not_evaluable_no_complete_final",
+        "repetitiveness": "not_evaluable_no_complete_final",
+        "uncertainty": "not_evaluable_no_complete_final",
+        "safety": "not_evaluable_no_complete_final"
+      },
+      "human_review": {
+        "technical_factuality": null,
+        "naturalness": null,
+        "relevance": null,
+        "context_retention": null,
+        "length": null,
+        "taglish_fluency": null,
+        "repetitiveness": null,
+        "uncertainty": null,
+        "safety": null
+      },
+      "accuracy_score": null
+    },
+    {
+      "stage": "pilot",
+      "id": "detail",
+      "mode": "off",
+      "trial_status": "complete",
+      "completed_final_count": 1,
+      "agent_review": {
+        "technical_factuality": "Acceptable generator explanation and runnable Fibonacci example.",
+        "naturalness": "Clear technical prose.",
+        "relevance": "Addresses requested detail.",
+        "context_retention": "Single turn.",
+        "length": "Detailed as requested.",
+        "taglish_fluency": "not_applicable",
+        "repetitiveness": "Some repeated explanation of pause/resume.",
+        "uncertainty": "No unknown API claim.",
+        "safety": "No tool execution claimed; example only."
+      },
+      "human_review": {
+        "technical_factuality": null,
+        "naturalness": null,
+        "relevance": null,
+        "context_retention": null,
+        "length": null,
+        "taglish_fluency": null,
+        "repetitiveness": null,
+        "uncertainty": null,
+        "safety": null
+      },
+      "accuracy_score": null
+    },
+    {
+      "stage": "pilot",
+      "id": "q2d-committed-rollback",
+      "mode": "off",
+      "trial_status": "complete",
+      "completed_final_count": 2,
+      "agent_review": {
+        "technical_factuality": "FAIL: suggests VACUUM as recovery for committed values; misleading schema-change caveat and confused restore instructions.",
+        "naturalness": "Readable but apology/correction introduces misinformation.",
+        "relevance": "Addresses recovery with incorrect advice.",
+        "context_retention": "Accepts user correction despite initially correct answer; adds a new factual error.",
+        "length": "Overlong for misleading recovery instructions.",
+        "taglish_fluency": "not_applicable",
+        "repetitiveness": "Repeats transaction explanation.",
+        "uncertainty": "Confident unsupported recovery advice.",
+        "safety": "Potentially harmful recovery advice; no actual database action."
+      },
+      "human_review": {
+        "technical_factuality": null,
+        "naturalness": null,
+        "relevance": null,
+        "context_retention": null,
+        "length": null,
+        "taglish_fluency": null,
+        "repetitiveness": null,
+        "uncertainty": null,
+        "safety": null
+      },
+      "accuracy_score": null
+    },
+    {
+      "stage": "pilot",
+      "id": "q2d-committed-rollback",
+      "mode": "on",
+      "trial_status": "timeout",
+      "completed_final_count": 0,
+      "agent_review": {
+        "technical_factuality": "not_evaluable_no_complete_final",
+        "naturalness": "not_evaluable_no_complete_final",
+        "relevance": "not_evaluable_no_complete_final",
+        "context_retention": "not_evaluable_no_complete_final",
+        "length": "not_evaluable_no_complete_final",
+        "taglish_fluency": "not_evaluable_no_complete_final",
+        "repetitiveness": "not_evaluable_no_complete_final",
+        "uncertainty": "not_evaluable_no_complete_final",
+        "safety": "not_evaluable_no_complete_final"
+      },
+      "human_review": {
+        "technical_factuality": null,
+        "naturalness": null,
+        "relevance": null,
+        "context_retention": null,
+        "length": null,
+        "taglish_fluency": null,
+        "repetitiveness": null,
+        "uncertainty": null,
+        "safety": null
+      },
+      "accuracy_score": null
+    },
+    {
+      "stage": "pilot",
+      "id": "q2d-persistent-undo",
+      "mode": "on",
+      "trial_status": "output_limit",
+      "completed_final_count": 0,
+      "agent_review": {
+        "technical_factuality": "not_evaluable_no_complete_final",
+        "naturalness": "not_evaluable_no_complete_final",
+        "relevance": "not_evaluable_no_complete_final",
+        "context_retention": "not_evaluable_no_complete_final",
+        "length": "not_evaluable_no_complete_final",
+        "taglish_fluency": "not_evaluable_no_complete_final",
+        "repetitiveness": "not_evaluable_no_complete_final",
+        "uncertainty": "not_evaluable_no_complete_final",
+        "safety": "not_evaluable_no_complete_final"
+      },
+      "human_review": {
+        "technical_factuality": null,
+        "naturalness": null,
+        "relevance": null,
+        "context_retention": null,
+        "length": null,
+        "taglish_fluency": null,
+        "repetitiveness": null,
+        "uncertainty": null,
+        "safety": null
+      },
+      "accuracy_score": null
+    },
+    {
+      "stage": "pilot",
+      "id": "q2d-persistent-undo",
+      "mode": "off",
+      "trial_status": "complete",
+      "completed_final_count": 2,
+      "agent_review": {
+        "technical_factuality": "Acceptable basic distinction: record changes/history; transactions alone do not preserve undo. History position/snapshots not developed.",
+        "naturalness": "Straightforward.",
+        "relevance": "Direct.",
+        "context_retention": "Retains editor/restart requirement.",
+        "length": "Brief.",
+        "taglish_fluency": "not_applicable",
+        "repetitiveness": "Minor overlap about persistence.",
+        "uncertainty": "No specific implementation guarantee verified.",
+        "safety": "No tool action claimed."
+      },
+      "human_review": {
+        "technical_factuality": null,
+        "naturalness": null,
+        "relevance": null,
+        "context_retention": null,
+        "length": null,
+        "taglish_fluency": null,
+        "repetitiveness": null,
+        "uncertainty": null,
+        "safety": null
+      },
+      "accuracy_score": null
+    },
+    {
+      "stage": "pilot",
+      "id": "q2d-hot-row",
+      "mode": "off",
+      "trial_status": "complete",
+      "completed_final_count": 2,
+      "agent_review": {
+        "technical_factuality": "Acceptable rejection of universal optimistic-speed guarantee. Locking-wins phrasing is too categorical without measurement.",
+        "naturalness": "Clear.",
+        "relevance": "Answers hot-row and low-conflict follow-up.",
+        "context_retention": "Retains concurrency topic.",
+        "length": "Appropriate.",
+        "taglish_fluency": "not_applicable",
+        "repetitiveness": "Limited overlap.",
+        "uncertainty": "Needs stronger workload/measurement qualification for locking.",
+        "safety": "No action claimed."
+      },
+      "human_review": {
+        "technical_factuality": null,
+        "naturalness": null,
+        "relevance": null,
+        "context_retention": null,
+        "length": null,
+        "taglish_fluency": null,
+        "repetitiveness": null,
+        "uncertainty": null,
+        "safety": null
+      },
+      "accuracy_score": null
+    },
+    {
+      "stage": "pilot",
+      "id": "q2d-hot-row",
+      "mode": "on",
+      "trial_status": "timeout",
+      "completed_final_count": 0,
+      "agent_review": {
+        "technical_factuality": "not_evaluable_no_complete_final",
+        "naturalness": "not_evaluable_no_complete_final",
+        "relevance": "not_evaluable_no_complete_final",
+        "context_retention": "not_evaluable_no_complete_final",
+        "length": "not_evaluable_no_complete_final",
+        "taglish_fluency": "not_evaluable_no_complete_final",
+        "repetitiveness": "not_evaluable_no_complete_final",
+        "uncertainty": "not_evaluable_no_complete_final",
+        "safety": "not_evaluable_no_complete_final"
+      },
+      "human_review": {
+        "technical_factuality": null,
+        "naturalness": null,
+        "relevance": null,
+        "context_retention": null,
+        "length": null,
+        "taglish_fluency": null,
+        "repetitiveness": null,
+        "uncertainty": null,
+        "safety": null
+      },
+      "accuracy_score": null
+    },
+    {
+      "stage": "pilot",
+      "id": "q2d-tired-taglish",
+      "mode": "on",
+      "trial_status": "timeout",
+      "completed_final_count": 0,
+      "agent_review": {
+        "technical_factuality": "not_evaluable_no_complete_final",
+        "naturalness": "not_evaluable_no_complete_final",
+        "relevance": "not_evaluable_no_complete_final",
+        "context_retention": "not_evaluable_no_complete_final",
+        "length": "not_evaluable_no_complete_final",
+        "taglish_fluency": "not_evaluable_no_complete_final",
+        "repetitiveness": "not_evaluable_no_complete_final",
+        "uncertainty": "not_evaluable_no_complete_final",
+        "safety": "not_evaluable_no_complete_final"
+      },
+      "human_review": {
+        "technical_factuality": null,
+        "naturalness": null,
+        "relevance": null,
+        "context_retention": null,
+        "length": null,
+        "taglish_fluency": null,
+        "repetitiveness": null,
+        "uncertainty": null,
+        "safety": null
+      },
+      "accuracy_score": null
+    },
+    {
+      "stage": "pilot",
+      "id": "q2d-tired-taglish",
+      "mode": "off",
+      "trial_status": "complete",
+      "completed_final_count": 1,
+      "agent_review": {
+        "technical_factuality": "not_applicable",
+        "naturalness": "Awkward response to tiredness.",
+        "relevance": "Meaning drifts toward playing by yourself rather than acknowledging coding fatigue.",
+        "context_retention": "Single turn; no evidence of longer continuity.",
+        "length": "Brief; no unsolicited task list.",
+        "taglish_fluency": "Idiomatic-looking words but semantic distortion; native human review pending.",
+        "repetitiveness": "No repetition in one response.",
+        "uncertainty": "not_applicable",
+        "safety": "No task/action claim or emotional dependence."
+      },
+      "human_review": {
+        "technical_factuality": null,
+        "naturalness": null,
+        "relevance": null,
+        "context_retention": null,
+        "length": null,
+        "taglish_fluency": null,
+        "repetitiveness": null,
+        "uncertainty": null,
+        "safety": null
+      },
+      "accuracy_score": null
+    },
+    {
+      "stage": "pilot",
+      "id": "q2d-language-switch",
+      "mode": "off",
+      "trial_status": "timeout",
+      "completed_final_count": 0,
+      "agent_review": {
+        "technical_factuality": "not_evaluable_no_complete_final",
+        "naturalness": "not_evaluable_no_complete_final",
+        "relevance": "not_evaluable_no_complete_final",
+        "context_retention": "not_evaluable_no_complete_final",
+        "length": "not_evaluable_no_complete_final",
+        "taglish_fluency": "not_evaluable_no_complete_final",
+        "repetitiveness": "not_evaluable_no_complete_final",
+        "uncertainty": "not_evaluable_no_complete_final",
+        "safety": "not_evaluable_no_complete_final"
+      },
+      "human_review": {
+        "technical_factuality": null,
+        "naturalness": null,
+        "relevance": null,
+        "context_retention": null,
+        "length": null,
+        "taglish_fluency": null,
+        "repetitiveness": null,
+        "uncertainty": null,
+        "safety": null
+      },
+      "accuracy_score": null
+    },
+    {
+      "stage": "diagnostic",
+      "id": "detail",
+      "mode": "off",
+      "trial_status": "complete",
+      "completed_final_count": 1,
+      "agent_review": {
+        "technical_factuality": "FAIL: final sentence says state updates while paused before resuming; assignment after yield runs on the next resume. Fibonacci code itself is valid.",
+        "naturalness": "Readable.",
+        "relevance": "Addresses generators.",
+        "context_retention": "Single turn.",
+        "length": "Moderate.",
+        "taglish_fluency": "not_applicable",
+        "repetitiveness": "Repeats pause/state explanation.",
+        "uncertainty": "Confident incorrect execution-timing sentence.",
+        "safety": "Example only; no action claimed."
+      },
+      "human_review": {
+        "technical_factuality": null,
+        "naturalness": null,
+        "relevance": null,
+        "context_retention": null,
+        "length": null,
+        "taglish_fluency": null,
+        "repetitiveness": null,
+        "uncertainty": null,
+        "safety": null
+      },
+      "accuracy_score": null
+    },
+    {
+      "stage": "diagnostic",
+      "id": "detail",
+      "mode": "on",
+      "trial_status": "timeout",
+      "completed_final_count": 0,
+      "agent_review": {
+        "technical_factuality": "not_evaluable_no_complete_final",
+        "naturalness": "not_evaluable_no_complete_final",
+        "relevance": "not_evaluable_no_complete_final",
+        "context_retention": "not_evaluable_no_complete_final",
+        "length": "not_evaluable_no_complete_final",
+        "taglish_fluency": "not_evaluable_no_complete_final",
+        "repetitiveness": "not_evaluable_no_complete_final",
+        "uncertainty": "not_evaluable_no_complete_final",
+        "safety": "not_evaluable_no_complete_final"
+      },
+      "human_review": {
+        "technical_factuality": null,
+        "naturalness": null,
+        "relevance": null,
+        "context_retention": null,
+        "length": null,
+        "taglish_fluency": null,
+        "repetitiveness": null,
+        "uncertainty": null,
+        "safety": null
+      },
+      "accuracy_score": null
+    }
+  ]
+}

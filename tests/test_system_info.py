@@ -17,6 +17,7 @@ from src.capabilities.registry import ToolRegistry
 from src.capabilities.system_info import initialize_measurements as initialize_interfaces
 from src.capabilities.system_intent import gib, system_request
 from src.intelligence.conversation import ConversationSession
+from src.intelligence.persona import HISTORY_OMITTED
 from src.memory.store import MemoryStore
 from src.storage.conversation_store import ConversationStore, StorageError
 
@@ -395,7 +396,8 @@ def test_system_history_persists_but_is_excluded_from_model_after_resume(measure
     assert restored.history(for_model=True) == []
     assert restored.reply("Explain how RAM works") == "Ordinary reply"
     outbound = generate.call_args.args[0]
-    assert outbound == [{"role": "system", "content": "Identity"}, {"role": "user", "content": "Explain how RAM works"}]
+    assert outbound == [{"role": "system", "content": "Identity" + HISTORY_OMITTED},
+                        {"role": "user", "content": "Explain how RAM works"}]
     assert process_answer not in repr(outbound) and snapshot_answer not in repr(outbound)
     assert measurements.process_iter.call_count == 1
     assert len(MemoryStore(tmp_path).list_facts("project", "Orion")) == 0
@@ -416,8 +418,8 @@ def test_calculator_memory_and_app_launcher_regression(measurements, tmp_path, m
     monkeypatch.setattr("src.capabilities.applications._launch", lambda app: {"application": app.app_id, "launch_state": "verified", "pid": 4321, "process_observed": True, "exit_code": None})
     monkeypatch.setattr(session.applications, "availability", lambda app: "AVAILABLE")
     session.reply("Remember that Orion uses SvelteKit for its frontend.")
-    assert "launch verified" in session.reply("Open Calculator")
-    assert "launch verified" in session.reply("Open Notepad")
+    assert "is running" in session.reply("Open Calculator")
+    assert "is running" in session.reply("Open Notepad")
     assert session.reply("What is 245 multiplied by 18?") == "4410"
     assert "CPU Usage: 22.5%" in session.reply("What's my CPU usage?")
     assert "SvelteKit" in session.reply("What frontend does Orion currently use?")

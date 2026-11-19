@@ -9,6 +9,7 @@ from src.config import ConfigError, load_config
 from src.intelligence.conversation import ConversationSession
 from src.intelligence.ollama_client import OllamaClient, OllamaError
 from src.intelligence.prompt_budget import bounded_context
+from src.intelligence.persona import HISTORY_OMITTED
 from src.storage.conversation_store import ConversationStore, StorageError
 
 
@@ -83,7 +84,7 @@ def test_long_and_restored_history_is_trimmed_only_for_model(tmp_path):
     saved_id, history = session.session_id, session.history()
     assert len(history) == 12 and session.turn_count == 6
     assert all(sum(len(row["content"]) for row in messages) <= 4096 for messages in captured)
-    assert captured[-1][0] == {"role": "system", "content": "SYS"}
+    assert captured[-1][0] == {"role": "system", "content": "SYS" + HISTORY_OMITTED}
     assert len(captured[-1]) == 4  # One whole prior exchange fits.
     restored = ConversationSession("SYS", 10, generate, store, context_chars=4096)
     restored.resume(saved_id)

@@ -86,7 +86,7 @@ def test_app_wording(prompt, app):
 @pytest.mark.parametrize("prompt", ["Open PowerShell and run a command.", "Open C:/Windows/System32/cmd.exe.", "Open arbitrary.exe."])
 def test_unapproved_application_never_launches_or_generates(local, prompt):
     session, model, _, _ = local
-    assert "launch verified" not in session.reply(prompt)
+    assert "is running" not in session.reply(prompt)
     model.assert_not_called()
 
 

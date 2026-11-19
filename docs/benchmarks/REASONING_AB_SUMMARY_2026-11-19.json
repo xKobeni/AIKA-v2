@@ -1,0 +1,1810 @@
+{
+  "source": "REASONING_AB_STUDY_2026-11-19.json",
+  "note": "Agent factual/style review is separate from unfilled human_review slots. No accuracy score is assigned to missing finals.",
+  "groups": {
+    "pilot_off": {
+      "trial_statuses": {
+        "complete": 6,
+        "timeout": 1
+      },
+      "turn_statuses": {
+        "complete": 9,
+        "timeout": 1
+      },
+      "chat_requests": 10,
+      "finals": 9,
+      "unrun_turns_in_started_trials": 1,
+      "turn_wall_seconds": {
+        "n": 10,
+        "median": 9.391926000000002,
+        "minimum": 2.7280729999999997,
+        "maximum": 35.452782,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "complete_turn_wall_seconds": {
+        "n": 9,
+        "median": 9.208491,
+        "minimum": 2.7280729999999997,
+        "maximum": 35.452782,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "case_sum_turn_wall_seconds": {
+        "n": 7,
+        "median": 13.448152,
+        "minimum": 9.575361000000001,
+        "maximum": 39.367319,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "thinking_observed_responses": 0,
+      "load_duration": {
+        "n": 9,
+        "median": 9262500,
+        "minimum": 5384700,
+        "maximum": 12467219000,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "prompt_eval_duration": {
+        "n": 9,
+        "median": 826766000,
+        "minimum": 525942000,
+        "maximum": 1777555000,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "eval_duration": {
+        "n": 9,
+        "median": 7768573000,
+        "minimum": 795373000,
+        "maximum": 34735770000,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "eval_count": {
+        "n": 9,
+        "median": 50,
+        "minimum": 5,
+        "maximum": 223,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "prompt_eval_count": {
+        "n": 9,
+        "median": 675,
+        "minimum": 654,
+        "maximum": 774,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "final_characters": {
+        "n": 9,
+        "median": 265,
+        "minimum": 15,
+        "maximum": 985,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "available_ram_bytes": {
+        "n": 18,
+        "median": 106729472.0,
+        "minimum": 1585152,
+        "maximum": 229777408,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "total_ram_bytes": {
+        "n": 18,
+        "median": 7879598080.0,
+        "minimum": 7879598080,
+        "maximum": 7879598080,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "system_cpu_percent_50ms": {
+        "n": 18,
+        "median": 35.6,
+        "minimum": 0.0,
+        "maximum": 66.7,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "ollama_working_set_sum_bytes": {
+        "n": 18,
+        "median": 16332800.0,
+        "minimum": 1048576,
+        "maximum": 28508160,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "ollama_reported_model_vram_bytes": {
+        "n": 17,
+        "median": 1879813650,
+        "minimum": 1879813650,
+        "maximum": 1879813650,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      }
+    },
+    "pilot_on": {
+      "trial_statuses": {
+        "output_limit": 3,
+        "timeout": 3
+      },
+      "turn_statuses": {
+        "output_limit": 3,
+        "timeout": 3
+      },
+      "chat_requests": 6,
+      "finals": 0,
+      "unrun_turns_in_started_trials": 3,
+      "turn_wall_seconds": {
+        "n": 6,
+        "median": 176.252679,
+        "minimum": 158.25499,
+        "maximum": 180.179617,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "complete_turn_wall_seconds": {
+        "n": 0,
+        "median": null,
+        "minimum": null,
+        "maximum": null,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "case_sum_turn_wall_seconds": {
+        "n": 6,
+        "median": 176.252679,
+        "minimum": 158.25499,
+        "maximum": 180.179617,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "thinking_observed_responses": 3,
+      "load_duration": {
+        "n": 3,
+        "median": 15363200,
+        "minimum": 10369600,
+        "maximum": 13394189400,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "prompt_eval_duration": {
+        "n": 3,
+        "median": 1280180000,
+        "minimum": 1033603000,
+        "maximum": 1420671000,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "eval_duration": {
+        "n": 3,
+        "median": 157389088000,
+        "minimum": 156765978000,
+        "maximum": 161491811000,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "eval_count": {
+        "n": 3,
+        "median": 1024,
+        "minimum": 1024,
+        "maximum": 1024,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "prompt_eval_count": {
+        "n": 3,
+        "median": 664,
+        "minimum": 652,
+        "maximum": 666,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "final_characters": {
+        "n": 3,
+        "median": 0,
+        "minimum": 0,
+        "maximum": 0,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "available_ram_bytes": {
+        "n": 12,
+        "median": 144824320.0,
+        "minimum": 28409856,
+        "maximum": 1749549056,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "total_ram_bytes": {
+        "n": 12,
+        "median": 7879598080.0,
+        "minimum": 7879598080,
+        "maximum": 7879598080,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "system_cpu_percent_50ms": {
+        "n": 12,
+        "median": 43.05,
+        "minimum": 0.0,
+        "maximum": 58.7,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "ollama_working_set_sum_bytes": {
+        "n": 12,
+        "median": 16871424.0,
+        "minimum": 5033984,
+        "maximum": 29093888,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "ollama_reported_model_vram_bytes": {
+        "n": 11,
+        "median": 1879813650,
+        "minimum": 1879813650,
+        "maximum": 1879813650,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      }
+    },
+    "diagnostic_off": {
+      "trial_statuses": {
+        "complete": 1
+      },
+      "turn_statuses": {
+        "complete": 1
+      },
+      "chat_requests": 1,
+      "finals": 1,
+      "unrun_turns_in_started_trials": 0,
+      "turn_wall_seconds": {
+        "n": 1,
+        "median": 85.24609,
+        "minimum": 85.24609,
+        "maximum": 85.24609,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "complete_turn_wall_seconds": {
+        "n": 1,
+        "median": 85.24609,
+        "minimum": 85.24609,
+        "maximum": 85.24609,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "case_sum_turn_wall_seconds": {
+        "n": 1,
+        "median": 85.24609,
+        "minimum": 85.24609,
+        "maximum": 85.24609,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "thinking_observed_responses": 0,
+      "load_duration": {
+        "n": 1,
+        "median": 22109900,
+        "minimum": 22109900,
+        "maximum": 22109900,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "prompt_eval_duration": {
+        "n": 1,
+        "median": 2198913000,
+        "minimum": 2198913000,
+        "maximum": 2198913000,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "eval_duration": {
+        "n": 1,
+        "median": 82730771000,
+        "minimum": 82730771000,
+        "maximum": 82730771000,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "eval_count": {
+        "n": 1,
+        "median": 213,
+        "minimum": 213,
+        "maximum": 213,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "prompt_eval_count": {
+        "n": 1,
+        "median": 668,
+        "minimum": 668,
+        "maximum": 668,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "final_characters": {
+        "n": 1,
+        "median": 798,
+        "minimum": 798,
+        "maximum": 798,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "available_ram_bytes": {
+        "n": 2,
+        "median": 95180800.0,
+        "minimum": 50249728,
+        "maximum": 140111872,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "total_ram_bytes": {
+        "n": 2,
+        "median": 7879598080.0,
+        "minimum": 7879598080,
+        "maximum": 7879598080,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "system_cpu_percent_50ms": {
+        "n": 2,
+        "median": 10.649999999999999,
+        "minimum": 2.9,
+        "maximum": 18.4,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "ollama_working_set_sum_bytes": {
+        "n": 2,
+        "median": 7168000.0,
+        "minimum": 3854336,
+        "maximum": 10481664,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "ollama_reported_model_vram_bytes": {
+        "n": 2,
+        "median": 1879813650.0,
+        "minimum": 1879813650,
+        "maximum": 1879813650,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      }
+    },
+    "diagnostic_on": {
+      "trial_statuses": {
+        "timeout": 1
+      },
+      "turn_statuses": {
+        "timeout": 1
+      },
+      "chat_requests": 1,
+      "finals": 0,
+      "unrun_turns_in_started_trials": 0,
+      "turn_wall_seconds": {
+        "n": 1,
+        "median": 360.175864,
+        "minimum": 360.175864,
+        "maximum": 360.175864,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "complete_turn_wall_seconds": {
+        "n": 0,
+        "median": null,
+        "minimum": null,
+        "maximum": null,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "case_sum_turn_wall_seconds": {
+        "n": 1,
+        "median": 360.175864,
+        "minimum": 360.175864,
+        "maximum": 360.175864,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "thinking_observed_responses": 0,
+      "load_duration": {
+        "n": 0,
+        "median": null,
+        "minimum": null,
+        "maximum": null,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "prompt_eval_duration": {
+        "n": 0,
+        "median": null,
+        "minimum": null,
+        "maximum": null,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "eval_duration": {
+        "n": 0,
+        "median": null,
+        "minimum": null,
+        "maximum": null,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "eval_count": {
+        "n": 0,
+        "median": null,
+        "minimum": null,
+        "maximum": null,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "prompt_eval_count": {
+        "n": 0,
+        "median": null,
+        "minimum": null,
+        "maximum": null,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "final_characters": {
+        "n": 0,
+        "median": null,
+        "minimum": null,
+        "maximum": null,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "available_ram_bytes": {
+        "n": 2,
+        "median": 103487488.0,
+        "minimum": 39256064,
+        "maximum": 167718912,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "total_ram_bytes": {
+        "n": 2,
+        "median": 7879598080.0,
+        "minimum": 7879598080,
+        "maximum": 7879598080,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "system_cpu_percent_50ms": {
+        "n": 2,
+        "median": 42.15,
+        "minimum": 5.6,
+        "maximum": 78.7,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "ollama_working_set_sum_bytes": {
+        "n": 2,
+        "median": 9439232.0,
+        "minimum": 8560640,
+        "maximum": 10317824,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      },
+      "ollama_reported_model_vram_bytes": {
+        "n": 2,
+        "median": 1879813650.0,
+        "minimum": 1879813650,
+        "maximum": 1879813650,
+        "p95": null,
+        "p95_note": "Not estimated: small, selected pilot with timeout/deadline censoring."
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "greeting",
+      "category": "casual greeting",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "morning",
+      "category": "casual greeting",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "followup",
+      "category": "casual follow-up",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 2,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "thanks",
+      "category": "gratitude",
+      "pilot_selected": true,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "pilot",
+          "status": "complete",
+          "turns_run": 1,
+          "unrun_turns": 0,
+          "turn_wall_seconds": [
+            15.201979
+          ]
+        }
+      ],
+      "on": [
+        {
+          "stage": "pilot",
+          "status": "output_limit",
+          "turns_run": 1,
+          "unrun_turns": 0,
+          "turn_wall_seconds": [
+            172.38181899999998
+          ]
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "ack",
+      "category": "short acknowledgement",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "okay",
+      "category": "short acknowledgement",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "frustrated",
+      "category": "coding frustration",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "traceback",
+      "category": "technical troubleshooting",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "project",
+      "category": "multi-turn project discussion",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 3,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "pronoun",
+      "category": "context-dependent questions",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 2,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "correction",
+      "category": "user correcting AIKA",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 3,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "ambiguous",
+      "category": "ambiguous requests",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "unknown",
+      "category": "unknown information",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "roughday",
+      "category": "emotional but non-crisis",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "tired",
+      "category": "emotional but non-crisis",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "explain",
+      "category": "technical explanations",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "detail",
+      "category": "detailed answers",
+      "pilot_selected": true,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "pilot",
+          "status": "complete",
+          "turns_run": 1,
+          "unrun_turns": 0,
+          "turn_wall_seconds": [
+            35.452782
+          ]
+        },
+        {
+          "stage": "diagnostic",
+          "status": "complete",
+          "turns_run": 1,
+          "unrun_turns": 0,
+          "turn_wall_seconds": [
+            85.24609
+          ]
+        }
+      ],
+      "on": [
+        {
+          "stage": "pilot",
+          "status": "output_limit",
+          "turns_run": 1,
+          "unrun_turns": 0,
+          "turn_wall_seconds": [
+            158.25499
+          ]
+        },
+        {
+          "stage": "diagnostic",
+          "status": "timeout",
+          "turns_run": 1,
+          "unrun_turns": 0,
+          "turn_wall_seconds": [
+            360.175864
+          ]
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "short",
+      "category": "short answers",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "taglish",
+      "category": "Filipino-English",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "taglish-follow",
+      "category": "Filipino-English",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 2,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "memory",
+      "category": "structured memory recall",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 2,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "revision",
+      "category": "memory revision",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 3,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "capability",
+      "category": "capability questions",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "explicit-action",
+      "category": "explicit action requests",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "measurement",
+      "category": "verified system measurements",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "storage",
+      "category": "verified system measurements",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "failure",
+      "category": "tool failures and uncertainty",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "temperature",
+      "category": "tool failures and uncertainty",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "elaborate",
+      "category": "requests to elaborate",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 2,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "simplify",
+      "category": "requests to simplify",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 2,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "topic-change",
+      "category": "changing topics",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 2,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "repeat",
+      "category": "repeated questions",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 2,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "missing-context",
+      "category": "omitted context",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 2,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "char-trim",
+      "category": "omitted context",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "identity",
+      "category": "honest identity",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "experience",
+      "category": "honest identity",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "no-action-claim",
+      "category": "execution factuality",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "no-save-claim",
+      "category": "memory factuality",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "correction-tone",
+      "category": "user correcting AIKA",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 3,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "context-detail",
+      "category": "context-dependent questions",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 2,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "humor",
+      "category": "casual follow-up",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "specific-unknown",
+      "category": "unknown information",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "calculator",
+      "category": "verified calculator",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "web-disabled",
+      "category": "tool failures and uncertainty",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "q2d-committed-rollback",
+      "category": "SQLite committed edits",
+      "pilot_selected": true,
+      "expected_turns_per_mode": 2,
+      "off": [
+        {
+          "stage": "pilot",
+          "status": "complete",
+          "turns_run": 2,
+          "unrun_turns": 0,
+          "turn_wall_seconds": [
+            9.208491,
+            30.158828
+          ]
+        }
+      ],
+      "on": [
+        {
+          "stage": "pilot",
+          "status": "timeout",
+          "turns_run": 1,
+          "unrun_turns": 1,
+          "turn_wall_seconds": [
+            180.123539
+          ]
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "q2d-persistent-undo",
+      "category": "persistent undo history",
+      "pilot_selected": true,
+      "expected_turns_per_mode": 2,
+      "off": [
+        {
+          "stage": "pilot",
+          "status": "complete",
+          "turns_run": 2,
+          "unrun_turns": 0,
+          "turn_wall_seconds": [
+            2.7280729999999997,
+            8.707842000000001
+          ]
+        }
+      ],
+      "on": [
+        {
+          "stage": "pilot",
+          "status": "output_limit",
+          "turns_run": 1,
+          "unrun_turns": 1,
+          "turn_wall_seconds": [
+            162.821908
+          ]
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "q2d-hot-row",
+      "category": "optimistic concurrency tradeoffs",
+      "pilot_selected": true,
+      "expected_turns_per_mode": 2,
+      "off": [
+        {
+          "stage": "pilot",
+          "status": "complete",
+          "turns_run": 2,
+          "unrun_turns": 0,
+          "turn_wall_seconds": [
+            7.732995,
+            5.7151570000000005
+          ]
+        }
+      ],
+      "on": [
+        {
+          "stage": "pilot",
+          "status": "timeout",
+          "turns_run": 1,
+          "unrun_turns": 1,
+          "turn_wall_seconds": [
+            180.128755
+          ]
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "q2d-unknown-library",
+      "category": "uncertain library behavior",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "q2d-vague-spec",
+      "category": "ambiguous technical specifications",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "q2d-tired-taglish",
+      "category": "Taglish tiredness",
+      "pilot_selected": true,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "pilot",
+          "status": "complete",
+          "turns_run": 1,
+          "unrun_turns": 0,
+          "turn_wall_seconds": [
+            10.475219
+          ]
+        }
+      ],
+      "on": [
+        {
+          "stage": "pilot",
+          "status": "timeout",
+          "turns_run": 1,
+          "unrun_turns": 0,
+          "turn_wall_seconds": [
+            180.179617
+          ]
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "q2d-bug-humor",
+      "category": "humor",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "q2d-salamat",
+      "category": "casual acknowledgements",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "q2d-language-switch",
+      "category": "English to Taglish",
+      "pilot_selected": true,
+      "expected_turns_per_mode": 2,
+      "off": [
+        {
+          "stage": "pilot",
+          "status": "timeout",
+          "turns_run": 1,
+          "unrun_turns": 1,
+          "turn_wall_seconds": [
+            9.575361000000001
+          ]
+        }
+      ],
+      "on": [
+        {
+          "stage": "pilot",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "q2d-asserted-benchmark",
+      "category": "user provided versus verified facts",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 2,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "q2h-transaction-boundary",
+      "category": "SQLite transaction boundary",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "q2h-editor-reopen",
+      "category": "persistent undo after restart",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 2,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "q2h-concurrency-assumption",
+      "category": "incorrect performance assumption",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "q2h-unseen-api",
+      "category": "uncertain local API",
+      "pilot_selected": true,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "pilot",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "pilot",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "q2h-autosave-spec",
+      "category": "ambiguous safety specification",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 2,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "q2h-rubber-duck",
+      "category": "casual joke",
+      "pilot_selected": true,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "pilot",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "pilot",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "q2h-done-tonight",
+      "category": "emotional casual statement",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "q2h-taglish-correction",
+      "category": "language switching and correction",
+      "pilot_selected": true,
+      "expected_turns_per_mode": 3,
+      "off": [
+        {
+          "stage": "pilot",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "pilot",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "q2h-laptop-taglish",
+      "category": "natural Taglish and uncertainty",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 1,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    },
+    {
+      "id": "q2h-context-unavailable",
+      "category": "missing historical context",
+      "pilot_selected": false,
+      "expected_turns_per_mode": 2,
+      "off": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "on": [
+        {
+          "stage": "full",
+          "status": "not_run"
+        }
+      ],
+      "human_review_status": "pending"
+    }
+  ]
+}

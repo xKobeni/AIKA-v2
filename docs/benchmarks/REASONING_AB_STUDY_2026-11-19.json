@@ -1,0 +1,2511 @@
+{
+  "created_at": "2026-11-19T09:37:52.055658+00:00",
+  "identity": {
+    "fixture_sha256": "01f6478fddac0db112cde4a645b258e88b7c4a60d8da5992f1a57f3ec767c7e8",
+    "persona_sha256": "7426b160dc81f2b404ffa84e9d277faf956f1b7845057df3f9e4828ff02cfcae",
+    "limits": {
+      "seconds": 2700,
+      "chat_requests": 200,
+      "http_requests": 1000
+    }
+  },
+  "environment": {
+    "python": "3.12.10",
+    "platform": "Windows",
+    "machine": "AMD64",
+    "ollama_version": "0.40.16",
+    "model_name": "qwen3.5:4b",
+    "model_digest": "d8b0f5e9760cd1682034f292d7ef72ec46f432149be0df7574bf2d6e92e38c04",
+    "model_details": {
+      "format": "gguf",
+      "family": "qwen35",
+      "parameter_size": "4.2B",
+      "quantization_level": "Q4_K_M"
+    },
+    "thinking_boolean_controls": [
+      false,
+      true
+    ],
+    "renderer": "qwen3.5",
+    "parser": "qwen3.5",
+    "setup_http_requests": 3,
+    "production_think": "off",
+    "timeout_seconds": 180.0,
+    "context_chars": 24000,
+    "context_turns": 10,
+    "production_response_tokens": 1024
+  },
+  "chat_requests": 20,
+  "http": [
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 268.924
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/tags",
+      "timeout_seconds": 3.0,
+      "wall_ms": 35.533
+    },
+    {
+      "stage": "pilot",
+      "method": "POST",
+      "path": "/api/show",
+      "timeout_seconds": 3.0,
+      "wall_ms": 13.943
+    },
+    {
+      "stage": "pilot",
+      "method": "POST",
+      "path": "/api/chat",
+      "timeout_seconds": 180.0,
+      "think": false,
+      "num_predict": 1024,
+      "temperature": 0.2,
+      "input_sha256": "d06a1015b5917f28b59559897c6adee1447fdc10aae6417dcf30879ec5e4d0df",
+      "input_characters": 3340,
+      "done": true,
+      "assistant_role": true,
+      "done_reason": "stop",
+      "thinking_present": false,
+      "thinking_characters": 0,
+      "final_content_present": true,
+      "final_characters": 15,
+      "total_duration": 15099795800,
+      "load_duration": 12467219000,
+      "prompt_eval_duration": 1777555000,
+      "eval_duration": 795373000,
+      "prompt_eval_count": 654,
+      "eval_count": 5,
+      "wall_ms": 15103.323
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 2.325
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/version",
+      "timeout_seconds": 3.0,
+      "wall_ms": 719.984
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 248.507
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/tags",
+      "timeout_seconds": 3.0,
+      "wall_ms": 45.425
+    },
+    {
+      "stage": "pilot",
+      "method": "POST",
+      "path": "/api/show",
+      "timeout_seconds": 3.0,
+      "wall_ms": 11.859
+    },
+    {
+      "stage": "pilot",
+      "method": "POST",
+      "path": "/api/chat",
+      "timeout_seconds": 180.0,
+      "think": true,
+      "num_predict": 1024,
+      "temperature": 0.2,
+      "input_sha256": "d06a1015b5917f28b59559897c6adee1447fdc10aae6417dcf30879ec5e4d0df",
+      "input_characters": 3340,
+      "done": true,
+      "assistant_role": true,
+      "done_reason": "length",
+      "thinking_present": true,
+      "thinking_characters": 4219,
+      "final_content_present": false,
+      "final_characters": 0,
+      "total_duration": 172260798100,
+      "load_duration": 13394189400,
+      "prompt_eval_duration": 1420671000,
+      "eval_duration": 157389088000,
+      "prompt_eval_count": 652,
+      "eval_count": 1024,
+      "wall_ms": 172284.399
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 5.074
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 271.129
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/tags",
+      "timeout_seconds": 3.0,
+      "wall_ms": 37.208
+    },
+    {
+      "stage": "pilot",
+      "method": "POST",
+      "path": "/api/show",
+      "timeout_seconds": 3.0,
+      "wall_ms": 10.993
+    },
+    {
+      "stage": "pilot",
+      "method": "POST",
+      "path": "/api/chat",
+      "timeout_seconds": 180.0,
+      "think": true,
+      "num_predict": 1024,
+      "temperature": 0.2,
+      "input_sha256": "d9cc9278137611218fb7ba834da69bb3fa3e3b78eb36546784c667b22501bb55",
+      "input_characters": 3426,
+      "done": true,
+      "assistant_role": true,
+      "done_reason": "length",
+      "thinking_present": true,
+      "thinking_characters": 4416,
+      "final_content_present": false,
+      "final_characters": 0,
+      "total_duration": 158179074500,
+      "load_duration": 10369600,
+      "prompt_eval_duration": 1280180000,
+      "eval_duration": 156765978000,
+      "prompt_eval_count": 666,
+      "eval_count": 1024,
+      "wall_ms": 158183.609
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 1.938
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 242.453
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/tags",
+      "timeout_seconds": 3.0,
+      "wall_ms": 35.596
+    },
+    {
+      "stage": "pilot",
+      "method": "POST",
+      "path": "/api/show",
+      "timeout_seconds": 3.0,
+      "wall_ms": 10.923
+    },
+    {
+      "stage": "pilot",
+      "method": "POST",
+      "path": "/api/chat",
+      "timeout_seconds": 180.0,
+      "think": false,
+      "num_predict": 1024,
+      "temperature": 0.2,
+      "input_sha256": "d9cc9278137611218fb7ba834da69bb3fa3e3b78eb36546784c667b22501bb55",
+      "input_characters": 3426,
+      "done": true,
+      "assistant_role": true,
+      "done_reason": "stop",
+      "thinking_present": false,
+      "thinking_characters": 0,
+      "final_content_present": true,
+      "final_characters": 985,
+      "total_duration": 35372761900,
+      "load_duration": 7870100,
+      "prompt_eval_duration": 525942000,
+      "eval_duration": 34735770000,
+      "prompt_eval_count": 668,
+      "eval_count": 223,
+      "wall_ms": 35374.831
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 1.397
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 231.359
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/tags",
+      "timeout_seconds": 3.0,
+      "wall_ms": 30.539
+    },
+    {
+      "stage": "pilot",
+      "method": "POST",
+      "path": "/api/show",
+      "timeout_seconds": 3.0,
+      "wall_ms": 14.188
+    },
+    {
+      "stage": "pilot",
+      "method": "POST",
+      "path": "/api/chat",
+      "timeout_seconds": 180.0,
+      "think": false,
+      "num_predict": 1024,
+      "temperature": 0.2,
+      "input_sha256": "1fb50c6a1ada86e9da38ebfad4b712b8c8d780c5bd54797de8081deb49052e8c",
+      "input_characters": 3435,
+      "done": true,
+      "assistant_role": true,
+      "done_reason": "stop",
+      "thinking_present": false,
+      "thinking_characters": 0,
+      "final_content_present": true,
+      "final_characters": 265,
+      "total_duration": 9139320200,
+      "load_duration": 5384700,
+      "prompt_eval_duration": 1350146000,
+      "eval_duration": 7768573000,
+      "prompt_eval_count": 675,
+      "eval_count": 59,
+      "wall_ms": 9140.949
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 1.15
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 1.324
+    },
+    {
+      "stage": "pilot",
+      "method": "POST",
+      "path": "/api/chat",
+      "timeout_seconds": 180.0,
+      "think": false,
+      "num_predict": 1024,
+      "temperature": 0.2,
+      "input_sha256": "0909f9714a4934be1a013132b312ffa40ca874b2cf34eb192906d74e964f7a68",
+      "input_characters": 3852,
+      "done": true,
+      "assistant_role": true,
+      "done_reason": "stop",
+      "thinking_present": false,
+      "thinking_characters": 0,
+      "final_content_present": true,
+      "final_characters": 870,
+      "total_duration": 30144701200,
+      "load_duration": 5715700,
+      "prompt_eval_duration": 633714000,
+      "eval_duration": 29490479000,
+      "prompt_eval_count": 774,
+      "eval_count": 200,
+      "wall_ms": 30146.451
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 1.156
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 234.347
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/tags",
+      "timeout_seconds": 3.0,
+      "wall_ms": 35.045
+    },
+    {
+      "stage": "pilot",
+      "method": "POST",
+      "path": "/api/show",
+      "timeout_seconds": 3.0,
+      "wall_ms": 10.261
+    },
+    {
+      "stage": "pilot",
+      "method": "POST",
+      "path": "/api/chat",
+      "timeout_seconds": 180.0,
+      "think": true,
+      "num_predict": 1024,
+      "temperature": 0.2,
+      "input_sha256": "1fb50c6a1ada86e9da38ebfad4b712b8c8d780c5bd54797de8081deb49052e8c",
+      "input_characters": 3435,
+      "error_kind": "timeout",
+      "wall_ms": 180028.868
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 292.534
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 235.318
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/tags",
+      "timeout_seconds": 3.0,
+      "wall_ms": 59.388
+    },
+    {
+      "stage": "pilot",
+      "method": "POST",
+      "path": "/api/show",
+      "timeout_seconds": 3.0,
+      "wall_ms": 15.087
+    },
+    {
+      "stage": "pilot",
+      "method": "POST",
+      "path": "/api/chat",
+      "timeout_seconds": 180.0,
+      "think": true,
+      "num_predict": 1024,
+      "temperature": 0.2,
+      "input_sha256": "c4f59a1d5046b22a27d25f8b9feedd67db8aec564386aede2489d32c068fb946",
+      "input_characters": 3402,
+      "done": true,
+      "assistant_role": true,
+      "done_reason": "length",
+      "thinking_present": true,
+      "thinking_characters": 4519,
+      "final_content_present": false,
+      "final_characters": 0,
+      "total_duration": 162682735400,
+      "load_duration": 15363200,
+      "prompt_eval_duration": 1033603000,
+      "eval_duration": 161491811000,
+      "prompt_eval_count": 664,
+      "eval_count": 1024,
+      "wall_ms": 162715.488
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 6.457
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 250.441
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/tags",
+      "timeout_seconds": 3.0,
+      "wall_ms": 58.302
+    },
+    {
+      "stage": "pilot",
+      "method": "POST",
+      "path": "/api/show",
+      "timeout_seconds": 3.0,
+      "wall_ms": 15.339
+    },
+    {
+      "stage": "pilot",
+      "method": "POST",
+      "path": "/api/chat",
+      "timeout_seconds": 180.0,
+      "think": false,
+      "num_predict": 1024,
+      "temperature": 0.2,
+      "input_sha256": "c4f59a1d5046b22a27d25f8b9feedd67db8aec564386aede2489d32c068fb946",
+      "input_characters": 3402,
+      "done": true,
+      "assistant_role": true,
+      "done_reason": "stop",
+      "thinking_present": false,
+      "thinking_characters": 0,
+      "final_content_present": true,
+      "final_characters": 68,
+      "total_duration": 2622312000,
+      "load_duration": 15053600,
+      "prompt_eval_duration": 826766000,
+      "eval_duration": 1654354000,
+      "prompt_eval_count": 666,
+      "eval_count": 15,
+      "wall_ms": 2624.335
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 1.426
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 1.668
+    },
+    {
+      "stage": "pilot",
+      "method": "POST",
+      "path": "/api/chat",
+      "timeout_seconds": 180.0,
+      "think": false,
+      "num_predict": 1024,
+      "temperature": 0.2,
+      "input_sha256": "fdd372c1e1db75bff1fd3057924a7c964dbe6c702552f4340559fef0c0fa5f7a",
+      "input_characters": 3553,
+      "done": true,
+      "assistant_role": true,
+      "done_reason": "stop",
+      "thinking_present": false,
+      "thinking_characters": 0,
+      "final_content_present": true,
+      "final_characters": 288,
+      "total_duration": 8691636600,
+      "load_duration": 8199100,
+      "prompt_eval_duration": 710653000,
+      "eval_duration": 7960100000,
+      "prompt_eval_count": 708,
+      "eval_count": 58,
+      "wall_ms": 8693.382
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 1.544
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 223.782
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/tags",
+      "timeout_seconds": 3.0,
+      "wall_ms": 33.099
+    },
+    {
+      "stage": "pilot",
+      "method": "POST",
+      "path": "/api/show",
+      "timeout_seconds": 3.0,
+      "wall_ms": 17.1
+    },
+    {
+      "stage": "pilot",
+      "method": "POST",
+      "path": "/api/chat",
+      "timeout_seconds": 180.0,
+      "think": false,
+      "num_predict": 1024,
+      "temperature": 0.2,
+      "input_sha256": "c68ef5bcb6c14c59fc09d06ffcb572b3c44ec5c267466ea87d38f97bfa432887",
+      "input_characters": 3426,
+      "done": true,
+      "assistant_role": true,
+      "done_reason": "stop",
+      "thinking_present": false,
+      "thinking_characters": 0,
+      "final_content_present": true,
+      "final_characters": 279,
+      "total_duration": 7651431600,
+      "load_duration": 13596400,
+      "prompt_eval_duration": 951158000,
+      "eval_duration": 6666540000,
+      "prompt_eval_count": 667,
+      "eval_count": 50,
+      "wall_ms": 7653.539
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 1.239
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 1.348
+    },
+    {
+      "stage": "pilot",
+      "method": "POST",
+      "path": "/api/chat",
+      "timeout_seconds": 180.0,
+      "think": false,
+      "num_predict": 1024,
+      "temperature": 0.2,
+      "input_sha256": "7dc4bd3e2eec91c184bd67d92703dd1e1562888bd08a10149b58ccc81c78f076",
+      "input_characters": 3738,
+      "done": true,
+      "assistant_role": true,
+      "done_reason": "stop",
+      "thinking_present": false,
+      "thinking_characters": 0,
+      "final_content_present": true,
+      "final_characters": 202,
+      "total_duration": 5699651000,
+      "load_duration": 9262500,
+      "prompt_eval_duration": 689098000,
+      "eval_duration": 4986862000,
+      "prompt_eval_count": 733,
+      "eval_count": 39,
+      "wall_ms": 5698.73
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 1.388
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 226.958
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/tags",
+      "timeout_seconds": 3.0,
+      "wall_ms": 33.722
+    },
+    {
+      "stage": "pilot",
+      "method": "POST",
+      "path": "/api/show",
+      "timeout_seconds": 3.0,
+      "wall_ms": 13.385
+    },
+    {
+      "stage": "pilot",
+      "method": "POST",
+      "path": "/api/chat",
+      "timeout_seconds": 180.0,
+      "think": true,
+      "num_predict": 1024,
+      "temperature": 0.2,
+      "input_sha256": "c68ef5bcb6c14c59fc09d06ffcb572b3c44ec5c267466ea87d38f97bfa432887",
+      "input_characters": 3426,
+      "error_kind": "timeout",
+      "wall_ms": 180023.821
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 281.182
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 227.44
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/tags",
+      "timeout_seconds": 3.0,
+      "wall_ms": 61.736
+    },
+    {
+      "stage": "pilot",
+      "method": "POST",
+      "path": "/api/show",
+      "timeout_seconds": 3.0,
+      "wall_ms": 15.334
+    },
+    {
+      "stage": "pilot",
+      "method": "POST",
+      "path": "/api/chat",
+      "timeout_seconds": 180.0,
+      "think": true,
+      "num_predict": 1024,
+      "temperature": 0.2,
+      "input_sha256": "a2d66d0339c6cd0e0548115fb153180011329e557212a4f44514e44a7ef0fd33",
+      "input_characters": 3401,
+      "error_kind": "timeout",
+      "wall_ms": 180035.11
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 276.872
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 239.265
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/tags",
+      "timeout_seconds": 3.0,
+      "wall_ms": 62.827
+    },
+    {
+      "stage": "pilot",
+      "method": "POST",
+      "path": "/api/show",
+      "timeout_seconds": 3.0,
+      "wall_ms": 15.916
+    },
+    {
+      "stage": "pilot",
+      "method": "POST",
+      "path": "/api/chat",
+      "timeout_seconds": 23.437,
+      "think": false,
+      "num_predict": 1024,
+      "temperature": 0.2,
+      "input_sha256": "a2d66d0339c6cd0e0548115fb153180011329e557212a4f44514e44a7ef0fd33",
+      "input_characters": 3401,
+      "done": true,
+      "assistant_role": true,
+      "done_reason": "stop",
+      "thinking_present": false,
+      "thinking_characters": 0,
+      "final_content_present": true,
+      "final_characters": 73,
+      "total_duration": 10180031500,
+      "load_duration": 16258900,
+      "prompt_eval_duration": 1091898000,
+      "eval_duration": 8906281000,
+      "prompt_eval_count": 676,
+      "eval_count": 28,
+      "wall_ms": 10264.247
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 43.842
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 390.096
+    },
+    {
+      "stage": "pilot",
+      "method": "GET",
+      "path": "/api/tags",
+      "timeout_seconds": 3.0,
+      "wall_ms": 98.519
+    },
+    {
+      "stage": "pilot",
+      "method": "POST",
+      "path": "/api/show",
+      "timeout_seconds": 3.0,
+      "wall_ms": 28.235
+    },
+    {
+      "stage": "pilot",
+      "method": "POST",
+      "path": "/api/chat",
+      "timeout_seconds": 9.328,
+      "think": false,
+      "num_predict": 1024,
+      "temperature": 0.2,
+      "input_sha256": "f29ddc6eb08e8eb65f7195b38ba343993319121fbdf08c57109c4a2c6762513f",
+      "input_characters": 3369,
+      "error_kind": "timeout",
+      "wall_ms": 9370.026
+    },
+    {
+      "stage": "diagnostic",
+      "method": "GET",
+      "path": "/api/version",
+      "timeout_seconds": 3.0,
+      "wall_ms": 994.767
+    },
+    {
+      "stage": "diagnostic",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 260.086
+    },
+    {
+      "stage": "diagnostic",
+      "method": "GET",
+      "path": "/api/tags",
+      "timeout_seconds": 3.0,
+      "wall_ms": 72.118
+    },
+    {
+      "stage": "diagnostic",
+      "method": "POST",
+      "path": "/api/show",
+      "timeout_seconds": 3.0,
+      "wall_ms": 19.236
+    },
+    {
+      "stage": "diagnostic",
+      "method": "POST",
+      "path": "/api/chat",
+      "timeout_seconds": 360.0,
+      "think": false,
+      "num_predict": 2048,
+      "temperature": 0.2,
+      "input_sha256": "d9cc9278137611218fb7ba834da69bb3fa3e3b78eb36546784c667b22501bb55",
+      "input_characters": 3426,
+      "done": true,
+      "assistant_role": true,
+      "done_reason": "stop",
+      "thinking_present": false,
+      "thinking_characters": 0,
+      "final_content_present": true,
+      "final_characters": 798,
+      "total_duration": 85022671900,
+      "load_duration": 22109900,
+      "prompt_eval_duration": 2198913000,
+      "eval_duration": 82730771000,
+      "prompt_eval_count": 668,
+      "eval_count": 213,
+      "wall_ms": 85069.314
+    },
+    {
+      "stage": "diagnostic",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 9.538
+    },
+    {
+      "stage": "diagnostic",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 266.305
+    },
+    {
+      "stage": "diagnostic",
+      "method": "GET",
+      "path": "/api/tags",
+      "timeout_seconds": 3.0,
+      "wall_ms": 66.347
+    },
+    {
+      "stage": "diagnostic",
+      "method": "POST",
+      "path": "/api/show",
+      "timeout_seconds": 3.0,
+      "wall_ms": 15.941
+    },
+    {
+      "stage": "diagnostic",
+      "method": "POST",
+      "path": "/api/chat",
+      "timeout_seconds": 360.0,
+      "think": true,
+      "num_predict": 2048,
+      "temperature": 0.2,
+      "input_sha256": "d9cc9278137611218fb7ba834da69bb3fa3e3b78eb36546784c667b22501bb55",
+      "input_characters": 3426,
+      "error_kind": "timeout",
+      "wall_ms": 360035.618
+    },
+    {
+      "stage": "diagnostic",
+      "method": "GET",
+      "path": "/api/ps",
+      "timeout_seconds": 3.0,
+      "wall_ms": 286.25
+    }
+  ],
+  "trials": [
+    {
+      "key": [
+        "pilot",
+        "thanks",
+        "off",
+        0
+      ],
+      "stage": "pilot",
+      "id": "thanks",
+      "category": "gratitude",
+      "mode": "off",
+      "tokens": 1024,
+      "repetition": 0,
+      "status": "complete",
+      "turns": [
+        {
+          "index": 0,
+          "status": "complete",
+          "final": "You're welcome.",
+          "wall_ms": 15201.979,
+          "model_requests": 1,
+          "generation_http_requests": 3,
+          "http_requests": 5,
+          "http_start": 0,
+          "http_end": 5,
+          "metrics": {
+            "stage": "pilot",
+            "method": "POST",
+            "path": "/api/chat",
+            "timeout_seconds": 180.0,
+            "think": false,
+            "num_predict": 1024,
+            "temperature": 0.2,
+            "input_sha256": "d06a1015b5917f28b59559897c6adee1447fdc10aae6417dcf30879ec5e4d0df",
+            "input_characters": 3340,
+            "done": true,
+            "assistant_role": true,
+            "done_reason": "stop",
+            "thinking_present": false,
+            "thinking_characters": 0,
+            "final_content_present": true,
+            "final_characters": 15,
+            "total_duration": 15099795800,
+            "load_duration": 12467219000,
+            "prompt_eval_duration": 1777555000,
+            "eval_duration": 795373000,
+            "prompt_eval_count": 654,
+            "eval_count": 5,
+            "wall_ms": 15103.323
+          },
+          "context": null,
+          "tools": null,
+          "blocked_launch_attempts": null,
+          "thinking_observation": "no_thinking_observed",
+          "resources_before": {
+            "status": "not_checkpointed_due_to_io_error"
+          },
+          "resources_after": {
+            "status": "not_checkpointed_due_to_io_error"
+          },
+          "recovery_note": "Accepted final, completed API metadata and measured reply latency recovered from the final checkpoint; resource/tool callbacks were not checkpointed. No model retry."
+        }
+      ],
+      "expected_turns": 1,
+      "human_review": {
+        "technical_factuality": null,
+        "naturalness": null,
+        "relevance": null,
+        "context_retention": null,
+        "length": null,
+        "taglish_fluency": null,
+        "repetitiveness": null,
+        "uncertainty": null,
+        "safety": null
+      },
+      "unrun_turns": 0
+    },
+    {
+      "key": [
+        "pilot",
+        "thanks",
+        "on",
+        0
+      ],
+      "stage": "pilot",
+      "id": "thanks",
+      "category": "gratitude",
+      "mode": "on",
+      "tokens": 1024,
+      "repetition": 0,
+      "status": "output_limit",
+      "turns": [
+        {
+          "index": 0,
+          "status": "output_limit",
+          "final": null,
+          "wall_ms": 172381.819,
+          "model_requests": 1,
+          "generation_http_requests": 3,
+          "http_requests": 5,
+          "http_start": 6,
+          "http_end": 11,
+          "metrics": {
+            "stage": "pilot",
+            "method": "POST",
+            "path": "/api/chat",
+            "timeout_seconds": 180.0,
+            "think": true,
+            "num_predict": 1024,
+            "temperature": 0.2,
+            "input_sha256": "d06a1015b5917f28b59559897c6adee1447fdc10aae6417dcf30879ec5e4d0df",
+            "input_characters": 3340,
+            "done": true,
+            "assistant_role": true,
+            "done_reason": "length",
+            "thinking_present": true,
+            "thinking_characters": 4219,
+            "final_content_present": false,
+            "final_characters": 0,
+            "total_duration": 172260798100,
+            "load_duration": 13394189400,
+            "prompt_eval_duration": 1420671000,
+            "eval_duration": 157389088000,
+            "prompt_eval_count": 652,
+            "eval_count": 1024,
+            "wall_ms": 172284.399
+          },
+          "context": [
+            [
+              0,
+              false
+            ]
+          ],
+          "tools": [],
+          "blocked_launch_attempts": 0,
+          "resources_before": {
+            "collected_at": "2026-11-19T09:48:26.654921+00:00",
+            "source": "psutil before/after samples; RSS sums may double-count shared pages",
+            "available_ram_bytes": 1749549056,
+            "total_ram_bytes": 7879598080,
+            "system_cpu_percent_50ms": 38.9,
+            "ollama_processes": 2,
+            "ollama_working_set_sum_bytes": 25481216,
+            "ollama_reported_model_vram_bytes": null
+          },
+          "resources_after": {
+            "collected_at": "2026-11-19T09:51:20.710479+00:00",
+            "source": "psutil before/after samples; RSS sums may double-count shared pages",
+            "available_ram_bytes": 130686976,
+            "total_ram_bytes": 7879598080,
+            "system_cpu_percent_50ms": 41.7,
+            "ollama_processes": 2,
+            "ollama_working_set_sum_bytes": 29093888,
+            "ollama_reported_model_vram_bytes": 1879813650
+          },
+          "thinking_observation": "activated_without_complete_final"
+        }
+      ],
+      "expected_turns": 1,
+      "human_review": {
+        "technical_factuality": null,
+        "naturalness": null,
+        "relevance": null,
+        "context_retention": null,
+        "length": null,
+        "taglish_fluency": null,
+        "repetitiveness": null,
+        "uncertainty": null,
+        "safety": null
+      },
+      "unrun_turns": 0
+    },
+    {
+      "key": [
+        "pilot",
+        "detail",
+        "on",
+        0
+      ],
+      "stage": "pilot",
+      "id": "detail",
+      "category": "detailed answers",
+      "mode": "on",
+      "tokens": 1024,
+      "repetition": 0,
+      "status": "output_limit",
+      "turns": [
+        {
+          "index": 0,
+          "status": "output_limit",
+          "final": null,
+          "wall_ms": 158254.99,
+          "model_requests": 1,
+          "generation_http_requests": 3,
+          "http_requests": 5,
+          "http_start": 11,
+          "http_end": 16,
+          "metrics": {
+            "stage": "pilot",
+            "method": "POST",
+            "path": "/api/chat",
+            "timeout_seconds": 180.0,
+            "think": true,
+            "num_predict": 1024,
+            "temperature": 0.2,
+            "input_sha256": "d9cc9278137611218fb7ba834da69bb3fa3e3b78eb36546784c667b22501bb55",
+            "input_characters": 3426,
+            "done": true,
+            "assistant_role": true,
+            "done_reason": "length",
+            "thinking_present": true,
+            "thinking_characters": 4416,
+            "final_content_present": false,
+            "final_characters": 0,
+            "total_duration": 158179074500,
+            "load_duration": 10369600,
+            "prompt_eval_duration": 1280180000,
+            "eval_duration": 156765978000,
+            "prompt_eval_count": 666,
+            "eval_count": 1024,
+            "wall_ms": 158183.609
+          },
+          "context": [
+            [
+              0,
+              false
+            ]
+          ],
+          "tools": [],
+          "blocked_launch_attempts": 0,
+          "resources_before": {
+            "collected_at": "2026-11-19T09:51:21.469662+00:00",
+            "source": "psutil before/after samples; RSS sums may double-count shared pages",
+            "available_ram_bytes": 136847360,
+            "total_ram_bytes": 7879598080,
+            "system_cpu_percent_50ms": 0.0,
+            "ollama_processes": 2,
+            "ollama_working_set_sum_bytes": 29093888,
+            "ollama_reported_model_vram_bytes": 1879813650
+          },
+          "resources_after": {
+            "collected_at": "2026-11-19T09:54:00.707205+00:00",
+            "source": "psutil before/after samples; RSS sums may double-count shared pages",
+            "available_ram_bytes": 227430400,
+            "total_ram_bytes": 7879598080,
+            "system_cpu_percent_50ms": 44.4,
+            "ollama_processes": 2,
+            "ollama_working_set_sum_bytes": 28508160,
+            "ollama_reported_model_vram_bytes": 1879813650
+          },
+          "thinking_observation": "activated_without_complete_final"
+        }
+      ],
+      "expected_turns": 1,
+      "human_review": {
+        "technical_factuality": null,
+        "naturalness": null,
+        "relevance": null,
+        "context_retention": null,
+        "length": null,
+        "taglish_fluency": null,
+        "repetitiveness": null,
+        "uncertainty": null,
+        "safety": null
+      },
+      "unrun_turns": 0
+    },
+    {
+      "key": [
+        "pilot",
+        "detail",
+        "off",
+        0
+      ],
+      "stage": "pilot",
+      "id": "detail",
+      "category": "detailed answers",
+      "mode": "off",
+      "tokens": 1024,
+      "repetition": 0,
+      "status": "complete",
+      "turns": [
+        {
+          "index": 0,
+          "status": "complete",
+          "final": "Python generators are functions that produce items one at a time rather than creating the entire list in memory upfront. They use the `yield` keyword to pause execution and return a value, then resume later when needed. This allows for efficient handling of large datasets or infinite sequences without consuming excessive RAM.\n\nWhen you call a generator function, it returns a generator object that holds its state. Iterating over this object triggers the function step-by-step; each `yield` statement pauses the function, saves its local variables, and returns the value. The next iteration resumes exactly where it left off. This makes generators ideal for processing streams of data or implementing lazy evaluation.\n\nHere is a runnable example that generates Fibonacci numbers:\n\n```python\ndef fibonacci_generator(n):\n    a, b = 0, 1\n    for _ in range(n):\n        yield a\n        a, b = b, a + b\n\n# Usage\ngen = fibonacci_generator(5)\nprint(list(gen)) \n# Output: [0, 1, 1, 2, 3]\n```",
+          "wall_ms": 35452.782,
+          "model_requests": 1,
+          "generation_http_requests": 3,
+          "http_requests": 5,
+          "http_start": 16,
+          "http_end": 21,
+          "metrics": {
+            "stage": "pilot",
+            "method": "POST",
+            "path": "/api/chat",
+            "timeout_seconds": 180.0,
+            "think": false,
+            "num_predict": 1024,
+            "temperature": 0.2,
+            "input_sha256": "d9cc9278137611218fb7ba834da69bb3fa3e3b78eb36546784c667b22501bb55",
+            "input_characters": 3426,
+            "done": true,
+            "assistant_role": true,
+            "done_reason": "stop",
+            "thinking_present": false,
+            "thinking_characters": 0,
+            "final_content_present": true,
+            "final_characters": 985,
+            "total_duration": 35372761900,
+            "load_duration": 7870100,
+            "prompt_eval_duration": 525942000,
+            "eval_duration": 34735770000,
+            "prompt_eval_count": 668,
+            "eval_count": 223,
+            "wall_ms": 35374.831
+          },
+          "context": [
+            [
+              0,
+              false
+            ]
+          ],
+          "tools": [],
+          "blocked_launch_attempts": 0,
+          "resources_before": {
+            "collected_at": "2026-11-19T09:54:01.489530+00:00",
+            "source": "psutil before/after samples; RSS sums may double-count shared pages",
+            "available_ram_bytes": 229777408,
+            "total_ram_bytes": 7879598080,
+            "system_cpu_percent_50ms": 0.0,
+            "ollama_processes": 2,
+            "ollama_working_set_sum_bytes": 28508160,
+            "ollama_reported_model_vram_bytes": 1879813650
+          },
+          "resources_after": {
+            "collected_at": "2026-11-19T09:54:37.906471+00:00",
+            "source": "psutil before/after samples; RSS sums may double-count shared pages",
+            "available_ram_bytes": 72949760,
+            "total_ram_bytes": 7879598080,
+            "system_cpu_percent_50ms": 50.0,
+            "ollama_processes": 2,
+            "ollama_working_set_sum_bytes": 21032960,
+            "ollama_reported_model_vram_bytes": 1879813650
+          },
+          "thinking_observation": "no_thinking_observed"
+        }
+      ],
+      "expected_turns": 1,
+      "human_review": {
+        "technical_factuality": null,
+        "naturalness": null,
+        "relevance": null,
+        "context_retention": null,
+        "length": null,
+        "taglish_fluency": null,
+        "repetitiveness": null,
+        "uncertainty": null,
+        "safety": null
+      },
+      "unrun_turns": 0
+    },
+    {
+      "key": [
+        "pilot",
+        "q2d-committed-rollback",
+        "off",
+        0
+      ],
+      "stage": "pilot",
+      "id": "q2d-committed-rollback",
+      "category": "SQLite committed edits",
+      "mode": "off",
+      "tokens": 1024,
+      "repetition": 0,
+      "status": "complete",
+      "turns": [
+        {
+          "index": 0,
+          "status": "complete",
+          "final": "No. The `ROLLBACK` undoes only the current transaction (the one you started with `BEGIN TRANSACTION`). Since your `UPDATE`, `COMMIT`, and subsequent `ROLLBACK` were separate transactions, the first commit made the change permanent. The rollback had no effect on it.",
+          "wall_ms": 9208.491,
+          "model_requests": 1,
+          "generation_http_requests": 3,
+          "http_requests": 5,
+          "http_start": 21,
+          "http_end": 26,
+          "metrics": {
+            "stage": "pilot",
+            "method": "POST",
+            "path": "/api/chat",
+            "timeout_seconds": 180.0,
+            "think": false,
+            "num_predict": 1024,
+            "temperature": 0.2,
+            "input_sha256": "1fb50c6a1ada86e9da38ebfad4b712b8c8d780c5bd54797de8081deb49052e8c",
+            "input_characters": 3435,
+            "done": true,
+            "assistant_role": true,
+            "done_reason": "stop",
+            "thinking_present": false,
+            "thinking_characters": 0,
+            "final_content_present": true,
+            "final_characters": 265,
+            "total_duration": 9139320200,
+            "load_duration": 5384700,
+            "prompt_eval_duration": 1350146000,
+            "eval_duration": 7768573000,
+            "prompt_eval_count": 675,
+            "eval_count": 59,
+            "wall_ms": 9140.949
+          },
+          "context": [
+            [
+              0,
+              false
+            ]
+          ],
+          "tools": [],
+          "blocked_launch_attempts": 0,
+          "resources_before": {
+            "collected_at": "2026-11-19T09:54:38.694596+00:00",
+            "source": "psutil before/after samples; RSS sums may double-count shared pages",
+            "available_ram_bytes": 80711680,
+            "total_ram_bytes": 7879598080,
+            "system_cpu_percent_50ms": 3.4,
+            "ollama_processes": 2,
+            "ollama_working_set_sum_bytes": 21049344,
+            "ollama_reported_model_vram_bytes": 1879813650
+          },
+          "resources_after": {
+            "collected_at": "2026-11-19T09:54:48.880591+00:00",
+            "source": "psutil before/after samples; RSS sums may double-count shared pages",
+            "available_ram_bytes": 89526272,
+            "total_ram_bytes": 7879598080,
+            "system_cpu_percent_50ms": 50.0,
+            "ollama_processes": 2,
+            "ollama_working_set_sum_bytes": 21876736,
+            "ollama_reported_model_vram_bytes": 1879813650
+          },
+          "thinking_observation": "no_thinking_observed"
+        },
+        {
+          "index": 1,
+          "status": "complete",
+          "final": "My previous statement was imprecise regarding the transaction boundaries; I apologize.\n\nIf you `UPDATE`, then `COMMIT`, that change is permanently saved in the database file. A subsequent `ROLLBACK` only affects an *open* transaction, not past commits. To undo a committed edit, you must restore the data from a backup or use SQLite's `VACUUM` to rebuild the database structure (which won't revert specific row values unless they were part of a schema change).\n\nFor practical recovery:\n1.  **Backup**: Always maintain a copy of your `.db` file before committing changes.\n2.  **Restore**: Copy the backup file over the current one, then run `ATTACH DATABASE 'backup.db' AS b; SELECT * FROM b.table_name WHERE id = X; INSERT INTO table_name VALUES (...);` to re-insert the old values if you have them stored elsewhere.\n\nDo you have a backup of that specific database file?",
+          "wall_ms": 30158.828,
+          "model_requests": 1,
+          "generation_http_requests": 1,
+          "http_requests": 3,
+          "http_start": 26,
+          "http_end": 29,
+          "metrics": {
+            "stage": "pilot",
+            "method": "POST",
+            "path": "/api/chat",
+            "timeout_seconds": 180.0,
+            "think": false,
+            "num_predict": 1024,
+            "temperature": 0.2,
+            "input_sha256": "0909f9714a4934be1a013132b312ffa40ca874b2cf34eb192906d74e964f7a68",
+            "input_characters": 3852,
+            "done": true,
+            "assistant_role": true,
+            "done_reason": "stop",
+            "thinking_present": false,
+            "thinking_characters": 0,
+            "final_content_present": true,
+            "final_characters": 870,
+            "total_duration": 30144701200,
+            "load_duration": 5715700,
+            "prompt_eval_duration": 633714000,
+            "eval_duration": 29490479000,
+            "prompt_eval_count": 774,
+            "eval_count": 200,
+            "wall_ms": 30146.451
+          },
+          "context": [
+            [
+              1,
+              false
+            ]
+          ],
+          "tools": [],
+          "blocked_launch_attempts": 0,
+          "resources_before": {
+            "collected_at": "2026-11-19T09:54:49.597723+00:00",
+            "source": "psutil before/after samples; RSS sums may double-count shared pages",
+            "available_ram_bytes": 86167552,
+            "total_ram_bytes": 7879598080,
+            "system_cpu_percent_50ms": 2.8,
+            "ollama_processes": 2,
+            "ollama_working_set_sum_bytes": 21876736,
+            "ollama_reported_model_vram_bytes": 1879813650
+          },
+          "resources_after": {
+            "collected_at": "2026-11-19T09:55:20.474243+00:00",
+            "source": "psutil before/after samples; RSS sums may double-count shared pages",
+            "available_ram_bytes": 99823616,
+            "total_ram_bytes": 7879598080,
+            "system_cpu_percent_50ms": 41.7,
+            "ollama_processes": 2,
+            "ollama_working_set_sum_bytes": 19300352,
+            "ollama_reported_model_vram_bytes": 1879813650
+          },
+          "thinking_observation": "no_thinking_observed"
+        }
+      ],
+      "expected_turns": 2,
+      "human_review": {
+        "technical_factuality": null,
+        "naturalness": null,
+        "relevance": null,
+        "context_retention": null,
+        "length": null,
+        "taglish_fluency": null,
+        "repetitiveness": null,
+        "uncertainty": null,
+        "safety": null
+      },
+      "unrun_turns": 0
+    },
+    {
+      "key": [
+        "pilot",
+        "q2d-committed-rollback",
+        "on",
+        0
+      ],
+      "stage": "pilot",
+      "id": "q2d-committed-rollback",
+      "category": "SQLite committed edits",
+      "mode": "on",
+      "tokens": 1024,
+      "repetition": 0,
+      "status": "timeout",
+      "turns": [
+        {
+          "index": 0,
+          "status": "timeout",
+          "final": null,
+          "wall_ms": 180123.539,
+          "model_requests": 1,
+          "generation_http_requests": 3,
+          "http_requests": 5,
+          "http_start": 29,
+          "http_end": 34,
+          "metrics": {
+            "stage": "pilot",
+            "method": "POST",
+            "path": "/api/chat",
+            "timeout_seconds": 180.0,
+            "think": true,
+            "num_predict": 1024,
+            "temperature": 0.2,
+            "input_sha256": "1fb50c6a1ada86e9da38ebfad4b712b8c8d780c5bd54797de8081deb49052e8c",
+            "input_characters": 3435,
+            "error_kind": "timeout",
+            "wall_ms": 180028.868
+          },
+          "context": [
+            [
+              0,
+              false
+            ]
+          ],
+          "tools": [],
+          "blocked_launch_attempts": 0,
+          "resources_before": {
+            "collected_at": "2026-11-19T09:55:21.206508+00:00",
+            "source": "psutil before/after samples; RSS sums may double-count shared pages",
+            "available_ram_bytes": 98787328,
+            "total_ram_bytes": 7879598080,
+            "system_cpu_percent_50ms": 0.0,
+            "ollama_processes": 2,
+            "ollama_working_set_sum_bytes": 19300352,
+            "ollama_reported_model_vram_bytes": 1879813650
+          },
+          "resources_after": {
+            "collected_at": "2026-11-19T09:58:22.287951+00:00",
+            "source": "psutil before/after samples; RSS sums may double-count shared pages",
+            "available_ram_bytes": 182177792,
+            "total_ram_bytes": 7879598080,
+            "system_cpu_percent_50ms": 58.3,
+            "ollama_processes": 2,
+            "ollama_working_set_sum_bytes": 5726208,
+            "ollama_reported_model_vram_bytes": 1879813650
+          },
+          "thinking_observation": "requested_not_demonstrably_active"
+        }
+      ],
+      "expected_turns": 2,
+      "human_review": {
+        "technical_factuality": null,
+        "naturalness": null,
+        "relevance": null,
+        "context_retention": null,
+        "length": null,
+        "taglish_fluency": null,
+        "repetitiveness": null,
+        "uncertainty": null,
+        "safety": null
+      },
+      "unrun_turns": 1
+    },
+    {
+      "key": [
+        "pilot",
+        "q2d-persistent-undo",
+        "on",
+        0
+      ],
+      "stage": "pilot",
+      "id": "q2d-persistent-undo",
+      "category": "persistent undo history",
+      "mode": "on",
+      "tokens": 1024,
+      "repetition": 0,
+      "status": "output_limit",
+      "turns": [
+        {
+          "index": 0,
+          "status": "output_limit",
+          "final": null,
+          "wall_ms": 162821.908,
+          "model_requests": 1,
+          "generation_http_requests": 3,
+          "http_requests": 5,
+          "http_start": 34,
+          "http_end": 39,
+          "metrics": {
+            "stage": "pilot",
+            "method": "POST",
+            "path": "/api/chat",
+            "timeout_seconds": 180.0,
+            "think": true,
+            "num_predict": 1024,
+            "temperature": 0.2,
+            "input_sha256": "c4f59a1d5046b22a27d25f8b9feedd67db8aec564386aede2489d32c068fb946",
+            "input_characters": 3402,
+            "done": true,
+            "assistant_role": true,
+            "done_reason": "length",
+            "thinking_present": true,
+            "thinking_characters": 4519,
+            "final_content_present": false,
+            "final_characters": 0,
+            "total_duration": 162682735400,
+            "load_duration": 15363200,
+            "prompt_eval_duration": 1033603000,
+            "eval_duration": 161491811000,
+            "prompt_eval_count": 664,
+            "eval_count": 1024,
+            "wall_ms": 162715.488
+          },
+          "context": [
+            [
+              0,
+              false
+            ]
+          ],
+          "tools": [],
+          "blocked_launch_attempts": 0,
+          "resources_before": {
+            "collected_at": "2026-11-19T09:58:23.469747+00:00",
+            "source": "psutil before/after samples; RSS sums may double-count shared pages",
+            "available_ram_bytes": 152801280,
+            "total_ram_bytes": 7879598080,
+            "system_cpu_percent_50ms": 4.8,
+            "ollama_processes": 2,
+            "ollama_working_set_sum_bytes": 6598656,
+            "ollama_reported_model_vram_bytes": 1879813650
+          },
+          "resources_after": {
+            "collected_at": "2026-11-19T10:01:07.338793+00:00",
+            "source": "psutil before/after samples; RSS sums may double-count shared pages",
+            "available_ram_bytes": 168439808,
+            "total_ram_bytes": 7879598080,
+            "system_cpu_percent_50ms": 52.2,
+            "ollama_processes": 2,
+            "ollama_working_set_sum_bytes": 14434304,
+            "ollama_reported_model_vram_bytes": 1879813650
+          },
+          "thinking_observation": "activated_without_complete_final"
+        }
+      ],
+      "expected_turns": 2,
+      "human_review": {
+        "technical_factuality": null,
+        "naturalness": null,
+        "relevance": null,
+        "context_retention": null,
+        "length": null,
+        "taglish_fluency": null,
+        "repetitiveness": null,
+        "uncertainty": null,
+        "safety": null
+      },
+      "unrun_turns": 1
+    },
+    {
+      "key": [
+        "pilot",
+        "q2d-persistent-undo",
+        "off",
+        0
+      ],
+      "stage": "pilot",
+      "id": "q2d-persistent-undo",
+      "category": "persistent undo history",
+      "mode": "off",
+      "tokens": 1024,
+      "repetition": 0,
+      "status": "complete",
+      "turns": [
+        {
+          "index": 0,
+          "status": "complete",
+          "final": "Got it. Storing undo history in SQLite will persist across sessions.",
+          "wall_ms": 2728.073,
+          "model_requests": 1,
+          "generation_http_requests": 3,
+          "http_requests": 5,
+          "http_start": 39,
+          "http_end": 44,
+          "metrics": {
+            "stage": "pilot",
+            "method": "POST",
+            "path": "/api/chat",
+            "timeout_seconds": 180.0,
+            "think": false,
+            "num_predict": 1024,
+            "temperature": 0.2,
+            "input_sha256": "c4f59a1d5046b22a27d25f8b9feedd67db8aec564386aede2489d32c068fb946",
+            "input_characters": 3402,
+            "done": true,
+            "assistant_role": true,
+            "done_reason": "stop",
+            "thinking_present": false,
+            "thinking_characters": 0,
+            "final_content_present": true,
+            "final_characters": 68,
+            "total_duration": 2622312000,
+            "load_duration": 15053600,
+            "prompt_eval_duration": 826766000,
+            "eval_duration": 1654354000,
+            "prompt_eval_count": 666,
+            "eval_count": 15,
+            "wall_ms": 2624.335
+          },
+          "context": [
+            [
+              0,
+              false
+            ]
+          ],
+          "tools": [],
+          "blocked_launch_attempts": 0,
+          "resources_before": {
+            "collected_at": "2026-11-19T10:01:08.144738+00:00",
+            "source": "psutil before/after samples; RSS sums may double-count shared pages",
+            "available_ram_bytes": 155402240,
+            "total_ram_bytes": 7879598080,
+            "system_cpu_percent_50ms": 29.5,
+            "ollama_processes": 2,
+            "ollama_working_set_sum_bytes": 14536704,
+            "ollama_reported_model_vram_bytes": 1879813650
+          },
+          "resources_after": {
+            "collected_at": "2026-11-19T10:01:11.888797+00:00",
+            "source": "psutil before/after samples; RSS sums may double-count shared pages",
+            "available_ram_bytes": 125341696,
+            "total_ram_bytes": 7879598080,
+            "system_cpu_percent_50ms": 47.2,
+            "ollama_processes": 2,
+            "ollama_working_set_sum_bytes": 20234240,
+            "ollama_reported_model_vram_bytes": 1879813650
+          },
+          "thinking_observation": "no_thinking_observed"
+        },
+        {
+          "index": 1,
+          "status": "complete",
+          "final": "Transactions alone won't preserve the full undo chain if you only commit once per batch. You need to log every individual change (the delta) into a separate history table before committing it to your main data table. This way, each step is recoverable independently when the app restarts.",
+          "wall_ms": 8707.842,
+          "model_requests": 1,
+          "generation_http_requests": 1,
+          "http_requests": 3,
+          "http_start": 44,
+          "http_end": 47,
+          "metrics": {
+            "stage": "pilot",
+            "method": "POST",
+            "path": "/api/chat",
+            "timeout_seconds": 180.0,
+            "think": false,
+            "num_predict": 1024,
+            "temperature": 0.2,
+            "input_sha256": "fdd372c1e1db75bff1fd3057924a7c964dbe6c702552f4340559fef0c0fa5f7a",
+            "input_characters": 3553,
+            "done": true,
+            "assistant_role": true,
+            "done_reason": "stop",
+            "thinking_present": false,
+            "thinking_characters": 0,
+            "final_content_present": true,
+            "final_characters": 288,
+            "total_duration": 8691636600,
+            "load_duration": 8199100,
+            "prompt_eval_duration": 710653000,
+            "eval_duration": 7960100000,
+            "prompt_eval_count": 708,
+            "eval_count": 58,
+            "wall_ms": 8693.382
+          },
+          "context": [
+            [
+              1,
+              false
+            ]
+          ],
+          "tools": [],
+          "blocked_launch_attempts": 0,
+          "resources_before": {
+            "collected_at": "2026-11-19T10:01:12.653281+00:00",
+            "source": "psutil before/after samples; RSS sums may double-count shared pages",
+            "available_ram_bytes": 139165696,
+            "total_ram_bytes": 7879598080,
+            "system_cpu_percent_50ms": 8.1,
+            "ollama_processes": 2,
+            "ollama_working_set_sum_bytes": 20242432,
+            "ollama_reported_model_vram_bytes": 1879813650
+          },
+          "resources_after": {
+            "collected_at": "2026-11-19T10:01:22.113920+00:00",
+            "source": "psutil before/after samples; RSS sums may double-count shared pages",
+            "available_ram_bytes": 110239744,
+            "total_ram_bytes": 7879598080,
+            "system_cpu_percent_50ms": 50.0,
+            "ollama_processes": 2,
+            "ollama_working_set_sum_bytes": 15749120,
+            "ollama_reported_model_vram_bytes": 1879813650
+          },
+          "thinking_observation": "no_thinking_observed"
+        }
+      ],
+      "expected_turns": 2,
+      "human_review": {
+        "technical_factuality": null,
+        "naturalness": null,
+        "relevance": null,
+        "context_retention": null,
+        "length": null,
+        "taglish_fluency": null,
+        "repetitiveness": null,
+        "uncertainty": null,
+        "safety": null
+      },
+      "unrun_turns": 0
+    },
+    {
+      "key": [
+        "pilot",
+        "q2d-hot-row",
+        "off",
+        0
+      ],
+      "stage": "pilot",
+      "id": "q2d-hot-row",
+      "category": "optimistic concurrency tradeoffs",
+      "mode": "off",
+      "tokens": 1024,
+      "repetition": 0,
+      "status": "complete",
+      "turns": [
+        {
+          "index": 0,
+          "status": "complete",
+          "final": "Not necessarily. Optimistic concurrency can be faster when conflicts are rare, but locking wins when contention is high or updates happen frequently in the same row. The overhead of checking and rolling back under optimistic control often outweighs its benefits in your scenario.",
+          "wall_ms": 7732.995,
+          "model_requests": 1,
+          "generation_http_requests": 3,
+          "http_requests": 5,
+          "http_start": 47,
+          "http_end": 52,
+          "metrics": {
+            "stage": "pilot",
+            "method": "POST",
+            "path": "/api/chat",
+            "timeout_seconds": 180.0,
+            "think": false,
+            "num_predict": 1024,
+            "temperature": 0.2,
+            "input_sha256": "c68ef5bcb6c14c59fc09d06ffcb572b3c44ec5c267466ea87d38f97bfa432887",
+            "input_characters": 3426,
+            "done": true,
+            "assistant_role": true,
+            "done_reason": "stop",
+            "thinking_present": false,
+            "thinking_characters": 0,
+            "final_content_present": true,
+            "final_characters": 279,
+            "total_duration": 7651431600,
+            "load_duration": 13596400,
+            "prompt_eval_duration": 951158000,
+            "eval_duration": 6666540000,
+            "prompt_eval_count": 667,
+            "eval_count": 50,
+            "wall_ms": 7653.539
+          },
+          "context": [
+            [
+              0,
+              false
+            ]
+          ],
+          "tools": [],
+          "blocked_launch_attempts": 0,
+          "resources_before": {
+            "collected_at": "2026-11-19T10:01:22.896931+00:00",
+            "source": "psutil before/after samples; RSS sums may double-count shared pages",
+            "available_ram_bytes": 149057536,
+            "total_ram_bytes": 7879598080,
+            "system_cpu_percent_50ms": 8.3,
+            "ollama_processes": 2,
+            "ollama_working_set_sum_bytes": 15384576,
+            "ollama_reported_model_vram_bytes": 1879813650
+          },
+          "resources_after": {
+            "collected_at": "2026-11-19T10:01:31.577020+00:00",
+            "source": "psutil before/after samples; RSS sums may double-count shared pages",
+            "available_ram_bytes": 130510848,
+            "total_ram_bytes": 7879598080,
+            "system_cpu_percent_50ms": 55.9,
+            "ollama_processes": 2,
+            "ollama_working_set_sum_bytes": 16289792,
+            "ollama_reported_model_vram_bytes": 1879813650
+          },
+          "thinking_observation": "no_thinking_observed"
+        },
+        {
+          "index": 1,
+          "status": "complete",
+          "final": "Choose it when conflicts are rare—like reading many rows before writing, or when writes happen infrequently across the dataset. It avoids the overhead of acquiring locks and waiting for them to release.",
+          "wall_ms": 5715.157,
+          "model_requests": 1,
+          "generation_http_requests": 1,
+          "http_requests": 3,
+          "http_start": 52,
+          "http_end": 55,
+          "metrics": {
+            "stage": "pilot",
+            "method": "POST",
+            "path": "/api/chat",
+            "timeout_seconds": 180.0,
+            "think": false,
+            "num_predict": 1024,
+            "temperature": 0.2,
+            "input_sha256": "7dc4bd3e2eec91c184bd67d92703dd1e1562888bd08a10149b58ccc81c78f076",
+            "input_characters": 3738,
+            "done": true,
+            "assistant_role": true,
+            "done_reason": "stop",
+            "thinking_present": false,
+            "thinking_characters": 0,
+            "final_content_present": true,
+            "final_characters": 202,
+            "total_duration": 5699651000,
+            "load_duration": 9262500,
+            "prompt_eval_duration": 689098000,
+            "eval_duration": 4986862000,
+            "prompt_eval_count": 733,
+            "eval_count": 39,
+            "wall_ms": 5698.73
+          },
+          "context": [
+            [
+              1,
+              false
+            ]
+          ],
+          "tools": [],
+          "blocked_launch_attempts": 0,
+          "resources_before": {
+            "collected_at": "2026-11-19T10:01:32.316390+00:00",
+            "source": "psutil before/after samples; RSS sums may double-count shared pages",
+            "available_ram_bytes": 149282816,
+            "total_ram_bytes": 7879598080,
+            "system_cpu_percent_50ms": 0.0,
+            "ollama_processes": 2,
+            "ollama_working_set_sum_bytes": 16375808,
+            "ollama_reported_model_vram_bytes": 1879813650
+          },
+          "resources_after": {
+            "collected_at": "2026-11-19T10:01:38.772153+00:00",
+            "source": "psutil before/after samples; RSS sums may double-count shared pages",
+            "available_ram_bytes": 103219200,
+            "total_ram_bytes": 7879598080,
+            "system_cpu_percent_50ms": 50.0,
+            "ollama_processes": 2,
+            "ollama_working_set_sum_bytes": 16240640,
+            "ollama_reported_model_vram_bytes": 1879813650
+          },
+          "thinking_observation": "no_thinking_observed"
+        }
+      ],
+      "expected_turns": 2,
+      "human_review": {
+        "technical_factuality": null,
+        "naturalness": null,
+        "relevance": null,
+        "context_retention": null,
+        "length": null,
+        "taglish_fluency": null,
+        "repetitiveness": null,
+        "uncertainty": null,
+        "safety": null
+      },
+      "unrun_turns": 0
+    },
+    {
+      "key": [
+        "pilot",
+        "q2d-hot-row",
+        "on",
+        0
+      ],
+      "stage": "pilot",
+      "id": "q2d-hot-row",
+      "category": "optimistic concurrency tradeoffs",
+      "mode": "on",
+      "tokens": 1024,
+      "repetition": 0,
+      "status": "timeout",
+      "turns": [
+        {
+          "index": 0,
+          "status": "timeout",
+          "final": null,
+          "wall_ms": 180128.755,
+          "model_requests": 1,
+          "generation_http_requests": 3,
+          "http_requests": 5,
+          "http_start": 55,
+          "http_end": 60,
+          "metrics": {
+            "stage": "pilot",
+            "method": "POST",
+            "path": "/api/chat",
+            "timeout_seconds": 180.0,
+            "think": true,
+            "num_predict": 1024,
+            "temperature": 0.2,
+            "input_sha256": "c68ef5bcb6c14c59fc09d06ffcb572b3c44ec5c267466ea87d38f97bfa432887",
+            "input_characters": 3426,
+            "error_kind": "timeout",
+            "wall_ms": 180023.821
+          },
+          "context": [
+            [
+              0,
+              false
+            ]
+          ],
+          "tools": [],
+          "blocked_launch_attempts": 0,
+          "resources_before": {
+            "collected_at": "2026-11-19T10:01:39.514206+00:00",
+            "source": "psutil before/after samples; RSS sums may double-count shared pages",
+            "available_ram_bytes": 92348416,
+            "total_ram_bytes": 7879598080,
+            "system_cpu_percent_50ms": 5.6,
+            "ollama_processes": 2,
+            "ollama_working_set_sum_bytes": 16166912,
+            "ollama_reported_model_vram_bytes": 1879813650
+          },
+          "resources_after": {
+            "collected_at": "2026-11-19T10:04:40.606286+00:00",
+            "source": "psutil before/after samples; RSS sums may double-count shared pages",
+            "available_ram_bytes": 50823168,
+            "total_ram_bytes": 7879598080,
+            "system_cpu_percent_50ms": 58.7,
+            "ollama_processes": 2,
+            "ollama_working_set_sum_bytes": 16699392,
+            "ollama_reported_model_vram_bytes": 1879813650
+          },
+          "thinking_observation": "requested_not_demonstrably_active"
+        }
+      ],
+      "expected_turns": 2,
+      "human_review": {
+        "technical_factuality": null,
+        "naturalness": null,
+        "relevance": null,
+        "context_retention": null,
+        "length": null,
+        "taglish_fluency": null,
+        "repetitiveness": null,
+        "uncertainty": null,
+        "safety": null
+      },
+      "unrun_turns": 1
+    },
+    {
+      "key": [
+        "pilot",
+        "q2d-tired-taglish",
+        "on",
+        0
+      ],
+      "stage": "pilot",
+      "id": "q2d-tired-taglish",
+      "category": "Taglish tiredness",
+      "mode": "on",
+      "tokens": 1024,
+      "repetition": 0,
+      "status": "timeout",
+      "turns": [
+        {
+          "index": 0,
+          "status": "timeout",
+          "final": null,
+          "wall_ms": 180179.617,
+          "model_requests": 1,
+          "generation_http_requests": 3,
+          "http_requests": 5,
+          "http_start": 60,
+          "http_end": 65,
+          "metrics": {
+            "stage": "pilot",
+            "method": "POST",
+            "path": "/api/chat",
+            "timeout_seconds": 180.0,
+            "think": true,
+            "num_predict": 1024,
+            "temperature": 0.2,
+            "input_sha256": "a2d66d0339c6cd0e0548115fb153180011329e557212a4f44514e44a7ef0fd33",
+            "input_characters": 3401,
+            "error_kind": "timeout",
+            "wall_ms": 180035.11
+          },
+          "context": [
+            [
+              0,
+              false
+            ]
+          ],
+          "tools": [],
+          "blocked_launch_attempts": 0,
+          "resources_before": {
+            "collected_at": "2026-11-19T10:04:41.731690+00:00",
+            "source": "psutil before/after samples; RSS sums may double-count shared pages",
+            "available_ram_bytes": 28409856,
+            "total_ram_bytes": 7879598080,
+            "system_cpu_percent_50ms": 45.2,
+            "ollama_processes": 2,
+            "ollama_working_set_sum_bytes": 17043456,
+            "ollama_reported_model_vram_bytes": 1879813650
+          },
+          "resources_after": {
+            "collected_at": "2026-11-19T10:07:42.896451+00:00",
+            "source": "psutil before/after samples; RSS sums may double-count shared pages",
+            "available_ram_bytes": 217714688,
+            "total_ram_bytes": 7879598080,
+            "system_cpu_percent_50ms": 50.0,
+            "ollama_processes": 2,
+            "ollama_working_set_sum_bytes": 5033984,
+            "ollama_reported_model_vram_bytes": 1879813650
+          },
+          "thinking_observation": "requested_not_demonstrably_active"
+        }
+      ],
+      "expected_turns": 1,
+      "human_review": {
+        "technical_factuality": null,
+        "naturalness": null,
+        "relevance": null,
+        "context_retention": null,
+        "length": null,
+        "taglish_fluency": null,
+        "repetitiveness": null,
+        "uncertainty": null,
+        "safety": null
+      },
+      "unrun_turns": 0
+    },
+    {
+      "key": [
+        "pilot",
+        "q2d-tired-taglish",
+        "off",
+        0
+      ],
+      "stage": "pilot",
+      "id": "q2d-tired-taglish",
+      "category": "Taglish tiredness",
+      "mode": "off",
+      "tokens": 1024,
+      "repetition": 0,
+      "status": "complete",
+      "turns": [
+        {
+          "index": 0,
+          "status": "complete",
+          "final": "Nakita ko. Parang naglalaro ka lang sa sarili mo, walang kailangan gawin.",
+          "wall_ms": 10475.219,
+          "model_requests": 1,
+          "generation_http_requests": 3,
+          "http_requests": 5,
+          "http_start": 65,
+          "http_end": 70,
+          "metrics": {
+            "stage": "pilot",
+            "method": "POST",
+            "path": "/api/chat",
+            "timeout_seconds": 23.437,
+            "think": false,
+            "num_predict": 1024,
+            "temperature": 0.2,
+            "input_sha256": "a2d66d0339c6cd0e0548115fb153180011329e557212a4f44514e44a7ef0fd33",
+            "input_characters": 3401,
+            "done": true,
+            "assistant_role": true,
+            "done_reason": "stop",
+            "thinking_present": false,
+            "thinking_characters": 0,
+            "final_content_present": true,
+            "final_characters": 73,
+            "total_duration": 10180031500,
+            "load_duration": 16258900,
+            "prompt_eval_duration": 1091898000,
+            "eval_duration": 8906281000,
+            "prompt_eval_count": 676,
+            "eval_count": 28,
+            "wall_ms": 10264.247
+          },
+          "context": [
+            [
+              0,
+              false
+            ]
+          ],
+          "tools": [],
+          "blocked_launch_attempts": 0,
+          "resources_before": {
+            "collected_at": "2026-11-19T10:07:44.070901+00:00",
+            "source": "psutil before/after samples; RSS sums may double-count shared pages",
+            "available_ram_bytes": 179544064,
+            "total_ram_bytes": 7879598080,
+            "system_cpu_percent_50ms": 0.0,
+            "ollama_processes": 2,
+            "ollama_working_set_sum_bytes": 6164480,
+            "ollama_reported_model_vram_bytes": 1879813650
+          },
+          "resources_after": {
+            "collected_at": "2026-11-19T10:07:55.544779+00:00",
+            "source": "psutil before/after samples; RSS sums may double-count shared pages",
+            "available_ram_bytes": 1585152,
+            "total_ram_bytes": 7879598080,
+            "system_cpu_percent_50ms": 66.7,
+            "ollama_processes": 2,
+            "ollama_working_set_sum_bytes": 1048576,
+            "ollama_reported_model_vram_bytes": 1879813650
+          },
+          "thinking_observation": "no_thinking_observed"
+        }
+      ],
+      "expected_turns": 1,
+      "human_review": {
+        "technical_factuality": null,
+        "naturalness": null,
+        "relevance": null,
+        "context_retention": null,
+        "length": null,
+        "taglish_fluency": null,
+        "repetitiveness": null,
+        "uncertainty": null,
+        "safety": null
+      },
+      "unrun_turns": 0
+    },
+    {
+      "key": [
+        "pilot",
+        "q2d-language-switch",
+        "off",
+        0
+      ],
+      "stage": "pilot",
+      "id": "q2d-language-switch",
+      "category": "English to Taglish",
+      "mode": "off",
+      "tokens": 1024,
+      "repetition": 0,
+      "status": "timeout",
+      "turns": [
+        {
+          "index": 0,
+          "status": "timeout",
+          "final": null,
+          "wall_ms": 9575.361,
+          "model_requests": 1,
+          "generation_http_requests": 3,
+          "http_requests": 4,
+          "http_start": 70,
+          "http_end": 74,
+          "metrics": {
+            "stage": "pilot",
+            "method": "POST",
+            "path": "/api/chat",
+            "timeout_seconds": 9.328,
+            "think": false,
+            "num_predict": 1024,
+            "temperature": 0.2,
+            "input_sha256": "f29ddc6eb08e8eb65f7195b38ba343993319121fbdf08c57109c4a2c6762513f",
+            "input_characters": 3369,
+            "error_kind": "timeout",
+            "wall_ms": 9370.026
+          },
+          "context": [
+            [
+              0,
+              false
+            ]
+          ],
+          "tools": [],
+          "blocked_launch_attempts": 0,
+          "resources_before": {
+            "collected_at": "2026-11-19T10:07:57.593336+00:00",
+            "source": "psutil before/after samples; RSS sums may double-count shared pages",
+            "available_ram_bytes": 74780672,
+            "total_ram_bytes": 7879598080,
+            "system_cpu_percent_50ms": 17.5,
+            "ollama_processes": 2,
+            "ollama_working_set_sum_bytes": 3190784,
+            "ollama_reported_model_vram_bytes": 1879813650
+          },
+          "resources_after": {
+            "collected_at": "2026-11-19T10:08:08.675596+00:00",
+            "source": "psutil before/after samples; RSS sums may double-count shared pages",
+            "available_ram_bytes": 36753408,
+            "total_ram_bytes": 7879598080,
+            "system_cpu_percent_50ms": 50.0,
+            "ollama_processes": 2,
+            "ollama_working_set_sum_bytes": 7774208,
+            "ollama_reported_model_vram_bytes": null
+          },
+          "thinking_observation": "no_thinking_observed"
+        }
+      ],
+      "expected_turns": 2,
+      "human_review": {
+        "technical_factuality": null,
+        "naturalness": null,
+        "relevance": null,
+        "context_retention": null,
+        "length": null,
+        "taglish_fluency": null,
+        "repetitiveness": null,
+        "uncertainty": null,
+        "safety": null
+      },
+      "unrun_turns": 1
+    },
+    {
+      "key": [
+        "diagnostic",
+        "detail",
+        "off",
+        0
+      ],
+      "stage": "diagnostic",
+      "id": "detail",
+      "category": "detailed answers",
+      "mode": "off",
+      "tokens": 2048,
+      "repetition": 0,
+      "status": "complete",
+      "turns": [
+        {
+          "index": 0,
+          "status": "complete",
+          "final": "Python generators are functions that produce items one at a time, allowing you to iterate through large datasets without loading everything into memory at once. They use the `yield` keyword instead of `return`. When a generator function runs, it pauses at every `yield`, saving its state so it can resume later. This creates an iterator object that yields values sequentially on demand.\n\nHere is a runnable example that generates Fibonacci numbers:\n\n```python\ndef fibonacci(n):\n    a, b = 0, 1\n    for _ in range(n):\n        yield a\n        a, b = b, a + b\n\n# Usage\nfor num in fibonacci(10):\n    print(num)\n```\n\nThis prints the first 10 Fibonacci numbers: `0, 1, 1, 2, 3, 5, 8, 13, 21, 34`. The generator pauses after yielding each number to update its internal state (`a` and `b`) before resuming.",
+          "wall_ms": 85246.09,
+          "model_requests": 1,
+          "generation_http_requests": 3,
+          "http_requests": 5,
+          "http_start": 75,
+          "http_end": 80,
+          "metrics": {
+            "stage": "diagnostic",
+            "method": "POST",
+            "path": "/api/chat",
+            "timeout_seconds": 360.0,
+            "think": false,
+            "num_predict": 2048,
+            "temperature": 0.2,
+            "input_sha256": "d9cc9278137611218fb7ba834da69bb3fa3e3b78eb36546784c667b22501bb55",
+            "input_characters": 3426,
+            "done": true,
+            "assistant_role": true,
+            "done_reason": "stop",
+            "thinking_present": false,
+            "thinking_characters": 0,
+            "final_content_present": true,
+            "final_characters": 798,
+            "total_duration": 85022671900,
+            "load_duration": 22109900,
+            "prompt_eval_duration": 2198913000,
+            "eval_duration": 82730771000,
+            "prompt_eval_count": 668,
+            "eval_count": 213,
+            "wall_ms": 85069.314
+          },
+          "context": [
+            [
+              0,
+              false
+            ]
+          ],
+          "tools": [],
+          "blocked_launch_attempts": 0,
+          "resources_before": {
+            "collected_at": "2026-11-19T10:08:27.151808+00:00",
+            "source": "psutil before/after samples; RSS sums may double-count shared pages",
+            "available_ram_bytes": 140111872,
+            "total_ram_bytes": 7879598080,
+            "system_cpu_percent_50ms": 2.9,
+            "ollama_processes": 2,
+            "ollama_working_set_sum_bytes": 3854336,
+            "ollama_reported_model_vram_bytes": 1879813650
+          },
+          "resources_after": {
+            "collected_at": "2026-11-19T10:09:53.510559+00:00",
+            "source": "psutil before/after samples; RSS sums may double-count shared pages",
+            "available_ram_bytes": 50249728,
+            "total_ram_bytes": 7879598080,
+            "system_cpu_percent_50ms": 18.4,
+            "ollama_processes": 2,
+            "ollama_working_set_sum_bytes": 10481664,
+            "ollama_reported_model_vram_bytes": 1879813650
+          },
+          "thinking_observation": "no_thinking_observed"
+        }
+      ],
+      "configured_timeout_seconds": 360.0,
+      "expected_turns": 1,
+      "human_review": {
+        "technical_factuality": null,
+        "naturalness": null,
+        "relevance": null,
+        "context_retention": null,
+        "length": null,
+        "taglish_fluency": null,
+        "repetitiveness": null,
+        "uncertainty": null,
+        "safety": null
+      },
+      "unrun_turns": 0
+    },
+    {
+      "key": [
+        "diagnostic",
+        "detail",
+        "on",
+        0
+      ],
+      "stage": "diagnostic",
+      "id": "detail",
+      "category": "detailed answers",
+      "mode": "on",
+      "tokens": 2048,
+      "repetition": 0,
+      "status": "timeout",
+      "turns": [
+        {
+          "index": 0,
+          "status": "timeout",
+          "final": null,
+          "wall_ms": 360175.864,
+          "model_requests": 1,
+          "generation_http_requests": 3,
+          "http_requests": 5,
+          "http_start": 80,
+          "http_end": 85,
+          "metrics": {
+            "stage": "diagnostic",
+            "method": "POST",
+            "path": "/api/chat",
+            "timeout_seconds": 360.0,
+            "think": true,
+            "num_predict": 2048,
+            "temperature": 0.2,
+            "input_sha256": "d9cc9278137611218fb7ba834da69bb3fa3e3b78eb36546784c667b22501bb55",
+            "input_characters": 3426,
+            "error_kind": "timeout",
+            "wall_ms": 360035.618
+          },
+          "context": [
+            [
+              0,
+              false
+            ]
+          ],
+          "tools": [],
+          "blocked_launch_attempts": 0,
+          "resources_before": {
+            "collected_at": "2026-11-19T10:09:54.414263+00:00",
+            "source": "psutil before/after samples; RSS sums may double-count shared pages",
+            "available_ram_bytes": 39256064,
+            "total_ram_bytes": 7879598080,
+            "system_cpu_percent_50ms": 5.6,
+            "ollama_processes": 2,
+            "ollama_working_set_sum_bytes": 8560640,
+            "ollama_reported_model_vram_bytes": 1879813650
+          },
+          "resources_after": {
+            "collected_at": "2026-11-19T10:15:55.758434+00:00",
+            "source": "psutil before/after samples; RSS sums may double-count shared pages",
+            "available_ram_bytes": 167718912,
+            "total_ram_bytes": 7879598080,
+            "system_cpu_percent_50ms": 78.7,
+            "ollama_processes": 2,
+            "ollama_working_set_sum_bytes": 10317824,
+            "ollama_reported_model_vram_bytes": 1879813650
+          },
+          "thinking_observation": "requested_not_demonstrably_active"
+        }
+      ],
+      "configured_timeout_seconds": 360.0,
+      "expected_turns": 1,
+      "human_review": {
+        "technical_factuality": null,
+        "naturalness": null,
+        "relevance": null,
+        "context_retention": null,
+        "length": null,
+        "taglish_fluency": null,
+        "repetitiveness": null,
+        "uncertainty": null,
+        "safety": null
+      },
+      "unrun_turns": 0
+    }
+  ],
+  "stages": [
+    {
+      "stage": "pilot",
+      "status": "checkpoint_io_interruption",
+      "reason": "Windows replacement denied in synced directory; completed OFF reply recovered without inference replay"
+    },
+    {
+      "stage": "pilot",
+      "status": "stopped",
+      "reason": "runtime_budget"
+    },
+    {
+      "stage": "diagnostic",
+      "status": "complete"
+    }
+  ],
+  "runtime_seconds": 1854.966,
+  "note": "Synthetic fixture references and accepted final responses only; thinking text is never logged. Primary 1024-token trials and 2048-token diagnostics are separate. Before/after resource samples are not peaks or causal attribution.",
+  "stage_runtime_seconds": {
+    "pilot": 1201.11,
+    "capability": 202.606,
+    "diagnostic": 451.25
+  },
+  "capability_chat_requests": 2,
+  "capability": {
+    "stage": "capability_verification",
+    "limit_tokens": 1024,
+    "maximum_chat_requests": 2,
+    "maximum_seconds": 360,
+    "input_sha256": "703d361af6a10401c85c7f9a85211038ab53005faf3e84ae16c38d502581b702",
+    "runs": [
+      {
+        "mode": "off",
+        "metrics": {
+          "thinking_present": false,
+          "thinking_characters": 0,
+          "final_content_present": true,
+          "final_characters": 242,
+          "done": true,
+          "done_reason": "stop",
+          "total_duration": 21517869300,
+          "load_duration": 13060490400,
+          "prompt_eval_duration": 1464636000,
+          "eval_duration": 6966331000,
+          "prompt_eval_count": 666,
+          "eval_count": 47
+        },
+        "requested_think": false,
+        "status": "complete",
+        "final": "No, a `ROLLBACK` transaction only undoes changes made within that specific transaction before it commits. Once an `UPDATE` statement has been committed, the database engine considers it permanent and cannot be undone by a subsequent rollback.",
+        "wall_seconds": 22.243
+      },
+      {
+        "mode": "on",
+        "metrics": {},
+        "requested_think": true,
+        "status": "error",
+        "error_kind": "timeout",
+        "final": null,
+        "wall_seconds": 180.363
+      }
+    ]
+  },
+  "recovery_note": "Live checkpoint moved outside OneDrive after one completed OFF reply. Completed response retained; no repeat. Capability durations/requests included in overall study budget.",
+  "inflight_reserved_seconds": 0
+}

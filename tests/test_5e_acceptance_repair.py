@@ -63,7 +63,7 @@ def test_ability_questions_never_authorize_launch(tmp_path, apps, mocked_process
     trace = []
     assert application_request(prompt) is None
     answer = session.reply(prompt, tool_trace=trace.append)
-    assert answer and "launch verified" not in answer and trace == []
+    assert answer and "is running" not in answer and trace == []
     mocked_process[0].assert_not_called()
     if prompt == "Can you open Notepad?":
         assert 'Yes, I can launch Notepad' in answer and '"Open Notepad"' in answer
@@ -77,7 +77,7 @@ def test_ability_questions_never_authorize_launch(tmp_path, apps, mocked_process
 def test_explicit_launches_keep_existing_permission_checked_adapter(tmp_path, apps, mocked_process, prompt):
     trace = []
     answer = session_for(tmp_path, apps).reply(prompt, tool_trace=trace.append)
-    assert "launch verified" in answer and len(trace) == 1
+    assert "is running" in answer and len(trace) == 1
     assert trace[0].tool == "app.open" and trace[0].verified
     assert trace[0].permission == Permission.LOCAL_ACTION
     mocked_process[0].assert_called_once()

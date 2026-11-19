@@ -240,7 +240,7 @@ def test_natural_language_and_command_use_same_executor_and_persist(tmp_path, ap
     trace = Mock()
     first = session.reply("Open Notepad.", tool_trace=trace)
     second = session.reply("/open notepad", tool_trace=trace)
-    assert first == second and "started process is running" in first and "Window readiness was not checked" in first
+    assert first == second and "Notepad is running (PID 4321)" in first and "window is visible or ready" in first
     assert trace.call_count == 2 and all(call.args[0].verified for call in trace.call_args_list)
     restored = session_for(tmp_path, apps)
     restored.resume(session.session_id)
@@ -253,7 +253,7 @@ def test_compound_explicit_app_requests_use_two_scoped_launches(tmp_path, apps, 
     answer = session.reply("Open Notepad; launch Calculator", tool_trace=trace.append)
     assert len(trace) == 2 and all(result.verified for result in trace)
     assert mocked_process[0].call_count == 2
-    assert "Notepad launch verified" in answer and "Windows Calculator launch verified" in answer
+    assert "Notepad is running" in answer and "Windows Calculator is running" in answer
     assert mocked_process[0].call_count == 2
     assert MemoryStore(tmp_path).list_facts("project", "Orion") == []
 
@@ -262,7 +262,7 @@ def test_calculator_memory_and_ordinary_conversation_remain_separate(tmp_path, a
     generate = Mock(return_value="Ordinary reply")
     session = session_for(tmp_path, apps, generate)
     session.reply("Remember that Orion uses SvelteKit for its frontend.")
-    assert "launch verified" in session.reply("Open Notepad.")
+    assert "Notepad is running (PID 4321)" in session.reply("Open Notepad.")
     assert session.reply("What is 245 multiplied by 18?") == "4410"
     assert "SvelteKit" in session.reply("What frontend does Orion currently use?")
     assert session.reply("Explain how a launcher works") == "Ordinary reply"
@@ -294,7 +294,7 @@ def test_inconclusive_and_failed_claims_are_honest(tmp_path, apps, mocked_proces
     process.wait.return_value = 0
     session = session_for(tmp_path, apps)
     answer = session.reply("Open Calculator.")
-    assert "verification is inconclusive" in answer and "launch verified" not in answer
+    assert "verification is inconclusive" in answer and "is running" not in answer
     process.wait.return_value = 5
     assert "exited with an error" in session.reply("/open notepad")
 
@@ -302,7 +302,7 @@ def test_inconclusive_and_failed_claims_are_honest(tmp_path, apps, mocked_proces
 def test_storage_failure_after_action_reports_effect_without_retry(tmp_path, apps, mocked_process, monkeypatch):
     session = session_for(tmp_path, apps)
     monkeypatch.setattr(session._store, "save_exchange", Mock(side_effect=StorageError("private db error")))
-    with pytest.raises(StorageError, match="launch verified.*could not be saved.*not rolled back"):
+    with pytest.raises(StorageError, match="is running.*could not be saved.*not rolled back"):
         session.reply("Open Notepad.")
     assert session.history() == [] and session._store.list_sessions() == []
     assert mocked_process[0].call_count == 1
@@ -350,7 +350,7 @@ def test_cli_open_apps_debug_uses_safe_metadata(apps, mocked_process, monkeypatc
     assert aika.main(["chat"]) == 0
     output = capsys.readouterr()
     assert "Spotify [spotify]  UNAVAILABLE  ENABLED" in output.out
-    assert "Notepad launch verified" in output.out and "Windows Calculator launch verified" in output.out
+    assert "Notepad is running" in output.out and "Windows Calculator is running" in output.out
     assert "You: /open notepad" in output.out
     assert "tool=app.open permission=LOCAL_ACTION validation=PASS execution=success verified=yes" in output.err
     assert "4321" not in output.err and "notepad.exe" not in output.err and str(apps.system_directory) not in output.err

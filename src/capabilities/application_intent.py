@@ -58,6 +58,6 @@ def format_application_result(result: ToolResult) -> str:
     if result.data and result.status in {ToolStatus.SUCCESS, ToolStatus.INCONCLUSIVE}:
         name = APPROVED_APPS[result.data["application"]][0]
         if result.status == ToolStatus.SUCCESS and result.verified:
-            return f"{name} launch verified: the started process is running (PID {result.data['pid']}). Window readiness was not checked."
+            return f"{name} is running (PID {result.data['pid']}). I haven't checked whether its window is visible or ready."
         return f"{name} launch initiated, but verification is inconclusive: the launcher exited, and I could not verify the application process or window."
     return f"Application launcher: {result.error or 'No verified launch result is available.'}"

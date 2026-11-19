@@ -31,6 +31,7 @@ from src.capabilities.research import (research_question, temporal_context, prep
 from src.intelligence.ollama_client import ChatMessage
 from src.intelligence.ollama_client import OllamaError
 from src.intelligence.prompt_budget import bounded_context
+from src.intelligence.persona import HISTORY_OMITTED
 from src.config import DEFAULT_CONTEXT_CHARS, MAX_CONTEXT_TURNS, MIN_CONTEXT_CHARS, MAX_CONTEXT_CHARS
 from src.intelligence.planning import (agent_task, build_plan, call_identity, execution_outcome, execution_counts,
                                       record_summary, PlanError, MAX_EXECUTIONS, MAX_MODEL_CALLS, MAX_STEP_TEXT)
@@ -655,14 +656,18 @@ class ConversationSession:
             summary["elapsed_ms"] = round((monotonic() - started) * 1000, 1)
 
     def _ordinary_reply(self, prompt: str, trace) -> str:
+        system = self.web_search.redact(self._system_instruction)
+        history = self.history(for_model=True)
         try:
-            messages, trimmed = bounded_context(self.web_search.redact(self._system_instruction),
-                                                self.history(for_model=True), prompt, self._context_chars)
+            messages, trimmed = bounded_context(system, history, prompt, self._context_chars)
+            omitted = trimmed or self._sequence // 2 > (len(messages) - 2) // 2
+            if omitted:
+                messages, _ = bounded_context(system + HISTORY_OMITTED, history, prompt, self._context_chars)
         except ValueError as exc:
             raise OllamaError(str(exc)) from None
         if trace is not None:
             included = (len(messages) - 2) // 2
-            trace(self.session_id, messages, included, trimmed or self._sequence // 2 > included)
+            trace(self.session_id, messages, included, omitted)
         answer = self._generate(messages)
         if self._memory is not None:
             answer = ordinary_statement_reply(answer)

@@ -170,7 +170,7 @@ def test_launch_keeps_explicit_exact_authorization_and_verification(agent, verif
     answer = agent.session.reply("/agent open Notepad then calculate 3+3")
     assert states(agent) == (["succeeded", "succeeded"] if verified else ["inconclusive", "skipped"])
     handler.assert_called_once_with({"app_id": "notepad"})
-    assert ("launch verified" if verified else "verification is inconclusive") in answer
+    assert ("is running" if verified else "verification is inconclusive") in answer
 
 
 def test_research_reuses_existing_workflow_with_no_paid_fallback(agent):
