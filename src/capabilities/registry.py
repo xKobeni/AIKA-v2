@@ -1,4 +1,5 @@
 import re
+from dataclasses import replace
 
 from src.capabilities.contracts import Permission, ToolDefinition, ToolStatus
 
@@ -36,3 +37,12 @@ class ToolRegistry:
 
     def list_tools(self) -> tuple[ToolDefinition, ...]:
         return tuple(self._tools.values())
+
+    def set_enabled(self, name: str, enabled: bool) -> None:
+        """Trusted owner control; retain the tool's contracts, permission and verifier."""
+        if type(enabled) is not bool:
+            raise ValueError("Tool enablement must be boolean.")
+        tool = self._tools.get(name)
+        if tool is None:
+            raise ToolLookupError(ToolStatus.UNKNOWN)
+        self._tools[name] = replace(tool, enabled=enabled)

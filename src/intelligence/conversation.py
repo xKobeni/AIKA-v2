@@ -9,6 +9,8 @@ from time import monotonic
 from threading import Lock
 
 from src.capabilities.discovery import capability_answer, clarification, unsupported_request
+from src.capabilities.desktop_intent import (desktop_request, desktop_status, format_desktop_result,
+                                             desktop_consent_request, desktop_question, CONSENT_HELP, USAGE as DESKTOP_USAGE)
 from src.capabilities import create_registry
 from src.capabilities.application_intent import application_request, format_application_result
 from src.capabilities.applications import ApplicationRegistry, create_applications
@@ -63,6 +65,7 @@ class ConversationSession:
         agent_generate: Callable | None = None,
         agent_timeout: float = 180.0,
         context_chars: int = DEFAULT_CONTEXT_CHARS,
+        desktop_context_enabled: bool = False,
     ):
         if type(context_turns) is not int or not 0 <= context_turns <= MAX_CONTEXT_TURNS:
             raise ValueError(f"context_turns must be from 0 to {MAX_CONTEXT_TURNS}.")
@@ -85,7 +88,10 @@ class ConversationSession:
         self._agent_generate = agent_generate if agent_generate is not None else generate
         self._agent_timeout = agent_timeout
         self._request_lock = Lock()
-        self.tools = ToolExecutor(create_registry(self.applications, self.web_search, self.web_reader), web_debug=web_debug)
+        self.tools = ToolExecutor(create_registry(self.applications, self.web_search, self.web_reader,
+                                                 desktop_context_enabled=desktop_context_enabled), web_debug=web_debug)
+        self._desktop_startup = desktop_context_enabled
+        self._closed = False
         self._turns: deque[tuple[str, str]] = deque(maxlen=context_turns)
         self.new()
 
@@ -104,7 +110,31 @@ class ConversationSession:
             messages.append({"role": "assistant", "content": self.web_search.redact(assistant)})
         return messages
 
-    def new(self) -> None:
+    @property
+    def desktop_context_enabled(self) -> bool:
+        return next((t.enabled for t in self.tools.registry.list_tools() if t.name == "desktop.context"), False)
+
+    def desktop_context_status(self) -> str:
+        return desktop_status(self.desktop_context_enabled, self._desktop_startup)
+
+    def desktop_context_consent_command(self, command: str) -> str:
+        """Trusted interactive adapter only; never called by reply(), tools or model text."""
+        if self._closed:
+            return "This conversation session is closed."
+        if command not in {"/desktop-context --enable", "/desktop-context --disable"}:
+            return DESKTOP_USAGE
+        self.tools.registry.set_enabled("desktop.context", command == "/desktop-context --enable")
+        return self.desktop_context_status()
+
+    def close(self) -> None:
+        self.tools.registry.set_enabled("desktop.context", False)
+        self._closed = True
+
+    def new(self, *, preserve_desktop_consent: bool = False) -> None:
+        if self._closed:
+            raise RuntimeError("This conversation session is closed.")
+        if not preserve_desktop_consent:
+            self.tools.registry.set_enabled("desktop.context", self._desktop_startup)
         self.session_id = uuid4().hex
         self._sequence = 0
         self._pending_memory: PendingMemory | None = None
@@ -115,6 +145,8 @@ class ConversationSession:
         self.last_agent = None
 
     def resume(self, session_id: str) -> None:
+        if self._closed:
+            raise RuntimeError("This conversation session is closed.")
         sequence, turns = self._store.load_session(session_id, self._context_turns)
         self.session_id = session_id
         self._sequence = sequence
@@ -128,6 +160,8 @@ class ConversationSession:
 
     def reply(self, prompt: str, **callbacks) -> str | None:
         """Reject overlapping/reentrant requests without changing the active exchange."""
+        if self._closed:
+            return "This conversation session is closed."
         if not self._request_lock.acquire(blocking=False):
             return "Another request is already running in this conversation. Wait for its result before sending another."
         try:
@@ -148,7 +182,27 @@ class ConversationSession:
         prompt = self.web_search.redact(prompt.strip())
         if not prompt:
             return None
+        if prompt.casefold().startswith("/desktop-context"):
+            if prompt.casefold() == "/desktop-context --status":
+                return self.desktop_context_status()
+            if prompt in {"/desktop-context --enable", "/desktop-context --disable"}:
+                return CONSENT_HELP
+            if prompt.casefold() != "/desktop-context":
+                return DESKTOP_USAGE
+        if desktop_consent_request(prompt):
+            return CONSENT_HELP
+        desktop = desktop_request(prompt)
+        if desktop is not None:
+            self._pending_memory = None
+            self._history_anchor = None
+            observed = self.tools.execute(desktop)
+            if tool_trace:
+                tool_trace(observed)
+            # Desktop observations never enter the archive, structured memory or model history.
+            return format_desktop_result(observed)
         resolution = capability_answer(prompt, self) if not prompt.startswith("/") or prompt.casefold() == "/capabilities" else None
+        if resolution is not None and desktop_question(prompt):
+            return resolution  # Live consent status is control information, not archived conversation context.
         memory_intent = parse_intent(prompt) if not prompt.startswith("/") else None
         if memory_intent is not None and memory_intent.action == "statement":
             memory_intent = None

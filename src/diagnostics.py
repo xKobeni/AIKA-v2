@@ -48,6 +48,8 @@ RUNTIME_FILES = (
     "src/capabilities/application_intent.py",
     "src/capabilities/system_info.py",
     "src/capabilities/system_intent.py",
+    "src/capabilities/desktop_context.py",
+    "src/capabilities/desktop_intent.py",
     "src/capabilities/web_search.py",
     "src/capabilities/web_intent.py",
     "src/capabilities/web_reader.py",
@@ -124,6 +126,8 @@ def inspect_runtime() -> tuple[Settings | None, list[Check]]:
         return None, checks
 
     checks.append(Check("PASS", "Configuration", "Environment settings passed validation."))
+    checks.append(Check("PASS", "Desktop Context", "Startup preference enabled; session commands can override it; no observation collected."
+                        if settings.desktop_context_enabled else "Startup preference disabled; session commands can override it; no observation collected."))
     checks.append(Check("PASS", "Configuration mode", settings.configuration_mode))
     checks.append(Check("PASS", "Configuration sources", " < ".join(("defaults", *settings.configuration_sources)) + " (highest priority last; values hidden)."))
     checks.append(Check("PASS", "User configuration", "Present and readable." if "user" in settings.configuration_sources else "Absent; optional."))

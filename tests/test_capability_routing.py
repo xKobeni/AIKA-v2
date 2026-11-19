@@ -201,7 +201,7 @@ def test_listing_reflects_registration_configuration_and_not_live_success(local)
     assert "web.search: DISABLED" in answer and "web.read: DISABLED" in answer
     assert "Research: UNAVAILABLE" in answer and "not verified live execution" in answer
     assert "four steps/eight executions" in answer
-    assert len(registry.list_tools()) == 6
+    assert len(registry.list_tools()) == 7
 
 
 def test_capabilities_permission_is_not_second_authority(local):

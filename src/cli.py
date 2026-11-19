@@ -112,7 +112,7 @@ def main(argv: list[str] | None = None) -> int:
         for component in FUTURE_COMPONENTS:
             print(f"{component}: NOT IMPLEMENTED")
         print("Tools:          Calculator, app launcher, Windows information, opt-in DDGS/Tavily search (run doctor to check availability)")
-        print("Current Phase:   5E")
+        print("Current Phase:   6B")
 
     return 1 if failures else 0
 
@@ -132,6 +132,7 @@ def run_chat(settings: Settings, system_instruction: str = SYSTEM_INSTRUCTION) -
             agent_generate=partial(client.generate, response_format=PLAN_SCHEMA, num_predict=512),
             agent_timeout=settings.agent_timeout,
             context_chars=settings.context_chars,
+            desktop_context_enabled=settings.desktop_context_enabled,
         )
         print(settings.app_name)
         show_session_status(settings, session)
@@ -177,6 +178,8 @@ def run_chat(settings: Settings, system_instruction: str = SYSTEM_INSTRUCTION) -
                         print(f"AIKA > {answer}\n")
         except (EOFError, KeyboardInterrupt):
             print()
+        finally:
+            session.close()
 
         print("Session ended.")
 
@@ -287,6 +290,7 @@ def handle_chat_command(
             print("/open <application>  Launch an explicitly selected approved application")
             print("/system   Show a current Windows system summary")
             print("/processes [1-25]  Show a bounded running process snapshot")
+            print("/desktop-context [--status|--enable|--disable]  On-demand metadata; temporary session consent controls collect nothing")
             print("/web <query>  Search using the configured mode (sends the query externally)")
             print("/web --provider ddgs|tavily <query>  Select exactly one provider, without fallback")
             print("/web-status  Show web-search configuration without making a request")
@@ -340,6 +344,12 @@ def handle_chat_command(
                 print(reason)
             print("DDGS is keyless. Tavily can use API credits only when selected or when paid fallback is explicitly enabled.")
             print("Explicit searches transmit only the query and bounded options to the selected provider.")
+        case "/desktop-context":
+            if command in {"/desktop-context --enable", "/desktop-context --disable"}:
+                answer = session.desktop_context_consent_command(command)
+            else:
+                answer = session.reply(command, tool_trace=show_tool_trace if settings.context_debug != "off" else None)
+            print(f"AIKA > {answer}\n")
         case "/calc" | "/open" | "/system" | "/processes" | "/web" | "/read" | "/ask-web" | "/research" | "/agent":
             answer = session.reply(
                 command, tool_trace=show_tool_trace if settings.context_debug != "off" else None,
@@ -348,11 +358,11 @@ def handle_chat_command(
             )
             print(f"AIKA > {answer}\n")
         case "/clear":
-            session.new()
-            print("Conversation context cleared. Saved history is retained and can be resumed with /resume.")
+            session.new(preserve_desktop_consent=True)
+            print("Conversation context cleared. Saved history is retained and can be resumed with /resume. Live desktop consent is unchanged.")
         case "/new":
             session.new()
-            print("New conversation started. Saved conversations remain available.")
+            print("New conversation started. Saved conversations remain available. Desktop consent reset to the configured startup preference.")
         case "/sessions":
             sessions = store.list_sessions()
             if sessions:
@@ -366,7 +376,7 @@ def handle_chat_command(
                 print("Usage: /resume <session_id>. Use /sessions to find the ID.")
                 return
             session.resume(arguments[0])
-            print(f"Conversation restored. Loaded {session.turn_count} recent completed turns.")
+            print(f"Conversation restored. Loaded {session.turn_count} recent completed turns. Live desktop consent is unchanged.")
         case "/history":
             history = session.history()
             if not history:

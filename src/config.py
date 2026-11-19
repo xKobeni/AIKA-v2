@@ -61,6 +61,7 @@ class Settings:
     agent_timeout: float = 180.0
     context_chars: int = DEFAULT_CONTEXT_CHARS
     response_tokens: int = DEFAULT_RESPONSE_TOKENS
+    desktop_context_enabled: bool = False
     configuration_mode: str = field(default="Not inspected", compare=False, repr=False)
     configuration_sources: tuple[str, ...] = field(default=(), compare=False, repr=False)
 
@@ -229,6 +230,9 @@ def load_config() -> Settings:
         raise ConfigError(apps_error)
 
     web_enabled = environment.get("AIKA_WEB_SEARCH_ENABLED", "off").strip().casefold()
+    desktop_enabled = environment.get("AIKA_DESKTOP_CONTEXT_ENABLED", "off").strip().casefold()
+    if desktop_enabled not in {"off", "on", "false", "true", "0", "1"}:
+        raise ConfigError("AIKA_DESKTOP_CONTEXT_ENABLED must be off/on, false/true, or 0/1.")
     if web_enabled not in {"off", "on", "false", "true", "0", "1"}:
         raise ConfigError("AIKA_WEB_SEARCH_ENABLED must be off/on, false/true, or 0/1.")
     api_key = environment.get("AIKA_TAVILY_API_KEY", "")
@@ -277,6 +281,7 @@ def load_config() -> Settings:
         provider, fallback in {"on", "true", "1"}, secondary, reading in {"on", "true", "1"}, web_debug in {"on", "true", "1"},
         research_timeout, timezone, agent_timeout,
         context_chars, response_tokens,
+        desktop_context_enabled=desktop_enabled in {"on", "true", "1"},
         configuration_mode=mode, configuration_sources=sources,
     )
 

@@ -6,12 +6,13 @@ from src.capabilities.application_intent import ALIASES, application_question
 from src.capabilities.contracts import Permission, ToolExecutionError, ToolInputError
 from src.capabilities.registry import ToolLookupError
 from src.capabilities.language import natural_text
+from src.capabilities.desktop_intent import desktop_question
 from src.capabilities.system_info import initialize_measurements
 
 
 COMMANDS = {"calculator.evaluate": "/calc 12*7", "app.open": "/apps; /open notepad",
             "system.snapshot": "/system", "system.processes": "/processes",
-            "web.search": "/web <query>", "web.read": "/read 1"}
+            "web.search": "/web <query>", "web.read": "/read 1", "desktop.context": "/desktop-context [--status|--enable|--disable]"}
 
 
 def capability_lines(session) -> dict[str, str]:
@@ -20,6 +21,9 @@ def capability_lines(session) -> dict[str, str]:
         status = "LOCALLY READY" if tool.enabled else "DISABLED"
         detail = ""
         if tool.enabled:
+            if tool.name == "desktop.context":
+                status = "ENABLED; Windows API availability not tested"
+                detail = " Explicit requests only; no background observation, stored activity or screen content."
             if tool.permission != Permission.READ_ONLY and not (tool.permission == Permission.LOCAL_ACTION and tool.name == "app.open" and tool.verify is not None):
                 status = "UNAVAILABLE (permission category is not enabled)"
             elif tool.name.startswith("system."):
@@ -68,6 +72,8 @@ def capabilities(session) -> str:
 
 
 def capability_answer(prompt, session):
+    if desktop_question(prompt):
+        return session.desktop_context_status()
     text = natural_text(prompt).casefold()
     if text in {"/capabilities", "what can you do", "what tools do you have"}:
         return capabilities(session)

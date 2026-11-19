@@ -7,6 +7,8 @@
 **Status:** Planning baseline, not a claim of implementation  
 **Role:** Source of truth for AIKA V2 architecture and phased implementation
 
+**Implementation checkpoint (2026-11-19):** Phase 6B adds exact interactive session enable/disable commands to Phase 6A's seventh tool, `desktop.context`. Startup defaults OFF; consent changes use each session's existing registry/executor, never model output or permanent configuration. Observations remain explicit, transient and excluded from memory/model input; no titles, screenshots, hooks or background tracking. See [Phase 6B report](phase-reports/PHASE_6B_REPORT.md) for lifecycle and acceptance evidence. Visual/voice embodiment and broader future event infrastructure remain deferred; the specifications below remain the broader architectural baseline.
+
 > **Product principle:** Build the intelligence, memory, safe agency, and event contracts of a desktop-embodied character *before* building its visual body.
 
 ## 0. How to use this document

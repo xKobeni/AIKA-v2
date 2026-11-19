@@ -35,7 +35,7 @@ def test_startup(ollama_model):
     assert result.returncode == 0, result.stderr
     assert "Core Runtime:    READY" in result.stdout
     assert "Configuration:   LOADED" in result.stdout
-    assert "Current Phase:   5E" in result.stdout
+    assert "Current Phase:   6B" in result.stdout
     assert f"AI Model:        {ollama_model} (run doctor to check availability)" in result.stdout
     assert result.stdout.count("NOT IMPLEMENTED") == 1
 
@@ -68,7 +68,7 @@ def test_doctor(tmp_path, capsys, mock_ollama, ollama_model):
     assert output.count("NOT IMPLEMENTED") == 1
     assert "PASS  Tool Registry: Initialized" in output
     assert "PASS  Calculator: Available" in output
-    assert "PASS  Tools Registered: 6" in output
+    assert "PASS  Tools Registered: 7" in output
     assert list(tmp_path.iterdir()) == []
 
 

@@ -24,7 +24,7 @@ def calculate(expression):
 def test_registry_registration_duplicate_and_availability():
     registry = create_registry()
     tool = registry.lookup("calculator.evaluate")
-    assert {item.name for item in registry.list_tools()} == {"calculator.evaluate", "app.open", "system.snapshot", "system.processes", "web.search", "web.read"}
+    assert {item.name for item in registry.list_tools()} == {"calculator.evaluate", "app.open", "system.snapshot", "system.processes", "web.search", "web.read", "desktop.context"}
     assert tool.permission == Permission.READ_ONLY
     assert callable(tool.input_contract) and callable(tool.output_contract)
     with pytest.raises(ValueError, match="Duplicate"):

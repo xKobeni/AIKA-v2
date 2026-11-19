@@ -583,31 +583,31 @@ Phase 2C-A covers flexible memory phrasing and session-bound clarification or fi
 **Objective:** Ingest narrow environment signals, not continuous surveillance.
 
 **Implement:**
-- Opt-in foreground application **identity** (avoid raw window titles by default).
-- Limited system-resource/time signals; normalized `perception.observed` events.
-- Provider interface with start/stop and clean resource handling.
+- Per the supplied Phase 6A implementation brief: default-OFF, explicitly requested `desktop.context` through the existing READ_ONLY tool registry/executor.
+- Foreground executable basename/PID and current Windows display count/mode pixel dimensions; timestamp, source and partial/unavailable status.
+- No titles, content capture, background provider, polling, activity retention, additional model call or event-loop infrastructure. Existing tool traces carry request outcomes; normalized perception events remain future work.
 
 **Manual acceptance:**
-1. With provider disabled, change active app → no event emitted.
-2. Enable provider, switch between Notepad and another app → correct app identities.
-3. Confirm no screenshot, camera, microphone, or document content is captured.
+1. With the gate OFF, `/desktop-context` and a foreground query collect nothing; `--status` also collects nothing when ON.
+2. Enable only in an isolated process, explicitly request foreground/display metadata, and compare with Windows Settings and existing application focus. A terminal may itself be foreground. Do not launch applications for automated acceptance.
+3. Verify no observation history, memory write, screenshot, camera, microphone, clipboard, title or document content is captured. See the phase report for actual versus pending interactive acceptance.
 
 **Pass when:** Narrow signals are accurate and disabled by default.  
 **Suggested tag:** `aika-v2/phase-6a`.
 
-### Checkpoint 6B — Consent lifecycle and contextual responses
+### Checkpoint 6B — Desktop permissions and session lifecycle
 
-**Objective:** Make perception controllable and safe to use in conversation.
+**Objective:** Allow explicit, temporary desktop consent changes within the existing conversation.
 
 **Implement:**
-- Clear enable/disable status; scope and event-retention choices.
-- Revocation stops future collection immediately; prevent implicit memory storage.
-- Context-aware answers only from permitted recent signals, with uncertainty if not available.
+- Per the supplied Phase 6B brief: exact interactive `/desktop-context --enable`, `--disable`, `--status`; configuration remains the startup preference, default OFF.
+- Revocation updates the session-owned registry entry checked by the existing executor; no separate permission system or model-controlled mutation.
+- `/clear` and `/resume` preserve live consent; `/new` resets startup preference; chat termination revokes access. No consent/observation persistence or stale evidence reuse.
 
 **Manual acceptance:**
-1. Ask `Which application is currently active?` while perception is enabled → correct app.
-2. Disable perception and repeat → AIKA states it lacks current permission/context.
-3. Restart → consent settings behave as documented, never silently expand.
+1. Start OFF, inspect status, enable interactively with zero collection, then make explicit foreground/display requests.
+2. Disable and verify the next observation is blocked; natural language and agent plans cannot enable consent.
+3. Close/reopen and verify the configured startup preference. Use isolated storage; consult the phase report for actual live and mocked lifecycle checks.
 
 **Pass when:** Context improves answers without uncontrolled monitoring.  
 **Suggested tag:** `aika-v2/phase-6b`.
@@ -922,8 +922,8 @@ Do not mark anything PASSED based solely on this document or Codex's summary.
 | 5C Controlled tool dataflow | MANUAL TESTING CONFIRMED (user report) | The Phase 5D brief records confirmed manual measurements, rejection cases and restore behavior. Historical [report](phase-reports/PHASE_5C_REPORT.md) retained. |
 | 5D Bounded conditions / intent routing | USER APPROVED (Phase 5E brief) | Approval recorded by the supplied Phase 5E request; historical [report](phase-reports/PHASE_5D_REPORT.md) retained. |
 | 5E Capability-aware routing / usability | READY FOR MANUAL REVIEW | Existing capability/configuration discovery and bounded recognition; [report](phase-reports/PHASE_5E_REPORT.md). User acceptance pending. |
-| 6A Desktop signals | NOT STARTED | — |
-| 6B Consent lifecycle | NOT STARTED | — |
+| 6A Desktop signals | READY FOR MANUAL REVIEW | Default-OFF `desktop.context`, foreground executable and physical display-mode pixels only; [report](phase-reports/PHASE_6A_REPORT.md). No activity persistence or automatic observation. |
+| 6B Consent lifecycle | READY FOR MANUAL REVIEW | Temporary trusted interactive consent via the session-owned registry; [report](phase-reports/PHASE_6B_REPORT.md). No new observation scope or persistence. |
 | 7A Character state events | NOT STARTED | — |
 | 7B Behavior selection | NOT STARTED | — |
 | 8A API + desktop shell | NOT STARTED | — |
@@ -938,6 +938,6 @@ Do not mark anything PASSED based solely on this document or Codex's summary.
 
 ## 11. Immediate next step
 
-**Current checkpoint: Phase 5E, READY FOR MANUAL REVIEW.** The supplied brief approves Phase 5D and authorizes routing/usability only. Run the Phase 5E walkthrough with isolated storage. No later checkpoint, new executable tool, model change, schema or autonomous control was implemented. Wait for manual review and a new scoped instruction before further implementation.
+**Current checkpoint: Phase 6B, READY FOR MANUAL REVIEW.** The supplied brief authorizes only session desktop consent and lifecycle on top of 6A. Review the phase report and isolated acceptance evidence. No model/persona/schema change, screenshot capture, monitoring, visual analysis, GUI, character or voice work is included. Earlier phases retain their recorded acceptance status. Stop for manual review before further implementation.
 
 > AIKA V2 is not successful because every module exists. It is successful when each capability really works, remains working after the next phase, and eventually powers one coherent desktop character.

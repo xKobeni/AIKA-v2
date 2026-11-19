@@ -1,0 +1,207 @@
+{
+  "note": "Real Windows native reads through CLI driven by synthetic input; separate processes verify restart. Foreground names/PIDs and raw CLI output are not retained.",
+  "scenarios": [
+    {
+      "scenario": "off",
+      "startup_preference": false,
+      "steps": [
+        {
+          "command": "/desktop-context --status",
+          "native_calls": 0,
+          "elapsed_ms": 57.836,
+          "effective_consent": false
+        },
+        {
+          "command": "Aika, turn on desktop awareness.",
+          "native_calls": 0,
+          "elapsed_ms": 0.413,
+          "effective_consent": false
+        },
+        {
+          "command": "What application am I using right now?",
+          "native_calls": 0,
+          "elapsed_ms": 0.326,
+          "effective_consent": false
+        },
+        {
+          "command": "/desktop-context --enable",
+          "native_calls": 0,
+          "elapsed_ms": 0.032,
+          "effective_consent": true
+        },
+        {
+          "command": "/desktop-context --status",
+          "native_calls": 0,
+          "elapsed_ms": 0.018,
+          "effective_consent": true
+        },
+        {
+          "command": "What application am I using right now?",
+          "native_calls": 1,
+          "elapsed_ms": 2.362,
+          "effective_consent": true
+        },
+        {
+          "command": "What is my screen resolution?",
+          "native_calls": 1,
+          "elapsed_ms": 1.0,
+          "effective_consent": true
+        },
+        {
+          "command": "/desktop-context --disable",
+          "native_calls": 0,
+          "elapsed_ms": 0.045,
+          "effective_consent": false
+        },
+        {
+          "command": "What application am I using right now?",
+          "native_calls": 0,
+          "elapsed_ms": 0.108,
+          "effective_consent": false
+        },
+        {
+          "command": "/desktop-context --status",
+          "native_calls": 0,
+          "elapsed_ms": 0.019,
+          "effective_consent": false
+        },
+        {
+          "command": "exit",
+          "native_calls": 0,
+          "elapsed_ms": 2.538,
+          "effective_consent": false
+        }
+      ],
+      "observations": [
+        {
+          "scope": "foreground",
+          "status": "disabled_tool",
+          "verified": false,
+          "collection_status": null,
+          "foreground_identifier_present": false,
+          "display_count": null,
+          "primary_resolution": null,
+          "timestamp_present": false,
+          "source": null,
+          "wall_ms": 0.027
+        },
+        {
+          "scope": "foreground",
+          "status": "success",
+          "verified": true,
+          "collection_status": "complete",
+          "foreground_identifier_present": true,
+          "display_count": null,
+          "primary_resolution": null,
+          "timestamp_present": true,
+          "source": "Local Win32 foreground/process and display APIs",
+          "wall_ms": 2.298
+        },
+        {
+          "scope": "displays",
+          "status": "success",
+          "verified": true,
+          "collection_status": "complete",
+          "foreground_identifier_present": false,
+          "display_count": 2,
+          "primary_resolution": {
+            "width_px": 1920,
+            "height_px": 1080
+          },
+          "timestamp_present": true,
+          "source": "Local Win32 foreground/process and display APIs",
+          "wall_ms": 0.572
+        },
+        {
+          "scope": "foreground",
+          "status": "disabled_tool",
+          "verified": false,
+          "collection_status": null,
+          "foreground_identifier_present": false,
+          "display_count": null,
+          "primary_resolution": null,
+          "timestamp_present": false,
+          "source": null,
+          "wall_ms": 0.02
+        }
+      ],
+      "closed_and_revoked": true,
+      "saved_exchanges": 0,
+      "ollama_generations": 0
+    },
+    {
+      "scenario": "reopened_off",
+      "startup_preference": false,
+      "steps": [
+        {
+          "command": "/desktop-context --status",
+          "native_calls": 0,
+          "elapsed_ms": 65.369,
+          "effective_consent": false
+        },
+        {
+          "command": "/desktop-context --disable",
+          "native_calls": 0,
+          "elapsed_ms": 0.047,
+          "effective_consent": false
+        },
+        {
+          "command": "exit",
+          "native_calls": 0,
+          "elapsed_ms": 0.299,
+          "effective_consent": false
+        }
+      ],
+      "observations": [],
+      "closed_and_revoked": true,
+      "saved_exchanges": 0,
+      "ollama_generations": 0
+    },
+    {
+      "scenario": "configured_on",
+      "startup_preference": true,
+      "steps": [
+        {
+          "command": "/desktop-context --status",
+          "native_calls": 0,
+          "elapsed_ms": 49.244,
+          "effective_consent": true
+        },
+        {
+          "command": "/desktop-context --disable",
+          "native_calls": 0,
+          "elapsed_ms": 0.044,
+          "effective_consent": false
+        },
+        {
+          "command": "exit",
+          "native_calls": 0,
+          "elapsed_ms": 0.367,
+          "effective_consent": false
+        }
+      ],
+      "observations": [],
+      "closed_and_revoked": true,
+      "saved_exchanges": 0,
+      "ollama_generations": 0
+    }
+  ],
+  "cli": [
+    {
+      "command": "startup",
+      "exit_code": 0
+    },
+    {
+      "command": "doctor",
+      "exit_code": 0
+    },
+    {
+      "command": "--version",
+      "exit_code": 0
+    },
+    {
+      "command": "--help",
+      "exit_code": 0
+    }
+  ]
+}

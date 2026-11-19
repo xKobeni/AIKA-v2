@@ -483,7 +483,7 @@ def test_doctor_cli_keeps_all_checks_without_collecting_metrics(measurements, mo
     output = capsys.readouterr().out
     for name in ("System Information", "SQLite", "Ollama", "Calculator", "Application Launcher"):
         assert f"PASS  {name}:" in output
-    assert "Tools Registered: 6" in output and "large.exe" not in output
+    assert "Tools Registered: 7" in output and "large.exe" not in output
     measurements.cpu_percent.assert_not_called()
     measurements.virtual_memory.assert_not_called()
     measurements.disk_usage.assert_not_called()

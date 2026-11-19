@@ -36,9 +36,19 @@ def main():
                              "print(json.dumps({'module': aika.__file__, 'data': str(c.load_data_dir()), "
                              "'config_module': c.__file__, 'user_config': str(c.resolve_user_config_path()), "
                              "'mode': settings.configuration_mode, 'context_chars': settings.context_chars, "
-                             "'response_tokens': settings.response_tokens}))"))
+                             "'response_tokens': settings.response_tokens, 'desktop_enabled': settings.desktop_context_enabled}))"))
         if info["context_chars"] != 24000 or info["response_tokens"] != 1024:
             raise RuntimeError("The installed model-budget defaults do not match the checkpoint.")
+        if info["desktop_enabled"]:
+            raise RuntimeError("Desktop context must be disabled by default in the installed wheel.")
+        desktop_check = run("-c", "from unittest.mock import patch; from src.capabilities import create_registry; "
+                            "from src.capabilities.executor import ToolExecutor; from src.capabilities.contracts import ToolRequest, ToolStatus; "
+                            "guard=patch('src.capabilities.desktop_context.open_windows',side_effect=AssertionError('No observation')); guard.start(); "
+                            "registry=create_registry(); assert len(registry.list_tools())==7; "
+                            "result=ToolExecutor(registry).execute(ToolRequest('desktop.context',{})); "
+                            "assert result.status==ToolStatus.DISABLED and not result.verified; print('disabled without collection')")
+        if "disabled without collection" not in desktop_check:
+            raise RuntimeError("Installed desktop consent boundary failed.")
         module_path = Path(info["module"]).resolve()
         if not module_path.is_relative_to(Path(sys.prefix).resolve()):
             raise RuntimeError("AIKA was imported from outside the fresh virtual environment.")
@@ -70,6 +80,37 @@ def main():
             extra_env={"AIKA_DATA_DIR": str(override)})
         if not (override / "conversations.sqlite3").is_file():
             raise RuntimeError("AIKA_DATA_DIR override was ignored.")
+        lifecycle = run("-c", """
+import contextlib, io
+from pathlib import Path
+from tempfile import TemporaryDirectory
+from unittest.mock import Mock, patch
+from src.cli import handle_chat_command
+from src.config import load_config
+from src.intelligence.conversation import ConversationSession
+from src.capabilities.contracts import ToolRequest, ToolStatus
+from src.storage.conversation_store import ConversationStore
+with TemporaryDirectory(prefix='aika-installed-consent-') as directory, patch('src.capabilities.desktop_context.open_windows', side_effect=AssertionError('No collection')) as native:
+    store=ConversationStore(Path(directory))
+    first=ConversationSession('Synthetic',10,Mock(side_effect=AssertionError('No generation')),store)
+    other=ConversationSession('Synthetic',10,Mock(),store)
+    with contextlib.redirect_stdout(io.StringIO()):
+        handle_chat_command('/desktop-context --enable',load_config(),first,store)
+        assert first.desktop_context_enabled and not other.desktop_context_enabled
+        handle_chat_command('/clear',load_config(),first,store)
+        assert first.desktop_context_enabled
+        handle_chat_command('/desktop-context --disable',load_config(),first,store)
+        assert not first.desktop_context_enabled
+    assert first.tools.execute(ToolRequest('desktop.context',{})).status==ToolStatus.DISABLED
+    first.reply('/desktop-context --enable')
+    assert not first.desktop_context_enabled and store.list_sessions()==[]
+    first.close()
+    assert not first.desktop_context_enabled
+    native.assert_not_called()
+print('session consent lifecycle passed')
+""")
+        if "session consent lifecycle passed" not in lifecycle:
+            raise RuntimeError("Installed session consent lifecycle failed.")
         # Neither a cwd marker nor a cwd .env is configuration authority for an installed wheel.
         (cwd / ".env").write_text("AIKA_APP_NAME=Working Directory Synthetic\n", encoding="utf-8")
         (cwd / "pyproject.toml").write_text('[project]\nname="aika-ai-v2"\n', encoding="utf-8")
@@ -78,7 +119,12 @@ def main():
             raise RuntimeError("Installed runtime trusted a cwd configuration file.")
         user_config.parent.mkdir(parents=True)
         with user_config.open("x", encoding="utf-8-sig") as stream:
-            stream.write("AIKA_APP_NAME=User Configuration Synthetic\nAIKA_TAVILY_API_KEY=synthetic-private-key\n")
+            stream.write("AIKA_APP_NAME=User Configuration Synthetic\nAIKA_TAVILY_API_KEY=synthetic-private-key\nAIKA_DESKTOP_CONTEXT_ENABLED=on\n")
+        if run("-c", "from src.config import load_config; print(load_config().desktop_context_enabled)").strip() != "True":
+            raise RuntimeError("Installed desktop user configuration opt-in failed.")
+        if run("-c", "from src.config import load_config; print(load_config().desktop_context_enabled)",
+               extra_env={"AIKA_DESKTOP_CONTEXT_ENABLED": "off"}).strip() != "False":
+            raise RuntimeError("Installed desktop process configuration precedence failed.")
         configured = run("-m", "aika")
         if not configured.startswith("User Configuration Synthetic\n"):
             raise RuntimeError("Installed wheel did not load per-user configuration.")
@@ -126,7 +172,9 @@ def main():
                           "source_configuration_compatibility": "passed", "unicode_profile_paths": "passed",
                           "malformed_configuration": "passed", "unreadable_configuration": "passed (mocked denial)",
                           "working_directory_dotenv_loaded": observed_name == "Working Directory Synthetic",
-                          "environment_override": "passed", "gui_or_provider_operations": 0}, indent=2))
+                          "environment_override": "passed", "desktop_disabled_without_observation": "passed",
+                          "desktop_configuration_precedence": "passed", "desktop_session_lifecycle": "passed",
+                          "gui_or_provider_operations": 0}, indent=2))
 
 
 if __name__ == "__main__":

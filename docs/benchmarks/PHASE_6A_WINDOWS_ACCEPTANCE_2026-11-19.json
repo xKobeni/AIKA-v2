@@ -1,0 +1,91 @@
+{
+  "platform": "Windows",
+  "python": "3.12.10",
+  "observations": [
+    {
+      "scope": "foreground",
+      "status": "success",
+      "collection_status": "complete",
+      "verified": true,
+      "wall_ms": 0.759,
+      "executor_ms": 0.685,
+      "foreground_identifier_present": true,
+      "foreground_error": null,
+      "display_count": null,
+      "primary_resolution": null,
+      "display_status": null,
+      "timestamp_present": true,
+      "source": "Local Win32 foreground/process and display APIs",
+      "safe_error": null
+    },
+    {
+      "scope": "displays",
+      "status": "success",
+      "collection_status": "complete",
+      "verified": true,
+      "wall_ms": 0.408,
+      "executor_ms": 0.36,
+      "foreground_identifier_present": false,
+      "foreground_error": null,
+      "display_count": 2,
+      "primary_resolution": {
+        "width_px": 1920,
+        "height_px": 1080
+      },
+      "display_status": "complete",
+      "timestamp_present": true,
+      "source": "Local Win32 foreground/process and display APIs",
+      "safe_error": null
+    },
+    {
+      "scope": "all",
+      "status": "success",
+      "collection_status": "complete",
+      "verified": true,
+      "wall_ms": 0.524,
+      "executor_ms": 0.498,
+      "foreground_identifier_present": true,
+      "foreground_error": null,
+      "display_count": 2,
+      "primary_resolution": {
+        "width_px": 1920,
+        "height_px": 1080
+      },
+      "display_status": "complete",
+      "timestamp_present": true,
+      "source": "Local Win32 foreground/process and display APIs",
+      "safe_error": null
+    }
+  ],
+  "note": "Only three explicit on-demand calls. No app identity/PID, titles, paths, raw responses or activity history retained.",
+  "disabled_observation_api_calls": 0,
+  "enabled_status_capability_api_calls": 0,
+  "observation_history_turns": 0,
+  "ollama_generations": 0,
+  "cli": [
+    {
+      "command": "startup",
+      "exit_code": 0
+    },
+    {
+      "command": "doctor",
+      "exit_code": 0
+    },
+    {
+      "command": "--version",
+      "exit_code": 0
+    },
+    {
+      "command": "--help",
+      "exit_code": 0
+    }
+  ],
+  "manual_pending": [
+    "Windows Settings UI comparison",
+    "switching existing applications interactively",
+    "terminal focus behavior observed by a human",
+    "physical multi-monitor",
+    "DPI scaling change",
+    "Remote Desktop"
+  ]
+}

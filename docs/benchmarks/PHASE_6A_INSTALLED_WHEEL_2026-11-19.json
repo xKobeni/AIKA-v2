@@ -1,0 +1,26 @@
+{
+  "python": "3.12.10",
+  "module_inside_fresh_venv": true,
+  "commands": {
+    "startup": "passed",
+    "--help": "passed",
+    "--version": "passed",
+    "doctor": "passed"
+  },
+  "default_data_path": "isolated OS default",
+  "synthetic_database_restart": "passed",
+  "explicit_data_override": "passed",
+  "configuration_mode": "Installed / non-checkout runtime",
+  "user_configuration_loading": "passed",
+  "source_configuration_compatibility": "passed",
+  "unicode_profile_paths": "passed",
+  "malformed_configuration": "passed",
+  "unreadable_configuration": "passed (mocked denial)",
+  "working_directory_dotenv_loaded": false,
+  "environment_override": "passed",
+  "desktop_disabled_without_observation": "passed",
+  "desktop_configuration_precedence": "passed",
+  "gui_or_provider_operations": 0,
+  "non_editable_wheel": "aika_ai_v2-0.1.0-py3-none-any.whl",
+  "fresh_pip_check": "No broken requirements found."
+}

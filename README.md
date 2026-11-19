@@ -6,7 +6,7 @@ Development starts with a headless backend and a CLI for verification. The plann
 
 ## Current checkpoint
 
-Phase 5E improves capability-aware intent routing and terminal usability. Status: READY FOR MANUAL REVIEW; Phase 5E acceptance is pending. The supplied brief approves Phase 5D. The same ConversationSession, six tools, executor, permissions, budgets and SQLite lifecycle remain in use. No model configuration, executable capability or database schema changed.
+Phase 6B adds temporary in-chat desktop consent controls to Phase 6A's on-demand `desktop.context` capability. Status: READY FOR MANUAL REVIEW. The same seven tools, ConversationSession, executor, permission categories, model/persona, budgets and SQLite schema remain in use. Earlier phase reports retain their original acceptance status. See the [Phase 6B report](docs/phase-reports/PHASE_6B_REPORT.md).
 
 The conversation reliability update prefers `qwen3.5:4b` when no model override is set. Saved chats can be resumed with either model.
 
@@ -35,7 +35,7 @@ To activate the environment instead, run `.\.venv\Scripts\Activate.ps1` and repl
 
 | Command | Expected result |
 | --- | --- |
-| `python -m aika` | Core runtime `READY`, configuration `LOADED`, configured model, and current phase `5E`. This command works offline. |
+| `python -m aika` | Core runtime `READY`, configuration `LOADED`, configured model, and current phase `6B`. This command works offline. |
 | `python -m aika --version` | `AIKA AI V2 0.1.0` by default. |
 | `python -m aika doctor` | Runtime, SQLite, memory, Ollama, calculator, application, Windows measurement, and optional search configuration/contract checks. It never launches applications, samples system metrics, enumerates processes, or contacts Tavily. Missing optional web credentials produce `WARN` and do not prevent local use. |
 | `python -m aika chat` | Opens an interactive session with the configured local model. Use `exit`, `/exit`, Ctrl+C, or EOF to quit. |
@@ -321,6 +321,29 @@ Explicit search/current-information recognition remains bounded. Educational exp
 
 `/web-status` and doctor report provider mode, readiness, fallback policy, key presence, and contracts without searching or spending credits. A locally ready provider has not been connectivity/authentication-tested. Tool traces omit queries, keys, headers, and excerpts. SQLite saves displayed sources with their original provider and timestamp; `/resume` restores them without replaying searches. Search exchanges stay out of later ordinary Ollama context and do not automatically become memory facts. Search results are not globally cached.
 
+
+## Desktop context and session consent (Phases 6A–6B)
+
+`AIKA_DESKTOP_CONTEXT_ENABLED=off` is the default startup preference. `on` starts each new session enabled. The normal precedence remains process environment > user configuration > verified development `.env` > defaults. You can override that preference temporarily in an active chat using the exact commands below; no environment or configuration file is changed. Consent alone never samples the desktop.
+
+Inside `python -m aika chat`:
+
+```text
+/desktop-context --status
+/desktop-context --enable
+/desktop-context
+/desktop-context --disable
+Aika, what application am I using right now?
+What is my screen resolution?
+How many monitors are connected?
+Show my desktop information.
+```
+
+`--status` shows live consent, startup preference, whether they differ, platform support and the limited scope. Status, enable, disable and capability questions such as “Can you tell what app I'm using?” collect nothing. Only exact interactive `--enable`/`--disable` commands mutate consent; ordinary text, model/tool output, saved history and agent plans cannot do so. `/clear` and `/resume` preserve current live consent; `/new` resets it to the configured startup preference. Exit, EOF and Ctrl+C revoke session access. A subsequent process starts from configuration again. Disabling does not clear saved history or facts and does not forcibly cancel a synchronous read already admitted.
+
+When enabled, explicit observations use the existing READ_ONLY executor and return only a foreground executable basename/PID and/or active Windows display count and current display-mode pixel dimensions, with timestamp/source. Revocation disables that session's registry entry, so direct executor calls are blocked too. A terminal may itself be the foreground application. Foreground and display races produce unavailable/partial results, not guessed identities or logical-coordinate resolutions. Displays can include virtual or Remote Desktop monitors; count does not prove physical panel count or native panel resolution.
+
+No window/document titles, URLs, clipboard, screenshots, global hooks, app launches or input automation are involved. Results and consent commands are transient: they do not enter saved chat history, structured memory, or later model context. There is no extra model call, background worker, activity history or cloud transmission. The existing agent planner cannot invoke this capability. See the [6A report](docs/phase-reports/PHASE_6A_REPORT.md) for collector limitations and the [6B report](docs/phase-reports/PHASE_6B_REPORT.md) for consent/lifecycle verification. Visual analysis, GUI, character and voice work remain deferred.
 
 ## Capability-aware routing (Phase 5E)
 

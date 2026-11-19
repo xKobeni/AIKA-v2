@@ -1,0 +1,23 @@
+{
+  "protected_files_unchanged": 17,
+  "tool_count": 7,
+  "model": "qwen3.5:4b",
+  "thinking": "off",
+  "existing_configured_desktop_startup": true,
+  "baseline_python312": {
+    "passed": 1659,
+    "seconds": 49.43
+  },
+  "final_python312": {
+    "passed": 1698,
+    "seconds": 51.44
+  },
+  "final_python313": {
+    "passed": 1698,
+    "seconds": 46.59
+  },
+  "consent_tests": 39,
+  "fresh_wheel_matches_runtime": true,
+  "wheel_sha256": "326676f09711772efd0d6de970f3be0cc92d234a884d101c090f369e7fbf7ce1",
+  "hosted_ci_run": false
+}

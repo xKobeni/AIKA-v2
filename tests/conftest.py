@@ -14,6 +14,7 @@ def isolated_config(monkeypatch, tmp_path, ollama_model):
         "AIKA_OLLAMA_URL", "AIKA_MODEL_TIMEOUT", "AIKA_CONTEXT_TURNS",
         "AIKA_OLLAMA_THINK", "AIKA_CONTEXT_DEBUG", "AIKA_CONTEXT_DEBUG_PUBLIC",
         "AIKA_DISABLED_APPS",
+        "AIKA_DESKTOP_CONTEXT_ENABLED",
         "AIKA_TAVILY_API_KEY", "AIKA_WEB_SEARCH_ENABLED",
         "AIKA_WEB_SEARCH_PROVIDER", "AIKA_WEB_SEARCH_FALLBACK_ENABLED", "AIKA_WEB_SEARCH_FALLBACK_PROVIDER", "DDGS_PROXY",
     ):
@@ -51,6 +52,7 @@ def prevent_real_system_measurements(monkeypatch):
     def forbidden():
         raise AssertionError("Automated tests must mock system measurement APIs.")
     monkeypatch.setattr("src.capabilities.system_info.initialize_measurements", forbidden)
+    monkeypatch.setattr("src.capabilities.desktop_context.open_windows", forbidden)
 
 
 @pytest.fixture(autouse=True)
