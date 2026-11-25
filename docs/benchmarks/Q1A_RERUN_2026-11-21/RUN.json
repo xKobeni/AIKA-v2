@@ -1,0 +1,41 @@
+{
+  "date": "2026-11-21",
+  "status": "complete",
+  "user_owned_service_not_restarted_or_stopped": true,
+  "model": "qwen3.5:4b",
+  "model_digest": "d8b0f5e9760cd1682034f292d7ef72ec46f432149be0df7574bf2d6e92e38c04",
+  "ollama_version": "0.40.16",
+  "thinking": "off",
+  "context_characters": 24000,
+  "response_tokens": 1024,
+  "context_turns": 10,
+  "generation_request_limit": 80,
+  "per_stage_seconds": 900,
+  "stages": [
+    {
+      "condition": "BASELINE",
+      "split": "DEV",
+      "exit_code": 0,
+      "wall_seconds": 263.976
+    },
+    {
+      "condition": "CANDIDATE",
+      "split": "DEV",
+      "exit_code": 0,
+      "wall_seconds": 191.48
+    },
+    {
+      "condition": "BASELINE",
+      "split": "ACCEPTANCE",
+      "exit_code": 0,
+      "wall_seconds": 209.742
+    },
+    {
+      "condition": "CANDIDATE",
+      "split": "ACCEPTANCE",
+      "exit_code": 0,
+      "wall_seconds": 187.861
+    }
+  ],
+  "protected_files_unchanged": true
+}

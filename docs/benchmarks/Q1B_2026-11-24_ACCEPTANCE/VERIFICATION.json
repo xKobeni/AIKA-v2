@@ -1,0 +1,45 @@
+{
+  "--version": {
+    "exit": 0,
+    "output": "AIKA AI V2 0.1.0\n"
+  },
+  "--help": {
+    "exit": 0,
+    "output": "usage: python -m aika [-h] [--version] {doctor,chat,memory} ...\n\nShow the AIKA AI V2 runtime status when no command is supplied.\n\npositional arguments:\n  {doctor,chat,memory}\n    doctor              check the runtime, conversation storage, and local\n                        Ollama model\n    chat                start a conversation with the local Ollama model\n    memory              manage structured facts explicitly\n\noptions:\n  -h, --help            show this help message and exit\n  --version             show the application version\n"
+  },
+  "--doctor": {
+    "exit": 2,
+    "output": "usage: python -m aika [-h] [--version] {doctor,chat,memory} ...\npython -m aika: error: unrecognized arguments: --doctor\n"
+  },
+  "wheel": {
+    "file": "aika_ai_v2-0.1.0-py3-none-any.whl",
+    "resolver_bytes_match": true,
+    "fresh_install_tested": false
+  },
+  "protected_files": {
+    "count": 15,
+    "changed": []
+  },
+  "resolver_matches_live_run": true,
+  "doctor": {
+    "exit": 0,
+    "output": "AIKA AI V2 diagnostics\nPASS  Python: Found 3.12.10, which meets the 3.12+ requirement.\nPASS  Project directory: Found the project root beside the runtime module.\nPASS  Runtime files: All required Python files are present.\nPASS  Environment: Running on the Windows target platform.\nPASS  Configuration: Environment settings passed validation.\nPASS  Desktop Context: Startup preference enabled; session commands can override it; no observation collected.\nPASS  Configuration mode: Source checkout\nPASS  Configuration sources: defaults < development .env < process environment (highest priority last; values hidden).\nPASS  User configuration: Absent; optional.\nPASS  Development .env: Loaded from verified source checkout.\nPASS  Data directory: The configured directory exists.\nPASS  Tool Registry: Initialized.\nPASS  Calculator: Available; execution probe passed.\nPASS  Tools Registered: 7\nPASS  Application Launcher: Registered; Windows system directory resolved. No applications launched.\nPASS  Registered Applications: 3\nPASS  Notepad: AVAILABLE; ENABLED; LOCAL_ACTION. Approved executable exists; application readiness not verified.\nPASS  Windows Calculator: AVAILABLE; ENABLED; LOCAL_ACTION. Approved executable exists; application readiness not verified.\nWARN  Spotify: UNAVAILABLE; ENABLED; LOCAL_ACTION. No audited Spotify launch target is configured; installation not inferred.\nPASS  SQLite: A temporary database passed schema and write checks. Chat or memory will create the AIKA database.\nWARN  Structured Memory: Temporary schema verified. The configured database has not been created yet.\nWARN  Ollama: Cannot connect to Ollama. Open Ollama or run `ollama serve`, then try again.\nWARN  Model: Could not verify qwen3.5:4b.\nPASS  System Information: Windows supported; snapshot/process tools registered READ_ONLY; contracts initialized.\nPASS  Measurement Dependency: psutil 7.2.2; measurement interfaces available. No metrics sampled or processes enumerated.\nWARN  Web Search: Web search is disabled. Enable AIKA_WEB_SEARCH_ENABLED explicitly to send queries externally.\nPASS  Web Search Configuration: Enabled=no; mode=auto; fallback=no; secondary=tavily; API key present=no; registered=web.search READ_ONLY; max_results=5.\nPASS  Search Provider Endpoint: https://api.tavily.com/search; diagnostics make no provider requests or use API credits.\nWARN  DDGS Search: Web search is disabled. Enable AIKA_WEB_SEARCH_ENABLED explicitly to send queries externally.\nWARN  Tavily Search: Web search is disabled. Enable AIKA_WEB_SEARCH_ENABLED explicitly to send queries to Tavily.\nPASS  Web Reading: Enabled=no; registered=web.read READ_ONLY; extraction=available; selected public HTTPS only; no source request made.\nPASS  Research Configuration: Budget=180s; timezone=local; one search, at most five read attempts and three successful sources; no diagnostic network requests.\nPASS  Agent Configuration: Budget=180s; 4 plan steps, 8 executor calls, 2 model generations; no diagnostic execution.\n      Automatic Memory: NOT IMPLEMENTED\n",
+    "note": "Intentionally unreachable Ollama endpoint; verifies diagnostics without generation or access to production storage."
+  },
+  "tests": {
+    "baseline_python312": {
+      "passed": 1698,
+      "seconds": 59.86
+    },
+    "final_python312": {
+      "passed": 1723,
+      "seconds": 64.17
+    },
+    "final_python313": {
+      "passed": 1723,
+      "seconds": 60.49
+    }
+  },
+  "dependency_checks": "pip check passed for both existing Python environments; no packages installed.",
+  "compile_checks": "compileall src scripts passed under both Python versions."
+}

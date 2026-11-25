@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-21",
+  "status": "startup_delay_resolved",
+  "generation_calls": 0,
+  "completed_model_outputs": 0,
+  "initial_probe": "connection_error_on_api_tags",
+  "later_probes": "api_tags_and_api_version_timeouts_including_direct_socket",
+  "service_started_for_evaluation": true,
+  "task_owned_service_restarts": 1,
+  "last_observed_startup_stage": "discovering available GPUs",
+  "root_cause_confirmed": false,
+  "default_model_and_budgets_preserved": true,
+  "final_probe": "responded",
+  "ollama_version": "0.40.16",
+  "model_digest": "d8b0f5e9760cd1682034f292d7ef72ec46f432149be0df7574bf2d6e92e38c04",
+  "protected_files_unchanged": 42,
+  "comparison_not_run_at_snapshot": true,
+  "scope": "Startup snapshot before generation; final call counts are in Q1A_METRICS.",
+  "task_owned_service_stopped_after_evaluation": true,
+  "task_owned_child_processes_stopped": 1
+}

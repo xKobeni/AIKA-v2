@@ -1,0 +1,61 @@
+{
+  "conditions": {
+    "BASELINE": {
+      "cases": 26,
+      "turns": 40,
+      "model_calls": 40,
+      "errors": 0,
+      "tool_calls": 0,
+      "guard_substitution_detected": false,
+      "latency_ms": {
+        "n": 40,
+        "median": 7727.9,
+        "minimum": 1278.8,
+        "maximum": 51084.1
+      },
+      "input_characters": {
+        "n": 40,
+        "median": 3419.0,
+        "minimum": 3327,
+        "maximum": 3944
+      },
+      "output_characters": {
+        "n": 40,
+        "median": 181.0,
+        "minimum": 4,
+        "maximum": 1009
+      },
+      "omission_notices": 2
+    },
+    "CANDIDATE": {
+      "cases": 26,
+      "turns": 40,
+      "model_calls": 40,
+      "errors": 0,
+      "tool_calls": 0,
+      "guard_substitution_detected": false,
+      "latency_ms": {
+        "n": 40,
+        "median": 5447.6,
+        "minimum": 1133.0,
+        "maximum": 40072.3
+      },
+      "input_characters": {
+        "n": 40,
+        "median": 3590.0,
+        "minimum": 3498,
+        "maximum": 4105
+      },
+      "output_characters": {
+        "n": 40,
+        "median": 109.0,
+        "minimum": 4,
+        "maximum": 873
+      },
+      "omission_notices": 2
+    }
+  },
+  "selection": "15 development cases, 10 existing held-out cases, 1 legacy generator regression; identical original wording and user-turn sequences.",
+  "limits": "One sequential worker, per-stage 600/900 s deadlines, unchanged 180 s request timeout and 1024-token cap. No seed or repetitions; no causal latency or reliability estimate.",
+  "conclusion": "Candidate rejected; active production persona unchanged."
+}

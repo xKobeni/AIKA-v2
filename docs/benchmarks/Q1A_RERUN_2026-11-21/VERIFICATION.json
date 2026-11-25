@@ -1,0 +1,12 @@
+{
+  "protected_files_unchanged": 42,
+  "active_persona_chars": 3320,
+  "model_digest_unchanged": true,
+  "live_model_replies": 80,
+  "matched_cases": 26,
+  "inference_errors": 0,
+  "candidate_deployed": false,
+  "backend_tests_repeated_this_rerun": false,
+  "user_owned_ollama_service_left_running": true,
+  "status": "FAILED_ACCEPTANCE"
+}

@@ -148,6 +148,26 @@ def _archive_terms(text: str) -> tuple[str, ...] | None:
     return terms
 
 
+def _fact_question(text: str) -> Intent | None:
+    """Strict single-property questions; comparisons and explanations do not match."""
+    match = _match(rf"(?:what is|what's) (?:its|(.+?)'s) (?:current )?({KEY_PATTERN})", text)
+    if match:
+        return Intent("saved_recall" if "current " in text.casefold() else "recall",
+                      _subject(match[1]) if match[1] else None, KEYS[match[2].casefold()])
+    match = _match(rf"(?:what is|what's) the (?:current )?({KEY_PATTERN}) (?:for|of) (.+)", text)
+    if match:
+        return Intent("saved_recall" if "current " in text.casefold() else "recall",
+                      _subject(match[2]), KEYS[match[1].casefold()])
+    match = _match(rf"what does (.+?) use for (?:its|the) ({KEY_PATTERN})", text)
+    if match:
+        return Intent("recall", _subject(match[1]), KEYS[match[2].casefold()])
+    match = _match(rf"(?:what|which) ({KEY_PATTERN}) (?:does|is) (.+?) (?:currently )?(?:use|using)(?: now)?", text)
+    if match:
+        return Intent("saved_recall" if re.search(r"\b(?:currently|now)\b",text,re.I) else "recall",
+                      _subject(match[2]), KEYS[match[1].casefold()])
+    return None
+
+
 def parse_intent(prompt: str) -> Intent | None:
     text = prompt.replace("’", "'").strip().rstrip(".?!").strip()
     explicit = _match(r"(?:please\s+)?(remember|save|forget|keep in mind|make a note)\b(?:\s+that\b)?\s*(.*)", text)
@@ -158,6 +178,22 @@ def parse_intent(prompt: str) -> Intent | None:
     replace = _match(r"(?:(?:i'm|i am) replacing|(?:i |i've |i have )replaced|(?:please )?replace)\s+(.+?)\s+with\s+(.+)", text)
     correction = _match(r"actually[, ]+(.+)", text)
     try:
+        # A same-message assertion plus question is context, never permission to update memory.
+        compound = _match(r"(.+?)[.;]\s*((?:what(?:'s| is)?|which|how|why|would|could|should|can|does|is)\b.+)", text)
+        if compound and not (explicit or change or replace):
+            question = _fact_question(compound[2])
+            if question:
+                assertion = re.sub(r"^(?:actually[, ]+|correction[:, ]+)","",compound[1],flags=re.I)
+                assertion = re.sub(r"\bnow uses\b","uses",assertion,flags=re.I)
+                assertion = re.sub(r"\b(uses|is) now\b",r"\1",assertion,flags=re.I)
+                try:
+                    claim = _statement(assertion,"correct")
+                except ValueError:
+                    return None
+                if (claim.subject and question.subject and claim.subject.casefold()==question.subject.casefold()
+                        and len(claim.facts)==1 and claim.facts[0][0]==question.key):
+                    return Intent("recall",question.subject,question.key,facts=claim.facts)
+            return None  # Do not reinterpret an unresolved contextual correction as a write.
         if re.fullmatch(r"[\w .'-]+\.\w+\s*=\s*.+", text):
             return Intent("unsupported_assignment")
         if _match(r"(?:tell me|show me|what is|what's) (?:its |the )?current(?: value| one)?|and the current one", text):
@@ -232,25 +268,13 @@ def parse_intent(prompt: str) -> Intent | None:
         match = _match(r"what (?:was|were) (.+?) using before", text)
         if match:
             return Intent("history", None if match[1].casefold() == "i" else _subject(match[1]))
-        match = _match(rf"(?:what is|what's) (?:its|(.+?)'s) (?:current )?({KEY_PATTERN})", text)
-        if match:
-            return Intent("saved_recall" if "current " in text.casefold() else "recall",
-                          _subject(match[1]) if match[1] else None, KEYS[match[2].casefold()])
-        match = _match(rf"(?:what is|what's) the (?:current )?({KEY_PATTERN}) for (.+)", text)
-        if match:
-            return Intent("saved_recall" if "current " in text.casefold() else "recall",
-                          _subject(match[2]), KEYS[match[1].casefold()])
-        match = _match(rf"what does (.+?) use for (?:its|the) ({KEY_PATTERN})", text)
-        if match:
-            return Intent("recall", _subject(match[1]), KEYS[match[2].casefold()])
+        question = _fact_question(text)
+        if question:
+            return question
         match = _match(r"what did (.+?) use before(?:\s+(.+))?", text)
         if match:
             return Intent("history", None if match[1].casefold() == "i" else _subject(match[1]),
                           value=_value(match[2]) if match[2] else None)
-        match = _match(rf"(?:what|which) ({KEY_PATTERN}) (?:does|is) (.+?) (?:currently )?(?:use|using)", text)
-        if match:
-            return Intent("saved_recall" if "currently" in text.casefold() else "recall",
-                          _subject(match[2]), KEYS[match[1].casefold()])
         match = _match(rf"(?:what|which) ({KEY_PATTERN}) (?:did i save|am i using) for (.+)", text)
         if match:
             action = "saved_recall" if "did i save" in text.casefold() else "recall"

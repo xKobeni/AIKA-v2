@@ -19,6 +19,7 @@ from src.capabilities.registry import ToolLookupError
 from src.capabilities.executor import ToolExecutor
 from src.capabilities.intent import calculator_request, format_result, guard_action_claim, unsupported_action
 from src.capabilities.system_intent import format_system_result, guard_system_claim, system_request, unsupported_measurement
+from src.capabilities.tool_followup import followup_request, followup_answer, remember_result, analysis_request, analyse_result
 from src.capabilities.web_intent import format_web_result, guard_web_claim, web_request
 from src.capabilities.web_search import DDGSSearchProvider, SearchRouter, TavilySearchProvider
 from src.capabilities.web_reader import WebReader
@@ -32,8 +33,7 @@ from src.capabilities.research import (research_question, temporal_context, prep
                                        safe_failure, log_summary, MAX_ATTEMPTS, MAX_SOURCES)
 from src.intelligence.ollama_client import ChatMessage
 from src.intelligence.ollama_client import OllamaError
-from src.intelligence.prompt_budget import bounded_context
-from src.intelligence.persona import HISTORY_OMITTED
+from src.intelligence.context import resolve_context
 from src.config import DEFAULT_CONTEXT_CHARS, MAX_CONTEXT_TURNS, MIN_CONTEXT_CHARS, MAX_CONTEXT_CHARS
 from src.intelligence.planning import (agent_task, build_plan, call_identity, execution_outcome, execution_counts,
                                       record_summary, PlanError, MAX_EXECUTIONS, MAX_MODEL_CALLS, MAX_STEP_TEXT)
@@ -102,13 +102,21 @@ class ConversationSession:
     def history(self, *, for_model: bool = False) -> list[ChatMessage]:
         messages: list[ChatMessage] = []
         for user, assistant in self._turns:
-            if for_model and (system_request(user) is not None or web_request(user) is not None
-                              or reading_request(user) is not None or answer_question(user) is not None
-                              or research_question(user) is not None or agent_task(user) is not None):
+            if for_model and not self._model_history_allowed(user):
                 continue
             messages.append({"role": "user", "content": self.web_search.redact(user)})
             messages.append({"role": "assistant", "content": self.web_search.redact(assistant)})
         return messages
+
+    @staticmethod
+    def _model_history_allowed(user):
+        return not (system_request(user) is not None or web_request(user) is not None
+                    or reading_request(user) is not None or answer_question(user) is not None
+                    or followup_request(user) is not None
+                    or analysis_request(user) is not None
+                    or research_question(user) is not None or agent_task(user) is not None
+                    or user.casefold().startswith('/desktop-context') or desktop_request(user) is not None
+                    or desktop_question(user) or desktop_consent_request(user))
 
     @property
     def desktop_context_enabled(self) -> bool:
@@ -129,6 +137,8 @@ class ConversationSession:
     def close(self) -> None:
         self.tools.registry.set_enabled("desktop.context", False)
         self._closed = True
+        self.last_context = None
+        self._tool_results.clear()
 
     def new(self, *, preserve_desktop_consent: bool = False) -> None:
         if self._closed:
@@ -143,6 +153,8 @@ class ConversationSession:
         self.web_reader.clear()
         self.last_research = None
         self.last_agent = None
+        self.last_context = None
+        self._tool_results = {}
 
     def resume(self, session_id: str) -> None:
         if self._closed:
@@ -157,6 +169,8 @@ class ConversationSession:
         self.web_reader.clear()
         self.last_research = None
         self.last_agent = None
+        self.last_context = None
+        self._tool_results.clear()
 
     def reply(self, prompt: str, **callbacks) -> str | None:
         """Reject overlapping/reentrant requests without changing the active exchange."""
@@ -177,6 +191,7 @@ class ConversationSession:
         agent_cancelled: Callable[[], bool] | None = None,
         agent_progress: Callable[[dict], None] | None = None,
     ) -> str | None:
+        self.last_context = None
         if len(prompt) > 16000 or any(not char.isprintable() and char not in "\r\n\t" for char in prompt):
             return "Request exceeds the input limit or contains unsupported control characters. No action was executed."
         prompt = self.web_search.redact(prompt.strip())
@@ -193,6 +208,7 @@ class ConversationSession:
             return CONSENT_HELP
         desktop = desktop_request(prompt)
         if desktop is not None:
+            self._tool_results.clear()
             self._pending_memory = None
             self._history_anchor = None
             observed = self.tools.execute(desktop)
@@ -200,7 +216,13 @@ class ConversationSession:
                 tool_trace(observed)
             # Desktop observations never enter the archive, structured memory or model history.
             return format_desktop_result(observed)
-        resolution = capability_answer(prompt, self) if not prompt.startswith("/") or prompt.casefold() == "/capabilities" else None
+        historical = followup_request(prompt)
+        analytical = analysis_request(prompt)
+        resolution = (analyse_result(self._tool_results,analytical,self._sequence,self._context_turns,self.tools.registry,
+                                     self._system_instruction,prompt,self._context_chars,self._generate,self.web_search.redact,
+                                     (lambda messages:trace(self.session_id,messages,0,True)) if trace else None) if analytical
+                      else followup_answer(self._tool_results,historical,self._sequence,self._context_turns,self.tools.registry) if historical
+                      else capability_answer(prompt, self) if not prompt.startswith("/") or prompt.casefold() == "/capabilities" else None)
         if resolution is not None and desktop_question(prompt):
             return resolution  # Live consent status is control information, not archived conversation context.
         memory_intent = parse_intent(prompt) if not prompt.startswith("/") else None
@@ -256,12 +278,20 @@ class ConversationSession:
         elif memory_intent is not None and self._memory is None:
             answer = "Structured memory is unavailable in this session; no memory operation was performed."
         elif agent is not None:
+            self._tool_results.clear()
             answer = self._agent_reply(agent, tool_trace, research_progress, agent_cancelled, agent_progress)
         elif request is not None:
             if request.tool == "web.search":
                 self.web_reader.clear()
             authorization = LocalActionAuthorization(request.tool, request.arguments["app_id"]) if request.tool == "app.open" else None
-            tool_result = self.tools.execute(request, authorization=authorization)
+            try:
+                tool_result = self.tools.execute(request, authorization=authorization)
+            except BaseException:
+                self._tool_results.clear()
+                raise
+            remember_result(self._tool_results,request,tool_result,self._sequence)
+            if not self._context_turns:
+                self._tool_results.clear()
             if tool_trace:
                 tool_trace(tool_result)
             if request.tool.startswith("system."):
@@ -273,6 +303,7 @@ class ConversationSession:
             else:
                 answer = format_application_result(tool_result) if request.tool == "app.open" else format_result(tool_result)
         elif research is not None:
+            self._tool_results.clear()
             answer = self._research_reply(research, tool_trace, research_progress)
         elif question is not None:
             answer = grounded_answer(question, self.web_reader.evidence, self._grounded_generate, self.web_reader._key, debug=self._web_debug)
@@ -286,6 +317,7 @@ class ConversationSession:
         try:
             self._sequence = self._store.save_exchange(self.session_id, self._sequence, prompt, answer)
         except StorageError:
+            self._tool_results.clear()
             if agent is not None and self.last_agent:
                 self.web_reader.clear()
                 self.last_agent["outcome"] = "storage_failed"
@@ -412,15 +444,20 @@ class ConversationSession:
                 if call["category"] in {"internal", "contract", "input_internal", "result_size"}:
                     limit_failure = "tool_internal_failure" if call["category"] != "result_size" else "result_size"
             except KeyboardInterrupt:
+                self._tool_results.clear()
                 call["state"], call["category"] = "inconclusive" if invoked else "cancelled", "interrupted"
                 raise
             except Exception:
+                self._tool_results.clear()
                 call["state"], call["category"] = "inconclusive", "internal"
                 raise
             finally:
                 finish(call)
                 if current["tool"] == "research":
                     emit("tool", call)
+            remember_result(self._tool_results,request,result,self._sequence)
+            if not self._context_turns:
+                self._tool_results.clear()
             if tool_trace:
                 try:
                     tool_trace(result)
@@ -710,18 +747,24 @@ class ConversationSession:
             summary["elapsed_ms"] = round((monotonic() - started) * 1000, 1)
 
     def _ordinary_reply(self, prompt: str, trace) -> str:
+        self.last_context = None
         system = self.web_search.redact(self._system_instruction)
         history = self.history(for_model=True)
         try:
-            messages, trimmed = bounded_context(system, history, prompt, self._context_chars)
-            omitted = trimmed or self._sequence // 2 > (len(messages) - 2) // 2
-            if omitted:
-                messages, _ = bounded_context(system + HISTORY_OMITTED, history, prompt, self._context_chars)
+            selection = resolve_context(system,history,prompt,self._context_chars,
+                                        turns=self._context_turns,sequence=self._sequence,
+                                        load=lambda:self._store.context_statements(self.session_id,self._sequence),
+                                        allowed=self._model_history_allowed,redact=self.web_search.redact,memory=self._memory)
+            messages = selection.messages
+            omitted = selection.metadata['omitted']
+            self.last_context = selection.metadata
         except ValueError as exc:
             raise OllamaError(str(exc)) from None
         if trace is not None:
             included = (len(messages) - 2) // 2
             trace(self.session_id, messages, included, omitted)
+        if selection.clarification is not None:
+            return selection.clarification
         answer = self._generate(messages)
         if self._memory is not None:
             answer = ordinary_statement_reply(answer)

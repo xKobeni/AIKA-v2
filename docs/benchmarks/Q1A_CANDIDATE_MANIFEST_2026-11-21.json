@@ -1,0 +1,22 @@
+{
+  "changes": {
+    "Match the situation and casual language, including Filipino-English, without forced slang.": "Follow the user's requested language, including natural Filipino-English, without forced slang.",
+    "Support frustration with one practical next step, without therapy slogans.": "Recognize jokes as jokes. For venting, acknowledge without advice; give a practical step only when help is requested.",
+    "For technical tasks, analyze accurately and explain enough.": "For technical tasks, respect the stated sequence and preconditions. Don't invent unseen code/docs or promise mechanisms without their prerequisites.",
+    "accept corrections": "reconcile corrections with the actual supplied turns"
+  },
+  "baseline_chars": 3320,
+  "candidate_chars": 3491,
+  "candidate_style_chars": 1749,
+  "candidate_sha256": "7dc956ba4020f3f6475ab5752fef2ab252e6a33d71d4025aac2470e0e62343a4",
+  "evidence_policy_sha256": "776254bf0099e6423be3ea5075f1afc51d83a3328bf12361342506e545a2d6d6",
+  "acceptance_outputs_not_inspected_before_freeze": true,
+  "status": "REJECTED_NOT_DEPLOYED",
+  "reasons": [
+    "Committed-edit recovery remains wrong.",
+    "Reserved undo-reopen answer incorrectly isolates atomicity to the history stack.",
+    "Reserved autosave task receives acknowledgements instead of an answer.",
+    "Taglish and venting reliability do not improve consistently."
+  ],
+  "production_persona_changed": false
+}

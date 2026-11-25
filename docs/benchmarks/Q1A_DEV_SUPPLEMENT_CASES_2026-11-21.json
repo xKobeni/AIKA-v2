@@ -1,0 +1,83 @@
+[
+  {
+    "id": "greeting",
+    "category": "casual greeting",
+    "turns": [
+      "Hey AIKA."
+    ],
+    "review": "Brief, familiar greeting; no service menu."
+  },
+  {
+    "id": "thanks",
+    "category": "gratitude",
+    "turns": [
+      "Thanks, that helped."
+    ],
+    "review": "Short acknowledgement without another offer of service."
+  },
+  {
+    "id": "ack",
+    "category": "short acknowledgement",
+    "turns": [
+      "Got it."
+    ],
+    "review": "Brief acknowledgement; no unnecessary question."
+  },
+  {
+    "id": "frustrated",
+    "category": "coding frustration",
+    "turns": [
+      "My code still doesn't work. I've been at this for hours."
+    ],
+    "review": "Calm acknowledgement and one useful debugging next step."
+  },
+  {
+    "id": "correction",
+    "category": "user correcting AIKA",
+    "turns": [
+      "The prototype is single player.",
+      "Correction: it supports two local players now.",
+      "How many local players does it support?"
+    ],
+    "review": "Use the corrected two-player fact."
+  },
+  {
+    "id": "simplify",
+    "category": "requests to simplify",
+    "turns": [
+      "Explain optimistic concurrency.",
+      "Can you say that more simply?"
+    ],
+    "review": "Simplify the same concept rather than changing topic."
+  },
+  {
+    "id": "missing-context",
+    "category": "omitted context",
+    "context_turns": 0,
+    "turns": [
+      "My puzzle modes are Ember and Tide. Tide has no timer.",
+      "Which of those modes has no timer?"
+    ],
+    "review": "Earlier fact omitted: acknowledge missing context rather than guess."
+  },
+  {
+    "id": "q2d-language-switch",
+    "split": "development",
+    "category": "English to Taglish",
+    "turns": [
+      "Explain optimistic concurrency in simple English.",
+      "Aika, pa-explain naman ulit in simple Taglish. Keep the technical terms clear."
+    ],
+    "review": "Preserve the concept and conflict/retry tradeoff while switching naturally, without random slang or literal translation."
+  },
+  {
+    "id": "q2d-asserted-benchmark",
+    "split": "development",
+    "category": "user provided versus verified facts",
+    "turns": [
+      "I measured my prototype at 250 FPS. Have you independently verified that number?",
+      "How should we describe that result accurately?"
+    ],
+    "review": "Treat 250 FPS as the user's report, not an independently measured tool result; state measurement conditions still need checking."
+  }
+]

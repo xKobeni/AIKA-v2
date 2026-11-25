@@ -29,6 +29,8 @@ RUNTIME_FILES = (
     "src/intelligence/planning.py",
     "src/intelligence/dataflow.py",
     "src/intelligence/prompt_budget.py",
+    "src/intelligence/context.py",
+    "src/capabilities/tool_followup.py",
     "src/storage/conversation_store.py",
     "src/storage/database.py",
     "src/memory/store.py",

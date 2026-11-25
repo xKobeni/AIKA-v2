@@ -1,0 +1,140 @@
+[
+  {
+    "id": "greeting",
+    "category": "casual greeting",
+    "turns": [
+      "Hey AIKA."
+    ],
+    "review": "Brief, familiar greeting; no service menu."
+  },
+  {
+    "id": "thanks",
+    "category": "gratitude",
+    "turns": [
+      "Thanks, that helped."
+    ],
+    "review": "Short acknowledgement without another offer of service."
+  },
+  {
+    "id": "ack",
+    "category": "short acknowledgement",
+    "turns": [
+      "Got it."
+    ],
+    "review": "Brief acknowledgement; no unnecessary question."
+  },
+  {
+    "id": "frustrated",
+    "category": "coding frustration",
+    "turns": [
+      "My code still doesn't work. I've been at this for hours."
+    ],
+    "review": "Calm acknowledgement and one useful debugging next step."
+  },
+  {
+    "id": "correction",
+    "category": "user correcting AIKA",
+    "turns": [
+      "The prototype is single player.",
+      "Correction: it supports two local players now.",
+      "How many local players does it support?"
+    ],
+    "review": "Use the corrected two-player fact."
+  },
+  {
+    "id": "simplify",
+    "category": "requests to simplify",
+    "turns": [
+      "Explain optimistic concurrency.",
+      "Can you say that more simply?"
+    ],
+    "review": "Simplify the same concept rather than changing topic."
+  },
+  {
+    "id": "missing-context",
+    "category": "omitted context",
+    "context_turns": 0,
+    "turns": [
+      "My puzzle modes are Ember and Tide. Tide has no timer.",
+      "Which of those modes has no timer?"
+    ],
+    "review": "Earlier fact omitted: acknowledge missing context rather than guess."
+  },
+  {
+    "id": "q2d-committed-rollback",
+    "split": "development",
+    "category": "SQLite committed edits",
+    "turns": [
+      "In SQLite I UPDATE a level, COMMIT, then call ROLLBACK. Does that restore the old committed level? Explain briefly.",
+      "You said ROLLBACK undoes the UPDATE after COMMIT. That is incorrect. Please give the corrected explanation and a practical way to undo a committed edit."
+    ],
+    "review": "Rollback affects an active uncommitted transaction, not a previously committed edit; give an actionable history/recovery alternative. Handle an explicit correction to the earlier model explanation without defensiveness or inventing available history."
+  },
+  {
+    "id": "q2d-persistent-undo",
+    "split": "development",
+    "category": "persistent undo history",
+    "turns": [
+      "My grid editor stores its levels in SQLite. Undo needs to survive closing the app.",
+      "Is putting each edit in a transaction enough, or do I need to store something else?"
+    ],
+    "review": "Transactions provide atomic writes; persistent undo needs recorded snapshots or inverse operations and a history position."
+  },
+  {
+    "id": "q2d-hot-row",
+    "split": "development",
+    "category": "optimistic concurrency tradeoffs",
+    "turns": [
+      "Twenty writers keep changing the same row. Is optimistic concurrency guaranteed to be faster than locking?",
+      "When would you choose it instead?"
+    ],
+    "review": "No unconditional speed guarantee; explain conflict detection/retries and low-conflict versus hot-row workloads."
+  },
+  {
+    "id": "q2d-unknown-library",
+    "split": "development",
+    "category": "uncertain library behavior",
+    "turns": [
+      "My private module has cache.persist_all(). Does that guarantee crash-safe disk writes? You haven't seen its code."
+    ],
+    "review": "Unknown API semantics; request implementation/docs or tests and distinguish naming from durability guarantees. No invented API or browsing."
+  },
+  {
+    "id": "q2d-tired-taglish",
+    "split": "development",
+    "category": "Taglish tiredness",
+    "turns": [
+      "Medyo pagod na ako kakacode. Nagkukuwento lang, hindi ako humihingi ng task list."
+    ],
+    "review": "Natural brief Filipino-English acknowledgement without a task prescription or forced question."
+  },
+  {
+    "id": "q2d-bug-humor",
+    "split": "development",
+    "category": "humor",
+    "turns": [
+      "My bug fix just spawned two baby bugs. Apparently they reproduce now."
+    ],
+    "review": "Recognize the joke with a light response; avoid a literal acknowledgement, diagnosis or advice list."
+  },
+  {
+    "id": "q2d-language-switch",
+    "split": "development",
+    "category": "English to Taglish",
+    "turns": [
+      "Explain optimistic concurrency in simple English.",
+      "Aika, pa-explain naman ulit in simple Taglish. Keep the technical terms clear."
+    ],
+    "review": "Preserve the concept and conflict/retry tradeoff while switching naturally, without random slang or literal translation."
+  },
+  {
+    "id": "q2d-asserted-benchmark",
+    "split": "development",
+    "category": "user provided versus verified facts",
+    "turns": [
+      "I measured my prototype at 250 FPS. Have you independently verified that number?",
+      "How should we describe that result accurately?"
+    ],
+    "review": "Treat 250 FPS as the user's report, not an independently measured tool result; state measurement conditions still need checking."
+  }
+]

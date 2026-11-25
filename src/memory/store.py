@@ -59,6 +59,26 @@ def _scope(entity_type: str, subject: str, key: str) -> tuple[str, str, str]:
 class MemoryStore(Database):
     """Structured facts managed explicitly, independently of chat and Ollama."""
 
+    def context_facts(self, subjects: tuple[str, ...], keys: tuple[str, ...]) -> tuple[int, list[Fact]]:
+        """Bounded exact project/property lookup of active facts only; never read revisions."""
+        if not subjects or not keys or len(subjects)>256 or len(keys)>272:
+            return 0, []
+        with self._transaction() as db:
+            db.execute("PRAGMA query_only = ON")
+            names = db.execute(
+                "SELECT DISTINCT normalized_subject FROM memory_facts WHERE entity_type = 'project' "
+                f"AND normalized_subject IN ({','.join('?' for _ in subjects)}) LIMIT 2", subjects,
+            ).fetchall()
+            if len(names)!=1:
+                return len(names), []
+            rows = db.execute(
+                "SELECT id, entity_type, subject, key, substr(value,1,601), substr(source,1,129), "
+                "created_at, updated_at, revision FROM memory_facts WHERE entity_type = 'project' "
+                f"AND normalized_subject = ? AND normalized_key IN ({','.join('?' for _ in keys)}) "
+                "ORDER BY normalized_key LIMIT 3", (names[0][0], *keys),
+            ).fetchall()
+            return 1, [Fact(*row) for row in rows]
+
     @staticmethod
     def _find(db: sqlite3.Connection, scope: tuple[str, str, str]) -> Fact | None:
         row = db.execute(f"SELECT {FACT_COLUMNS} FROM memory_facts WHERE {FACT_SCOPE}", scope).fetchone()

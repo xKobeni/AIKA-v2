@@ -1,0 +1,372 @@
+{
+  "reviewer": "Implementation agent; provisional qualitative assessment, not independent/native-speaker acceptance.",
+  "rubric": "Partial is not a full pass. Technical failures cannot be offset by style or aggregate gains.",
+  "candidate_status": "REJECTED_NOT_DEPLOYED",
+  "overall_status": "FAILED_ACCEPTANCE",
+  "cases": [
+    {
+      "id": "greeting",
+      "split": "DEV",
+      "baseline": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "candidate": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "assessment": "Both: Hey. Brief and direct.",
+      "independent_human_review": null
+    },
+    {
+      "id": "thanks",
+      "split": "DEV",
+      "baseline": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "candidate": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "assessment": "Both: You're welcome. No service offer.",
+      "independent_human_review": null
+    },
+    {
+      "id": "ack",
+      "split": "DEV",
+      "baseline": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "candidate": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "assessment": "Both: Alright. No unnecessary follow-up.",
+      "independent_human_review": null
+    },
+    {
+      "id": "frustrated",
+      "split": "DEV",
+      "baseline": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "candidate": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "assessment": "Both ask a focused debugging question; candidate repeats more of the frustration.",
+      "independent_human_review": null
+    },
+    {
+      "id": "correction",
+      "split": "DEV",
+      "baseline": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "candidate": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "assessment": "Both retain the corrected count of two local players.",
+      "independent_human_review": null
+    },
+    {
+      "id": "detail",
+      "split": "ACCEPTANCE",
+      "baseline": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "candidate": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "assessment": "Both explain lazy generator behavior and give coherent Fibonacci examples; the previous candidate 10-versus-20 mismatch did not recur. New snippets were reviewed but not executed in this rerun.",
+      "independent_human_review": null
+    },
+    {
+      "id": "simplify",
+      "split": "DEV",
+      "baseline": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "candidate": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "assessment": "Both simplify the same topic; internal-lock and retry details remain implementation-dependent.",
+      "independent_human_review": null
+    },
+    {
+      "id": "missing-context",
+      "split": "DEV",
+      "baseline": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "candidate": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "assessment": "Both acknowledge unavailable context and ask which modes, without guessing Tide. This baseline failure from the first run did not recur.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2d-committed-rollback",
+      "split": "DEV",
+      "baseline": {
+        "verdict": "fail",
+        "passed": false
+      },
+      "candidate": {
+        "verdict": "fail",
+        "passed": false
+      },
+      "assessment": "Baseline falsely says rollback undoes the committed UPDATE. Candidate first answers correctly, then its correction falsely offers a savepoint created before COMMIT. Both exchanges fail.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2d-persistent-undo",
+      "split": "DEV",
+      "baseline": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "candidate": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "assessment": "Both distinguish stored undo states from transactions. Roll back and current-session durability wording are imprecise, but the earlier forward-SQL replay proposal did not recur.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2d-hot-row",
+      "split": "DEV",
+      "baseline": {
+        "verdict": "partial",
+        "passed": false
+      },
+      "candidate": {
+        "verdict": "partial",
+        "passed": false
+      },
+      "assessment": "Both reject guaranteed optimistic superiority but assert locking wins under high contention without sufficient implementation/workload qualification.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2d-unknown-library",
+      "split": "DEV",
+      "baseline": {
+        "verdict": "partial",
+        "passed": false
+      },
+      "candidate": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "assessment": "Both admit missing implementation. Baseline speculates about temporary-file/external-driver internals; candidate stays at general mechanism/evidence level.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2d-tired-taglish",
+      "split": "DEV",
+      "baseline": {
+        "verdict": "fail",
+        "passed": false
+      },
+      "candidate": {
+        "verdict": "partial",
+        "passed": false
+      },
+      "assessment": "Baseline gives an unrelated reminder statement. Candidate implies resting mid-work rather than responding clearly to coding fatigue; neither is a clean natural acknowledgement.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2d-bug-humor",
+      "split": "DEV",
+      "baseline": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "candidate": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "assessment": "Both now recognize the joke without a task question. Earlier relative candidate gain is not reproduced.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2d-language-switch",
+      "split": "DEV",
+      "baseline": {
+        "verdict": "fail",
+        "passed": false
+      },
+      "candidate": {
+        "verdict": "fail",
+        "passed": false
+      },
+      "assessment": "Both answer the explicit Taglish request in English.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2d-asserted-benchmark",
+      "split": "DEV",
+      "baseline": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "candidate": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "assessment": "Both deny independent verification and qualify how to describe the measurement. Baseline adds unsupported praise; candidate asks for average/peak and measurement scope.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2h-transaction-boundary",
+      "split": "ACCEPTANCE",
+      "baseline": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "candidate": {
+        "verdict": "fail",
+        "passed": false
+      },
+      "assessment": "Baseline separates committed and uncommitted data. Candidate explicitly claims ROLLBACK today undoes yesterday's committed transaction: decisive factual failure.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2h-editor-reopen",
+      "split": "ACCEPTANCE",
+      "baseline": {
+        "verdict": "partial",
+        "passed": false
+      },
+      "candidate": {
+        "verdict": "fail",
+        "passed": false
+      },
+      "assessment": "Baseline discusses history capture and locking without establishing persistence atomicity. Candidate equates atomicity with per-stroke before-snapshots, rather than canvas/history/cursor persistence consistency.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2h-concurrency-assumption",
+      "split": "ACCEPTANCE",
+      "baseline": {
+        "verdict": "fail",
+        "passed": false
+      },
+      "candidate": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "assessment": "Baseline incorrectly says a newer proposed version is sufficient for success. Candidate describes checking the same expected version and rejecting a conflicting update.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2h-unseen-api",
+      "split": "ACCEPTANCE",
+      "baseline": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "candidate": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "assessment": "Both admit unavailable internal implementation; neither invents supplied documentation.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2h-autosave-spec",
+      "split": "ACCEPTANCE",
+      "baseline": {
+        "verdict": "partial",
+        "passed": false
+      },
+      "candidate": {
+        "verdict": "fail",
+        "passed": false
+      },
+      "assessment": "Baseline asks about framework, then echoes JSON and asks whether help is needed. Candidate only acknowledges both turns; original task remains unanswered.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2h-rubber-duck",
+      "split": "ACCEPTANCE",
+      "baseline": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "candidate": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "assessment": "Both recognize humor briefly; candidate is generic and flatter.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2h-done-tonight",
+      "split": "ACCEPTANCE",
+      "baseline": {
+        "verdict": "partial",
+        "passed": false
+      },
+      "candidate": {
+        "verdict": "partial",
+        "passed": false
+      },
+      "assessment": "Both say Take a break despite venting-only context. Safe but directive rather than simply listening.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2h-taglish-correction",
+      "split": "ACCEPTANCE",
+      "baseline": {
+        "verdict": "partial",
+        "passed": false
+      },
+      "candidate": {
+        "verdict": "partial",
+        "passed": false
+      },
+      "assessment": "Both preserve blue/purple but use broken-English Blue the menu, purple the loading screen on the correction turn. No consistent language-quality gain.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2h-laptop-taglish",
+      "split": "ACCEPTANCE",
+      "baseline": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "candidate": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "assessment": "Both offer possible causes and manual Task Manager checking without invented measurements; wording is somewhat awkward. Prior candidate malformed cache term did not recur.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2h-context-unavailable",
+      "split": "ACCEPTANCE",
+      "baseline": {
+        "verdict": "partial",
+        "passed": false
+      },
+      "candidate": {
+        "verdict": "fail",
+        "passed": false
+      },
+      "assessment": "Baseline admits not seeing details but asks broad file-format questions. Candidate explicitly says previous messages supplied no details despite the trusted omission notice; SVG was supplied earlier but excluded.",
+      "independent_human_review": null
+    }
+  ]
+}

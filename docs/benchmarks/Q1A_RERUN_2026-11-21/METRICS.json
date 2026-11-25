@@ -1,0 +1,54 @@
+{
+  "BASELINE": {
+    "cases": 26,
+    "turns": 40,
+    "model_calls": 40,
+    "errors": 0,
+    "tool_calls": 0,
+    "latency_ms": {
+      "n": 40,
+      "median": 8762.4,
+      "minimum": 1302.2,
+      "maximum": 72055.2
+    },
+    "input_characters": {
+      "n": 40,
+      "median": 3419.0,
+      "minimum": 3327,
+      "maximum": 3861
+    },
+    "output_characters": {
+      "n": 40,
+      "median": 171.0,
+      "minimum": 4,
+      "maximum": 1117
+    },
+    "omission_notices": 2
+  },
+  "CANDIDATE": {
+    "cases": 26,
+    "turns": 40,
+    "model_calls": 40,
+    "errors": 0,
+    "tool_calls": 0,
+    "latency_ms": {
+      "n": 40,
+      "median": 6088.35,
+      "minimum": 1492.0,
+      "maximum": 52683.7
+    },
+    "input_characters": {
+      "n": 40,
+      "median": 3590.0,
+      "minimum": 3498,
+      "maximum": 4080
+    },
+    "output_characters": {
+      "n": 40,
+      "median": 121.5,
+      "minimum": 4,
+      "maximum": 1076
+    },
+    "omission_notices": 2
+  }
+}

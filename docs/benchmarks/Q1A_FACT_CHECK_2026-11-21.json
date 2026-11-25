@@ -1,0 +1,20 @@
+{
+  "source": "Python standard-library sqlite3, independent synthetic in-memory check",
+  "sqlite_version": "3.49.1",
+  "committed_value_after_rollback": 2,
+  "rollback_to_precommit_savepoint_error": "no such savepoint: edit",
+  "production_database_access": false,
+  "generator_body_timing": "Calling generator did not run body; first next() did.",
+  "reviewed_model_examples": [
+    {
+      "condition": "BASELINE",
+      "output": "5 4 3 2 1 ",
+      "reviewed_code_no_imports_or_file_io": true
+    },
+    {
+      "condition": "CANDIDATE",
+      "output": "0\n1\n1\n2\n3\n5\n8\n13\n",
+      "reviewed_code_no_imports_or_file_io": true
+    }
+  ]
+}

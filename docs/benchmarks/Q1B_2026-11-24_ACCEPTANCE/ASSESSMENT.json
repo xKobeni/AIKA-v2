@@ -1,0 +1,175 @@
+{
+  "case_reviews": {
+    "single-project": {
+      "baseline": {
+        "trials": 3,
+        "context_answer_pass": 0,
+        "overall_response_pass": 0,
+        "evidence_selection_pass": 0
+      },
+      "q1b": {
+        "trials": 3,
+        "context_answer_pass": 3,
+        "overall_response_pass": 1,
+        "evidence_selection_pass": 3
+      }
+    },
+    "topic-return": {
+      "baseline": {
+        "trials": 3,
+        "context_answer_pass": 0,
+        "overall_response_pass": 0,
+        "evidence_selection_pass": 0
+      },
+      "q1b": {
+        "trials": 3,
+        "context_answer_pass": 3,
+        "overall_response_pass": 3,
+        "evidence_selection_pass": 3
+      }
+    },
+    "correction": {
+      "baseline": {
+        "trials": 3,
+        "context_answer_pass": 0,
+        "overall_response_pass": 0,
+        "evidence_selection_pass": 0
+      },
+      "q1b": {
+        "trials": 3,
+        "context_answer_pass": 3,
+        "overall_response_pass": 3,
+        "evidence_selection_pass": 3
+      }
+    },
+    "earlier-export": {
+      "baseline": {
+        "trials": 3,
+        "context_answer_pass": 0,
+        "overall_response_pass": 0,
+        "evidence_selection_pass": 0
+      },
+      "q1b": {
+        "trials": 3,
+        "context_answer_pass": 3,
+        "overall_response_pass": 3,
+        "evidence_selection_pass": 3
+      }
+    },
+    "current-assertion": {
+      "baseline": {
+        "trials": 3,
+        "context_answer_pass": 0,
+        "overall_response_pass": 0,
+        "evidence_selection_pass": 3
+      },
+      "q1b": {
+        "trials": 3,
+        "context_answer_pass": 0,
+        "overall_response_pass": 0,
+        "evidence_selection_pass": 3
+      }
+    },
+    "ambiguous": {
+      "baseline": {
+        "trials": 3,
+        "context_answer_pass": 0,
+        "overall_response_pass": 0,
+        "evidence_selection_pass": 0
+      },
+      "q1b": {
+        "trials": 3,
+        "context_answer_pass": 3,
+        "overall_response_pass": 3,
+        "evidence_selection_pass": 3
+      }
+    },
+    "history-disabled": {
+      "baseline": {
+        "trials": 1,
+        "context_answer_pass": 1,
+        "overall_response_pass": 1,
+        "evidence_selection_pass": 0
+      },
+      "q1b": {
+        "trials": 1,
+        "context_answer_pass": 1,
+        "overall_response_pass": 1,
+        "evidence_selection_pass": 1
+      }
+    },
+    "missing": {
+      "baseline": {
+        "trials": 1,
+        "context_answer_pass": 1,
+        "overall_response_pass": 1,
+        "evidence_selection_pass": 0
+      },
+      "q1b": {
+        "trials": 1,
+        "context_answer_pass": 1,
+        "overall_response_pass": 1,
+        "evidence_selection_pass": 1
+      }
+    }
+  },
+  "metrics": {
+    "baseline": {
+      "trials": 20,
+      "model_calls": 20,
+      "generated_wall_ms": {
+        "median": 5458.68,
+        "min": 3630.806,
+        "max": 12869.418
+      },
+      "all_wall_ms": {
+        "median": 5458.68,
+        "min": 3630.806,
+        "max": 12869.418
+      },
+      "input_characters_generated": {
+        "median": 3532.0,
+        "min": 3460,
+        "max": 3576
+      },
+      "output_characters_generated": {
+        "median": 104.0,
+        "min": 58,
+        "max": 234
+      },
+      "clarification_wall_ms": []
+    },
+    "q1b": {
+      "trials": 20,
+      "model_calls": 15,
+      "generated_wall_ms": {
+        "median": 2023.138,
+        "min": 1032.819,
+        "max": 13604.012
+      },
+      "all_wall_ms": {
+        "median": 1669.966,
+        "min": 5.783,
+        "max": 13604.012
+      },
+      "input_characters_generated": {
+        "median": 3870,
+        "min": 3576,
+        "max": 3943
+      },
+      "output_characters_generated": {
+        "median": 19,
+        "min": 5,
+        "max": 307
+      },
+      "clarification_wall_ms": [
+        7.222,
+        5.92,
+        9.406,
+        5.783,
+        10.197
+      ]
+    }
+  },
+  "review_note": "Movement scope is scored separately from full response quality. Two Q1B movement replies are conservatively not passed due to unverified technical suggestions. Current-PDF failure remains."
+}

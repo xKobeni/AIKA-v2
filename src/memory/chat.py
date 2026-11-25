@@ -294,6 +294,15 @@ def respond(
 
     assert key is not None
     fact = store.get_fact(*scope, key, connection=db)
+    if action == "recall" and intent.facts:
+        value = intent.facts[0][1]
+        answer = f"You just said {subject} uses {value} for its {key}. "
+        answer += (f"Saved memory still has {fact.value}; it hasn't been changed." if fact and fact.value.casefold()!=value.casefold()
+                   else "That matches saved memory." if fact else f"I don't have a saved {key} for {subject}.")
+        current = Retrieval("current_session",value,subject=subject,key=key,source=source,session_id=session_id,role="user")
+        return MemoryReply(answer,subject,(key,),retrieved=True,
+                           evidence=(current, fact_evidence(fact)) if fact else (current,),
+                           history_anchor=HistoryAnchor(fact.id,fact.subject,fact.key,fact.revision) if fact else None)
     if fact is None:
         forgotten = any(
             item.action == "forget" and item.key == key

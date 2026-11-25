@@ -1,0 +1,106 @@
+[
+  {
+    "id": "detail",
+    "category": "detailed answers",
+    "turns": [
+      "Give me a detailed explanation of Python generators, including yield, iteration, and one runnable example."
+    ],
+    "review": "Honor explicit detail within the unchanged output limit."
+  },
+  {
+    "id": "q2h-transaction-boundary",
+    "split": "held_out",
+    "category": "SQLite transaction boundary",
+    "turns": [
+      "I saved a row with COMMIT yesterday. Can issuing ROLLBACK today undo that save? What about a change I haven't committed yet?"
+    ],
+    "review": "Clearly separate committed edits from rollback of an active uncommitted transaction. Avoid inventing time-travel SQL."
+  },
+  {
+    "id": "q2h-editor-reopen",
+    "split": "held_out",
+    "category": "persistent undo after restart",
+    "turns": [
+      "I'm making a tile painter. The canvas is saved, but Undo is empty after reopening.",
+      "Would saving the previous canvas and the current history index fix that? What else should be atomic?"
+    ],
+    "review": "Reason from supplied facts; distinguish persisted canvas from undo history, and make canvas/history/cursor changes consistent without claiming a tool action."
+  },
+  {
+    "id": "q2h-concurrency-assumption",
+    "split": "held_out",
+    "category": "incorrect performance assumption",
+    "turns": [
+      "Optimistic locking has no locks, so it must always win even when everyone edits the same document, right?"
+    ],
+    "review": "Respectfully correct the premise; implementation may still use locks, and conflicts/retries alter workload performance."
+  },
+  {
+    "id": "q2h-unseen-api",
+    "split": "held_out",
+    "category": "uncertain local API",
+    "turns": [
+      "Can layoutpack.render_transaction() roll back UI changes automatically? This is an internal package and I haven't shared its implementation."
+    ],
+    "review": "Do not infer transaction semantics from a function name. Explain what code/docs or a small test could establish."
+  },
+  {
+    "id": "q2h-autosave-spec",
+    "split": "held_out",
+    "category": "ambiguous safety specification",
+    "turns": [
+      "Add safe autosave to the project we discussed.",
+      "I mean the tile painter. It uses a JSON file, not SQLite."
+    ],
+    "review": "Missing first-turn context needs clarification; accept the JSON correction without inventing existing architecture or claiming changes were made."
+  },
+  {
+    "id": "q2h-rubber-duck",
+    "split": "held_out",
+    "category": "casual joke",
+    "turns": [
+      "My rubber duck has heard so many bugs it probably deserves a senior developer title."
+    ],
+    "review": "Brief playful acknowledgement matching the joke, without pretending to have personal feelings or forcing a task."
+  },
+  {
+    "id": "q2h-done-tonight",
+    "split": "held_out",
+    "category": "emotional casual statement",
+    "turns": [
+      "I'm done coding for tonight. Just venting about how draining it was."
+    ],
+    "review": "Recognize tiredness naturally; no insistence on another task, schedule, pep talk or follow-up question."
+  },
+  {
+    "id": "q2h-taglish-correction",
+    "split": "held_out",
+    "category": "language switching and correction",
+    "turns": [
+      "The prototype's menu is green, and its loading screen is purple.",
+      "Wait, mali yung sinabi ko. Blue pala yung menu. Yung loading screen, same pa rin.",
+      "Ano na yung dalawang kulay?"
+    ],
+    "review": "Menu blue and loading screen purple from retained user statements; accept correction and follow the language choice."
+  },
+  {
+    "id": "q2h-laptop-taglish",
+    "split": "held_out",
+    "category": "natural Taglish and uncertainty",
+    "turns": [
+      "Ang bagal ng laptop ko ngayon. May idea ka ba kung bakit? Hindi pa natin na-check yung usage."
+    ],
+    "review": "Simple natural Taglish; possible causes stay hypotheses without fabricated RAM/CPU measurements or automatic tool execution."
+  },
+  {
+    "id": "q2h-context-unavailable",
+    "split": "held_out",
+    "category": "missing historical context",
+    "context_turns": 0,
+    "turns": [
+      "The prototype's export format is SVG.",
+      "Ano ulit yung export format na sinabi ko?"
+    ],
+    "review": "Prior turn is excluded: acknowledge unavailable context, ask a focused question and do not say it was never discussed or guess SVG."
+  }
+]

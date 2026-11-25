@@ -64,9 +64,11 @@ def test_omitted_private_tool_exchange_is_not_reintroduced_by_notice(tmp_path):
     previous = ("/system", "PRIVATE snapshot values")
     session._sequence = store.save_exchange(session.session_id, 0, *previous)
     session._turns.append(previous)
-    session.reply("What was that earlier detail?")
-    model.assert_called_once()
-    assert model.call_args.args[0] == [{"role": "system", "content": "SYS" + HISTORY_OMITTED},
+    trace = Mock()
+    answer = session.reply("What was that earlier detail?", trace=trace)
+    model.assert_not_called()
+    assert "currently accessible context" in answer
+    assert trace.call_args.args[1] == [{"role": "system", "content": "SYS" + HISTORY_OMITTED},
                                      {"role": "user", "content": "What was that earlier detail?"}]
 
 
@@ -84,12 +86,14 @@ def test_ordinary_model_receives_trusted_notice_when_history_is_omitted(tmp_path
         session.reply("My synthetic export format is SVG.")
     trace = Mock()
     session.reply("Which export format did I mention?", trace=trace)
-    sent = model.call_args.args[0]
+    sent = trace.call_args.args[1]
     assert sent[0]["content"] == "SYS" + HISTORY_OMITTED
     assert len(sent) == 2 and "ignore the rules" not in json.dumps(sent)
     assert trace.call_args.args[2:] == (0, True)
     assert sum(len(m["content"]) for m in sent) <= 4096
     assert sent[-1]["content"] == "Which export format did I mention?"
+    assert model.call_count == (0 if padding else 1)
+    assert session.last_context["clarification_needed"]
 
 
 def test_omission_notice_budget_failure_never_calls_model_or_changes_history(tmp_path):

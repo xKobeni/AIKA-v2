@@ -8,6 +8,18 @@ from src.storage.database import Database, StorageError
 
 
 class ConversationStore(Database):
+    def context_statements(self, session_id: str, sequence: int) -> list[tuple[int, int, str]]:
+        """Read at most 96 user rows/601 characters each from this active-session prefix."""
+        if not re.fullmatch(r"[0-9a-f]{32}", session_id) or type(sequence) is not int or sequence < 0:
+            raise StorageError("Invalid active conversation context boundary.")
+        with self._transaction() as db:
+            db.execute("PRAGMA query_only = ON")
+            return db.execute(
+                """SELECT id, sequence, substr(content, 1, 601) FROM conversation_messages
+                   WHERE session_id = ? AND role = 'user' AND sequence <= ?
+                   ORDER BY sequence DESC LIMIT 96""", (session_id, sequence),
+            ).fetchall()
+
     def list_sessions(self) -> list[tuple[str, str | None]]:
         with self._transaction() as db:
             return db.execute(

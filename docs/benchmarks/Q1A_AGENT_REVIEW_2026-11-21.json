@@ -1,0 +1,397 @@
+{
+  "reviewer": "Implementation agent; qualitative review, not independent/native-speaker acceptance.",
+  "rubric": "Pass means the complete exchange meets its fixture goal; partial is not a full pass. Serious factual/intent regressions reject the candidate regardless of aggregate gains.",
+  "candidate_status": "REJECTED_NOT_DEPLOYED",
+  "cases": [
+    {
+      "id": "greeting",
+      "category": "casual greeting",
+      "evaluation_split": "development",
+      "baseline": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "candidate": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "assessment": "Both give a brief greeting without a service menu.",
+      "independent_human_review": null
+    },
+    {
+      "id": "thanks",
+      "category": "gratitude",
+      "evaluation_split": "development",
+      "baseline": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "candidate": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "assessment": "Both give a short acknowledgement with no follow-up offer.",
+      "independent_human_review": null
+    },
+    {
+      "id": "ack",
+      "category": "short acknowledgement",
+      "evaluation_split": "development",
+      "baseline": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "candidate": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "assessment": "Both stop after a short acknowledgement.",
+      "independent_human_review": null
+    },
+    {
+      "id": "frustrated",
+      "category": "coding frustration",
+      "evaluation_split": "development",
+      "baseline": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "candidate": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "assessment": "Both offer a focused debugging next step; candidate is more verbose.",
+      "independent_human_review": null
+    },
+    {
+      "id": "correction",
+      "category": "user correcting AIKA",
+      "evaluation_split": "development",
+      "baseline": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "candidate": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "assessment": "Both retain the corrected two-local-player fact.",
+      "independent_human_review": null
+    },
+    {
+      "id": "detail",
+      "category": "detailed answers",
+      "evaluation_split": "acceptance_regression",
+      "baseline": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "candidate": {
+        "verdict": "partial",
+        "passed": false
+      },
+      "assessment": "Both correctly explain generator invocation versus iteration, and both code samples execute. Candidate introduces an up-to-10 description with an actual limit of 20; minor new explanation/example inconsistency.",
+      "independent_human_review": null
+    },
+    {
+      "id": "simplify",
+      "category": "requests to simplify",
+      "evaluation_split": "development",
+      "baseline": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "candidate": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "assessment": "Both simplify the same concurrency topic. No-locks language needs implementation qualification; these are high-level explanations.",
+      "independent_human_review": null
+    },
+    {
+      "id": "missing-context",
+      "category": "omitted context",
+      "evaluation_split": "development",
+      "baseline": {
+        "verdict": "fail",
+        "passed": false
+      },
+      "candidate": {
+        "verdict": "partial",
+        "passed": false
+      },
+      "assessment": "Baseline falsely says the modes were not provided in the chat. Candidate asks for missing context, but first replies with the wrong ownership pronoun (My puzzle modes).",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2d-committed-rollback",
+      "category": "SQLite committed edits",
+      "evaluation_split": "development",
+      "baseline": {
+        "verdict": "fail",
+        "passed": false
+      },
+      "candidate": {
+        "verdict": "fail",
+        "passed": false
+      },
+      "assessment": "Both suggest restoring a pre-commit savepoint after COMMIT. Candidate correction also suggests INSERT for an existing row and uses imprecise other-transactions wording. Neither full exchange is technically reliable.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2d-persistent-undo",
+      "category": "persistent undo history",
+      "evaluation_split": "development",
+      "baseline": {
+        "verdict": "fail",
+        "passed": false
+      },
+      "candidate": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "assessment": "Baseline initially claims replaying stored forward SQL restores previous state. Candidate avoids that claim and explains separate persisted snapshots/diffs in the follow-up; an extra question remains.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2d-hot-row",
+      "category": "optimistic concurrency tradeoffs",
+      "evaluation_split": "development",
+      "baseline": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "candidate": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "assessment": "Both reject guaranteed optimistic superiority and discuss conflicts. Underlying implementations may still acquire locks; broad locking language remains a qualification gap.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2d-unknown-library",
+      "category": "uncertain library behavior",
+      "evaluation_split": "development",
+      "baseline": {
+        "verdict": "partial",
+        "passed": false
+      },
+      "candidate": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "assessment": "Both admit not seeing the implementation. Baseline invents specific possible internals; candidate remains more general and asks for evidence. Neither claims supplied documentation exists.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2d-tired-taglish",
+      "category": "Taglish tiredness",
+      "evaluation_split": "development",
+      "baseline": {
+        "verdict": "fail",
+        "passed": false
+      },
+      "candidate": {
+        "verdict": "fail",
+        "passed": false
+      },
+      "assessment": "Baseline gives an unnatural story/flow response. Candidate gives awkward unsolicited rest-before-work advice despite coding already underway and explicit venting-only context.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2d-bug-humor",
+      "category": "humor",
+      "evaluation_split": "development",
+      "baseline": {
+        "verdict": "fail",
+        "passed": false
+      },
+      "candidate": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "assessment": "Baseline misses the joke and asks for a plan. Candidate recognizes it without prescribing a task, although the wording remains generic.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2d-language-switch",
+      "category": "English to Taglish",
+      "evaluation_split": "development",
+      "baseline": {
+        "verdict": "fail",
+        "passed": false
+      },
+      "candidate": {
+        "verdict": "fail",
+        "passed": false
+      },
+      "assessment": "Both attempt Filipino-English, but fluency/meaning are unreliable. Baseline uses pagpapatibay for locking and mabil; candidate uses awkward sumasama and a weak low-conflict translation.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2d-asserted-benchmark",
+      "category": "user provided versus verified facts",
+      "evaluation_split": "development",
+      "baseline": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "candidate": {
+        "verdict": "partial",
+        "passed": false
+      },
+      "assessment": "Both deny independent verification. Baseline supplies a measured-value formulation; candidate adds unsupported positive appraisal and does not give the requested careful formulation.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2h-transaction-boundary",
+      "category": "SQLite transaction boundary",
+      "evaluation_split": "acceptance_regression",
+      "baseline": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "candidate": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "assessment": "Both distinguish committed saves from uncommitted changes; candidate has cleaner transaction wording.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2h-editor-reopen",
+      "category": "persistent undo after restart",
+      "evaluation_split": "acceptance_regression",
+      "baseline": {
+        "verdict": "partial",
+        "passed": false
+      },
+      "candidate": {
+        "verdict": "fail",
+        "passed": false
+      },
+      "assessment": "Baseline initially contradicts the supplied saved-canvas fact, then recommends bundling current canvas/history. Candidate wrongly calls only the history stack the atomic unit, omitting canvas/history/cursor consistency.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2h-concurrency-assumption",
+      "category": "incorrect performance assumption",
+      "evaluation_split": "acceptance_regression",
+      "baseline": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "candidate": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "assessment": "Both reject unconditional performance superiority and explain validation/conflicts. Neither fully explains internal-lock implementation caveats.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2h-unseen-api",
+      "category": "uncertain local API",
+      "evaluation_split": "acceptance_regression",
+      "baseline": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "candidate": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "assessment": "Both admit unavailable internal API implementation. No invented documentation or claimed browsing.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2h-autosave-spec",
+      "category": "ambiguous safety specification",
+      "evaluation_split": "acceptance_regression",
+      "baseline": {
+        "verdict": "fail",
+        "passed": false
+      },
+      "candidate": {
+        "verdict": "fail",
+        "passed": false
+      },
+      "assessment": "Baseline asks for context and provides a temp-file/rename pattern but overstates crash safety without durability assumptions. Candidate only acknowledges both turns and fails to clarify or answer autosave/JSON requirements.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2h-rubber-duck",
+      "category": "casual joke",
+      "evaluation_split": "acceptance_regression",
+      "baseline": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "candidate": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "assessment": "Both recognize a joke briefly; candidate is flatter and generic, not a naturalness improvement.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2h-done-tonight",
+      "category": "emotional casual statement",
+      "evaluation_split": "acceptance_regression",
+      "baseline": {
+        "verdict": "partial",
+        "passed": false
+      },
+      "candidate": {
+        "verdict": "fail",
+        "passed": false
+      },
+      "assessment": "Baseline adds an unnecessary follow-up question. Candidate directs Take a break despite the explicit just-venting context.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2h-taglish-correction",
+      "category": "language switching and correction",
+      "evaluation_split": "acceptance_regression",
+      "baseline": {
+        "verdict": "partial",
+        "passed": false
+      },
+      "candidate": {
+        "verdict": "pass",
+        "passed": true
+      },
+      "assessment": "Both preserve menu blue/loading purple; candidate second-turn Taglish is clearer than baseline broken-English phrasing. Final colors remain correct.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2h-laptop-taglish",
+      "category": "natural Taglish and uncertainty",
+      "evaluation_split": "acceptance_regression",
+      "baseline": {
+        "verdict": "partial",
+        "passed": false
+      },
+      "candidate": {
+        "verdict": "fail",
+        "passed": false
+      },
+      "assessment": "Baseline awkwardly presents possibilities without measurements. Candidate uses malformed/invented cache na gumupok and a weak display-workload hypothesis. No actual system measurement was claimed or performed.",
+      "independent_human_review": null
+    },
+    {
+      "id": "q2h-context-unavailable",
+      "category": "missing historical context",
+      "evaluation_split": "acceptance_regression",
+      "baseline": {
+        "verdict": "partial",
+        "passed": false
+      },
+      "candidate": {
+        "verdict": "partial",
+        "passed": false
+      },
+      "assessment": "Both avoid guessing SVG but ask poorly focused follow-ups. Candidate current-chat-session wording risks confusing visible context with the entire history; neither provides a clean focused reminder request.",
+      "independent_human_review": null
+    }
+  ]
+}

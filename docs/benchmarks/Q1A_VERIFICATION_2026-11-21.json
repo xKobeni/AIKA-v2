@@ -1,0 +1,28 @@
+{
+  "date": "2026-11-21",
+  "runtime_sources_configuration_and_packaging_unchanged": 42,
+  "active_persona_chars": 3320,
+  "candidate_deployed": false,
+  "baseline_tests": {
+    "python": "3.12.10",
+    "passed": 1698,
+    "seconds": 46.32
+  },
+  "final_tests": [
+    {
+      "python": "3.12.10",
+      "passed": 1698,
+      "seconds": 50.31
+    },
+    {
+      "python": "3.13.15",
+      "passed": 1698,
+      "seconds": 45.05
+    }
+  ],
+  "completed_live_model_calls": 80,
+  "matched_scenarios": 26,
+  "inference_errors": 0,
+  "hosted_ci_run": false,
+  "status": "FAILED_ACCEPTANCE"
+}
